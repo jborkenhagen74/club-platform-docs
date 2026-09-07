@@ -1,10 +1,15 @@
 #ifndef CLUBPLATFORM_EXTENSION_API_H
 #define CLUBPLATFORM_EXTENSION_API_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef _WIN32
-#  define CLUBPLATFORM_EXTENSION_EXPORT __declspec(dllexport)
+#  ifdef CLUBPLATFORM_EXTENSION_BUILD
+#    define CLUBPLATFORM_EXTENSION_EXPORT __declspec(dllexport)
+#  else
+#    define CLUBPLATFORM_EXTENSION_EXPORT __declspec(dllimport)
+#  endif
 #else
 #  define CLUBPLATFORM_EXTENSION_EXPORT __attribute__((visibility("default")))
 #endif
