@@ -1,0 +1,44 @@
+name: Documentation and Examples
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extension-example:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Configure extension example
+        run: cmake -S examples/extensions/hello-extension -B build/hello-extension -DCMAKE_BUILD_TYPE=Release
+      - name: Build extension example
+        run: cmake --build build/hello-extension --config Release --parallel
+
+  contract-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Verify public contract files
+        shell: bash
+        run: |
+          test -s sdk/extension_api.h
+          test -s openapi/club-platform.yaml
+          grep -q "openapi: 3.1.0" openapi/club-platform.yaml
+          grep -q "CLUBPLATFORM_EXTENSION_ABI_VERSION" sdk/extension_api.h

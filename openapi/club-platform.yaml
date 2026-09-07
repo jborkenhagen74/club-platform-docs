@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: Club Platform API
+  version: 0.1.0
+servers:
+  - url: https://example.invalid/api/v1
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required: [status]
+  /me:
+    get:
+      summary: Current authenticated principal
+      operationId: getMe
+      responses:
+        '200':
+          description: Current principal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Principal'
+        '401':
+          description: Not authenticated
+components:
+  schemas:
+    Principal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+      required: [id, displayName]
