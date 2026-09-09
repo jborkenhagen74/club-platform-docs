@@ -1,5 +1,8 @@
 # Versionnement et périmètre vérifiable
 
+> Version cible 0.6.0, préparation G0 : API HTTP `/api/v1` et contrat `Client` commun avec `LocalClient`/`RestClient`. Le schéma 8 et l’ABI 2 restent inchangés. Les anciennes routes `/api/...` répondent 404. Mettre à jour serveur, bureau, portail et proxy ensemble. Les descriptions fonctionnelles ci-dessous proviennent de la base 0.5.0 et restent valables sauf mise à jour par cette note. Core Foundation II, avec ABI V3 et sept langues d’interface, n’est pas encore terminé.
+
+
 [Accueil](README.md)
 
 Référence : application **0.5.0**, commit `320a4c2709c13dd56455768a2f8819a815ad3997`,
@@ -10,7 +13,7 @@ schéma **8**, ABI native **2**, édition documentaire **2026-09-09**.
 | Produit | Version du paquet 0.5.0 |
 | Base | Migrations ordonnées ; définitions inconnues ou modifiées refusées |
 | Extension | ABI 2 et version de manifeste à trois nombres |
-| HTTP | Routes `/api` et `/health` séparé ; pas de `/api/v1` publié |
+| HTTP | Routes `/api/v1` et `/health` séparé ; pas de `/api/v1` publié |
 | Documentation | Même structure et périmètre dans de/en/fr/es/ko |
 
 R1.9 apporte l’hôte natif, R1.10 les arts martiaux, R1.11 modèles/PDF/CSV et R1.12

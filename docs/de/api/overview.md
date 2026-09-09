@@ -1,23 +1,22 @@
 # REST-Vertrag und Integrationsregeln
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](../README.md) · [OpenAPI](../../../openapi/club-platform.yaml)
 
 ## Tatsächliche URLs
 
-Version 0.5.0 verwendet `/api`, **nicht `/api/v1`**. `/health` liegt außerhalb
-dieses Präfixes. Die OpenAPI-Datei beschreibt den implementierten HTTP-Vertrag;
-interne Core-Methoden sind nicht automatisch REST-Endpunkte. Routen für Termine,
-`/members`, Audit-Ausgaben oder beliebige Plugin-Callbacks dürfen nicht aus dem
-früheren Entwurf abgeleitet werden.
+Der aktuelle Entwicklungsstand verwendet `/api/v1`. `/health` bleibt außerhalb dieses Präfixes. Der OpenAPI-Vertrag beschreibt die tatsächlich implementierten HTTP-Operationen. Interne Methoden sind nicht automatisch HTTP-Endpunkte.
 
 | Bereich | Routen |
 |---|---|
-| Sitzung | `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`, `POST /api/auth/password` |
-| Personen | `GET/POST /api/persons`, `GET/PUT /api/persons/{id}` |
-| Verwaltung | `GET/POST /api/management/{resource}` |
-| Dateien | `GET/POST /api/assets`, `GET /api/assets/{id}`, öffentliches `GET /api/branding` |
-| Erweiterungen | `GET /api/extensions`, `POST /api/extensions/install` |
-| Dokumente | `POST /api/documents/render`, `GET /api/reports` |
+| Sitzung | `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, `POST /api/v1/auth/password` |
+| Personen | `GET/POST /api/v1/persons`, `GET/PUT /api/v1/persons/{id}` |
+| Verwaltung | `GET/POST /api/v1/management/{resource}` |
+| Dateien | `GET/POST /api/v1/assets`, `GET /api/v1/assets/{id}`, öffentliches `GET /api/v1/branding` |
+| Erweiterungen | `GET /api/v1/extensions`, `POST /api/v1/extensions/install` |
+| Dokumente | `POST /api/v1/documents/render`, `GET /api/v1/reports` |
 | Rechte/Felder | Benutzer-, Gruppen-, Rollen- und Feldrouten gemäß OpenAPI |
 
 ## Sitzung und Datentypen
@@ -40,7 +39,7 @@ Neue Person:
 {"given_name":"Erika","family_name":"Mustermann"}
 ```
 
-Personenänderung über `PUT /api/persons/{id}`:
+Personenänderung über `PUT /api/v1/persons/{id}`:
 
 ```json
 {"revision":"1","given_name":"Erika","family_name":"Muster"}
@@ -85,9 +84,9 @@ Listen enthalten Metadaten; der Einzelabruf enthält den Inhalt. Branding ist
 öffentlich, weil es vor der Anmeldung angezeigt wird. Dort keine vertraulichen
 Informationen als Bild hinterlegen.
 
-`/api/documents/render` erhält `template_id`, `person_id`, `date` und liefert
+`/api/v1/documents/render` erhält `template_id`, `person_id`, `date` und liefert
 `title` und `body`, kein PDF. PDF wird vom Client erzeugt. Datum ist ISO, auch
-wenn die Benutzeroberfläche ein lokales Format zeigt. `/api/reports` liefert
+wenn die Benutzeroberfläche ein lokales Format zeigt. `/api/v1/reports` liefert
 UTF-8-CSV mit BOM; freigegeben sind Personen, Organisationen, Mitgliedschaften,
 Funktionen und native Datensätze. Maximum 5.000 Zeilen; größere Auswertungen
 gezielt eingrenzen. Ein mehrseitiger Export ist kein transaktionaler Snapshot.
@@ -108,6 +107,6 @@ lesen, dann entscheiden, ob erneut geschrieben werden muss. Es gibt keine
 allgemeinen Idempotency-Keys oder Batchtransaktionen im HTTP-Vertrag.
 Standard-JSON ist auf 16 KiB begrenzt, Asset-Anfragen zusätzlich durch die
 8-MiB-HTTP-Grenze und die Grenzen des dekodierten Inhalts. Genau ein konfigurierter
-Browser-Ursprung wird zugelassen; Preflight verwendet `OPTIONS /api/…`.
+Browser-Ursprung wird zugelassen; Preflight verwendet `OPTIONS /api/v1/…`.
 Der Host akzeptiert als Upstream-Host `localhost` oder `127.0.0.1` mit optionalem
 Port. Clients außerhalb des Servers verwenden den HTTPS-Proxy.

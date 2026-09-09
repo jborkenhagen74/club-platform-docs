@@ -1,21 +1,22 @@
 # REST 계약과 연동 규칙
 
+> 목표 버전 0.6.0의 준비 작업 G0입니다. HTTP API는 `/api/v1`이며 공통 `Client` 계약을 `LocalClient`와 `RestClient`가 구현합니다. 데이터베이스 스키마 8과 확장 ABI 2는 그대로입니다. 기존 `/api/...` 경로는 404를 반환합니다. 서버, 데스크톱, 포털 및 프록시를 함께 업데이트하십시오. 아래 기능 설명은 0.5.0 기준에서 작성되었으며 이 안내로 변경된 부분 외에는 계속 적용됩니다. ABI V3 및 일곱 UI 언어를 포함한 Core Foundation II는 아직 완료되지 않았습니다.
+
+
 [시작 페이지](../README.md) · [OpenAPI](../../../openapi/club-platform.yaml)
 
 ## 실제 경로
 
-0.5.0은 `/api`를 사용하며 **`/api/v1`이 아닙니다**. `/health`는 별도입니다.
-내부 메서드가 있다고 HTTP 경로가 존재하는 것은 아닙니다. 이전 초안의 일정,
-`/members`, 감사 목록, 임의 플러그인 콜백은 구현된 경로가 아닙니다.
+현재 개발 API는 `/api/v1`을 사용하며 `/health`는 이 접두사 밖에 있습니다. OpenAPI는 구현된 HTTP 작업을 설명합니다. 내부 메서드가 자동으로 HTTP 경로가 되는 것은 아닙니다.
 
 | 영역 | 경로 |
 |---|---|
-| 세션 | `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`, `POST /api/auth/password` |
-| 사람 | `GET/POST /api/persons`, `GET/PUT /api/persons/{id}` |
-| 관리 | `GET/POST /api/management/{resource}` |
-| 파일 | `GET/POST /api/assets`, `GET /api/assets/{id}`, 공개 `GET /api/branding` |
-| 확장 | `GET /api/extensions`, `POST /api/extensions/install` |
-| 문서 | `POST /api/documents/render`, `GET /api/reports` |
+| 세션 | `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, `POST /api/v1/auth/password` |
+| 사람 | `GET/POST /api/v1/persons`, `GET/PUT /api/v1/persons/{id}` |
+| 관리 | `GET/POST /api/v1/management/{resource}` |
+| 파일 | `GET/POST /api/v1/assets`, `GET /api/v1/assets/{id}`, 공개 `GET /api/v1/branding` |
+| 확장 | `GET /api/v1/extensions`, `POST /api/v1/extensions/install` |
+| 문서 | `POST /api/v1/documents/render`, `GET /api/v1/reports` |
 | 권한·필드 | OpenAPI에 정의된 사용자, 그룹, 역할, 필드 작업 |
 
 ## 세션과 자료 표현
@@ -36,7 +37,7 @@ ID는 대체로 UUID이지만 관계 테이블에는 복합 ID가 있습니다.
 {"given_name":"Erika","family_name":"Mustermann"}
 ```
 
-`PUT /api/persons/{id}` 수정 예제:
+`PUT /api/v1/persons/{id}` 수정 예제:
 
 ```json
 {"revision":"1","given_name":"Erika","family_name":"Muster"}
@@ -76,9 +77,9 @@ ID는 대체로 UUID이지만 관계 테이블에는 복합 ID가 있습니다.
 단건 읽기는 내용을 포함합니다. 시작 화면 이미지는 로그인 전 공개되므로
 기밀 내용을 넣으면 안 됩니다.
 
-`/api/documents/render`는 `template_id`, `person_id`, `date`를 받고 `title`,
+`/api/v1/documents/render`는 `template_id`, `person_id`, `date`를 받고 `title`,
 `body`를 반환하며 **PDF를 반환하지 않습니다**. PDF는 클라이언트가 생성합니다.
-전송 날짜는 ISO입니다. `/api/reports`는 사람·조직·회원 소속·직책·네이티브
+전송 날짜는 ISO입니다. `/api/v1/reports`는 사람·조직·회원 소속·직책·네이티브
 데이터의 UTF-8 BOM CSV를 반환합니다. 최대 5,000행이며 초과하면 필터를 좁힙니다.
 페이지별 보고서는 트랜잭션 스냅샷이 아닙니다.
 
@@ -94,5 +95,5 @@ ID는 대체로 UUID이지만 관계 테이블에는 복합 ID가 있습니다.
 시간 초과된 쓰기가 이미 완료되었을 수 있으므로 먼저 재조회합니다. 일반적인
 멱등성 키나 HTTP 배치 트랜잭션은 없습니다. 일반 JSON은 16 KiB, 파일 요청은
 HTTP 8 MiB와 디코딩 내용 제한을 함께 적용합니다. 정확한 브라우저 출처 하나만
-허용합니다. 프리플라이트는 `OPTIONS /api/…`, 업스트림 Host는 `localhost` 또는
+허용합니다. 프리플라이트는 `OPTIONS /api/v1/…`, 업스트림 Host는 `localhost` 또는
 `127.0.0.1`과 선택적 포트입니다. 원격 클라이언트는 HTTPS 프록시를 사용합니다.

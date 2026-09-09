@@ -29,7 +29,7 @@ async function request(path, body) {
   return response.status === 204 ? null : response.json();
 }
 async function listPeople(append = false) {
-  const path = '/api/persons' + (append && cursor ? `?after=${encodeURIComponent(cursor)}` : '');
+  const path = '/api/v1/persons' + (append && cursor ? `?after=${encodeURIComponent(cursor)}` : '');
   const page = await request(path);
   if (!append) get('people').replaceChildren();
   for (const person of page.items) {
@@ -51,7 +51,7 @@ get('login-form').addEventListener('submit', event => {
   event.preventDefault();
   void perform(event.submitter || get('login-form').querySelector('button'), async () => {
     try {
-      const session = await request('/api/auth/login', {login: get('login').value, password: get('password').value});
+      const session = await request('/api/v1/auth/login', {login: get('login').value, password: get('password').value});
       token = session.token;
       get('login-form').hidden = true;
       get('session').hidden = false;
@@ -63,7 +63,7 @@ get('refresh').addEventListener('click', event => void perform(event.target, () 
 get('more').addEventListener('click', event => void perform(event.target, () => listPeople(true)));
 get('logout').addEventListener('click', event => void perform(event.target, async () => {
   try {
-    await request('/api/auth/logout', {});
+    await request('/api/v1/auth/logout', {});
     get('status').textContent = 'Signed out.';
   } finally { signedOut(); }
 }));

@@ -1,5 +1,8 @@
 # Frontends and web-server integration
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Language home](../README.md) · [REST](../api/overview.md) · [Installation](../installation.md)
 
 The product portal uses React/TypeScript and Tailwind 4. `npm ci` follows the lockfile;
@@ -10,14 +13,14 @@ not the full application.
 
 ## Transport
 
-Serve the browser and API through the same public HTTPS origin. Proxy `/api/` to
+Serve the browser and API through the same public HTTPS origin. Proxy `/api/v1/` to
 the loopback host. Set upstream `Host` to `127.0.0.1:8080` and preserve `Authorization`
 and `Origin`. Start the service with that exact public origin in `--portal-origin`.
 Without configuration, browser requests carrying an Origin are denied. Do not
 replace correct configuration with wildcard access.
 
 Configure `/health` separately if public health monitoring is required; the usual
-`/api/` proxy does not include it. Do not log request bodies, passwords or tokens.
+`/api/v1/` proxy does not include it. Do not log request bodies, passwords or tokens.
 DNS, certificates and service accounts follow local operating procedures; the
 application does not automatically manage TLS certificates.
 

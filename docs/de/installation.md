@@ -1,5 +1,8 @@
 # Installation und Erstinbetriebnahme
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](README.md) · [Betrieb und Wiederherstellung](operations.md)
 
 ## Vorbereitungen
@@ -102,7 +105,7 @@ npm run build
 ```
 
 Den Inhalt von `dist/` in das Dokumentenverzeichnis des HTTPS-Webservers kopieren.
-Kein Node-Prozess wird zum Ausliefern benötigt. `/api/` an `127.0.0.1:8080`
+Kein Node-Prozess wird zum Ausliefern benötigt. `/api/v1/` an `127.0.0.1:8080`
 weiterleiten; den Upstream-Header `Host` auf `127.0.0.1:8080` setzen und `Origin`
 sowie `Authorization` erhalten. `--portal-origin` muss exakt zum Browser-Ursprung
 passen, ohne abschließenden Schrägstrich. Der Portalpfad ist `/`; ein beliebiger
@@ -133,7 +136,7 @@ location / {
     try_files $uri $uri/ /index.html;
 }
 
-location /api/ {
+location /api/v1/ {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host 127.0.0.1:8080;
     proxy_set_header Origin $http_origin;

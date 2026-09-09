@@ -1,5 +1,8 @@
 # Versionierung und belegter Funktionsstand
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](README.md)
 
 Basis: Anwendung **0.5.0**, Commit `320a4c2709c13dd56455768a2f8819a815ad3997`,
@@ -10,7 +13,7 @@ Schema **8**, native ABI **2**, Dokumentationsausgabe **2026-09-09**.
 | Anwendung | Paket-/Produktversion 0.5.0 |
 | Datenbank | Geordnete Migrationen; unbekannte oder veränderte Definitionen werden abgewiesen |
 | Erweiterung | ABI 2 und eigenes Manifest mit dreiteiliger Versionsnummer |
-| HTTP | Implementierte `/api`-Routen, separat `/health`; kein veröffentlichtes `/api/v1` |
+| HTTP | Implementierte `/api/v1`-Routen, separat `/health`; kein veröffentlichtes `/api/v1` |
 | Dokumentation | Gleiche Kapitel und fachlicher Umfang in de/en/fr/es/ko |
 
 R1.9 stellt den nativen Host bereit, R1.10 das Kampfsportmodul, R1.11 Vorlagen,

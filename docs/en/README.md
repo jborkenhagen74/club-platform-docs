@@ -1,5 +1,8 @@
 # Club Platform — English
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Deutsch](../de/README.md) · [English](../en/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [한국어](../ko/README.md)
 
 **0.5.0 · 2026-09-09 · Schema 8 · ABI 2**

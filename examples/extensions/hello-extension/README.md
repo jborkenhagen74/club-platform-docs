@@ -16,7 +16,7 @@ ctest --test-dir build/hello-extension -C Release --output-on-failure
 Place the `.dll`, `.so` or `.dylib` in a dedicated trusted extension directory, restart
 the host with `--extensions /absolute/path`, then activate extensions as administrator.
 Assign `records.read/write` and `attendance.read/write` as appropriate. Create a record
-through `/api/management/ext:attendance.session` with values `person_id`, `attended_on`
+through `/api/v1/management/ext:attendance.session` with values `person_id`, `attended_on`
 and `course`. Do not upload executable modules through an entity's Files tab.
 
 The validator deliberately adds no business constraint beyond the host's manifest

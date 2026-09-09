@@ -1,5 +1,8 @@
 # Developing native extensions
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Language home](../README.md) · [UI contract](ui.md) · [Example](../../../examples/extensions/hello-extension/README.md)
 
 ## Compatibility and trust
@@ -46,13 +49,13 @@ modules again on the client.
 ## Activation and records
 
 After loading, an authenticated administrator selects `Erweiterungen aktivieren`
-or sends `{}` to `POST /api/extensions/install`. `schema.manage` is required.
+or sends `{}` to `POST /api/v1/extensions/install`. `schema.manage` is required.
 Record-type registration and manifest persistence are transactional and audited.
-`GET /api/extensions` shows loaded manifests and `installed`; reinstalling the
+`GET /api/v1/extensions` shows loaded manifests and `installed`; reinstalling the
 identical manifest is allowed.
 
 Native records currently belong to people. An example resource is
-`/api/management/ext:attendance.session`. Management values additionally carry
+`/api/v1/management/ext:attendance.session`. Management values additionally carry
 `person_id`; the host removes that association before invoking the domain validator.
 `attendance.read/write` supplement `records.read/write` and must be assigned to
 roles. Visible UI controls never replace server authorisation.

@@ -1,5 +1,8 @@
 # Native Erweiterungen entwickeln
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](../README.md) · [UI-Vertrag](ui.md) · [Beispiel](../../../examples/extensions/hello-extension/README.md)
 
 ## Kompatibilität und Vertrauen
@@ -49,13 +52,13 @@ Ein Remote-Desktop lädt serverseitige Module nicht nochmals lokal.
 ## Installation und Datenzugriff
 
 Nach dem Laden muss ein angemeldeter Administrator `Erweiterungen aktivieren`
-ausführen oder `POST /api/extensions/install` mit `{}` senden. Dafür ist
+ausführen oder `POST /api/v1/extensions/install` mit `{}` senden. Dafür ist
 `schema.manage` notwendig. Typregistrierung und Manifest werden transaktional
-persistiert und auditiert. `GET /api/extensions` zeigt geladene Manifeste und
+persistiert und auditiert. `GET /api/v1/extensions` zeigt geladene Manifeste und
 `installed`. Eine Wiederholung mit identischem Manifest ist zulässig.
 
 Native Einträge gehören derzeit zu Personen. Beispielroute:
-`/api/management/ext:attendance.session`. Die Verwaltungswerte enthalten zusätzlich
+`/api/v1/management/ext:attendance.session`. Die Verwaltungswerte enthalten zusätzlich
 `person_id`; der Host entfernt diese Zuordnung, bevor der fachliche Validator
 aufgerufen wird. `attendance.read/write` ergänzen `records.read/write`.
 Berechtigungen sind Rollen zuzuweisen; UI-Sichtbarkeit ersetzt keine Serverprüfung.

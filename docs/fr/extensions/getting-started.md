@@ -1,5 +1,8 @@
 # Développer une extension native
 
+> Version cible 0.6.0, préparation G0 : API HTTP `/api/v1` et contrat `Client` commun avec `LocalClient`/`RestClient`. Le schéma 8 et l’ABI 2 restent inchangés. Les anciennes routes `/api/...` répondent 404. Mettre à jour serveur, bureau, portail et proxy ensemble. Les descriptions fonctionnelles ci-dessous proviennent de la base 0.5.0 et restent valables sauf mise à jour par cette note. Core Foundation II, avec ABI V3 et sept langues d’interface, n’est pas encore terminé.
+
+
 [Accueil](../README.md) · [Interface](ui.md) · [Exemple](../../../examples/extensions/hello-extension/README.md)
 
 L’hôte 0.5.0 attend **ABI 2**. `sdk/extension_api.h` conserve le projet historique
@@ -46,12 +49,12 @@ sur le poste client.
 ## Activation et persistance
 
 Un administrateur connecté choisit `Erweiterungen aktivieren` ou envoie `{}` à
-`POST /api/extensions/install`. Droit requis : `schema.manage`. Enregistrement des
-types et manifeste sont transactionnels et audités. `GET /api/extensions` donne
+`POST /api/v1/extensions/install`. Droit requis : `schema.manage`. Enregistrement des
+types et manifeste sont transactionnels et audités. `GET /api/v1/extensions` donne
 les manifestes chargés et `installed`. Réinstaller un manifeste identique est permis.
 
 Les entrées natives appartiennent actuellement aux personnes. Exemple :
-`/api/management/ext:attendance.session`. `values` comprend aussi `person_id`,
+`/api/v1/management/ext:attendance.session`. `values` comprend aussi `person_id`,
 retiré avant appel du validateur métier. Affecter `attendance.read/write` aux rôles
 en complément de `records.read/write`. L’interface visible ne remplace pas ces contrôles.
 

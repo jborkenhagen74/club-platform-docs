@@ -1,21 +1,22 @@
 # Contrato REST e integración
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](../README.md) · [OpenAPI](../../../openapi/club-platform.yaml)
 
 ## Rutas reales
 
-0.5.0 utiliza `/api`, **no `/api/v1`**. `/health` está fuera de ese prefijo.
-Un método interno no implica una ruta HTTP. Agenda, `/members`, listado de
-auditoría y callbacks arbitrarios del borrador anterior no son rutas implementadas.
+El desarrollo actual utiliza `/api/v1`. `/health` queda fuera de ese prefijo. OpenAPI describe las operaciones HTTP implementadas; los métodos internos no son automáticamente rutas HTTP.
 
 | Área | Rutas |
 |---|---|
-| Sesión | `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`, `POST /api/auth/password` |
-| Personas | `GET/POST /api/persons`, `GET/PUT /api/persons/{id}` |
-| Gestión | `GET/POST /api/management/{resource}` |
-| Archivos | `GET/POST /api/assets`, `GET /api/assets/{id}`, `GET /api/branding` público |
-| Extensiones | `GET /api/extensions`, `POST /api/extensions/install` |
-| Documentos | `POST /api/documents/render`, `GET /api/reports` |
+| Sesión | `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, `POST /api/v1/auth/password` |
+| Personas | `GET/POST /api/v1/persons`, `GET/PUT /api/v1/persons/{id}` |
+| Gestión | `GET/POST /api/v1/management/{resource}` |
+| Archivos | `GET/POST /api/v1/assets`, `GET /api/v1/assets/{id}`, `GET /api/v1/branding` público |
+| Extensiones | `GET /api/v1/extensions`, `POST /api/v1/extensions/install` |
+| Documentos | `POST /api/v1/documents/render`, `GET /api/v1/reports` |
 | Seguridad/campos | Operaciones de usuarios, grupos, roles y campos en OpenAPI |
 
 ## Sesiones y tipos
@@ -37,7 +38,7 @@ Crear persona:
 {"given_name":"Erika","family_name":"Mustermann"}
 ```
 
-Modificar mediante `PUT /api/persons/{id}`:
+Modificar mediante `PUT /api/v1/persons/{id}`:
 
 ```json
 {"revision":"1","given_name":"Erika","family_name":"Muster"}
@@ -78,9 +79,9 @@ usan owner vacío y requieren `security.manage`. Las listas dan metadatos; la
 lectura individual incluye contenido. La imagen institucional se muestra antes
 del acceso: no debe contener información confidencial.
 
-`/api/documents/render` recibe `template_id`, `person_id`, `date` y devuelve
+`/api/v1/documents/render` recibe `template_id`, `person_id`, `date` y devuelve
 `title`, `body`, **no PDF**. El PDF lo genera el cliente y la fecha de transporte
-sigue siendo ISO. `/api/reports` devuelve CSV UTF-8 con BOM para personas,
+sigue siendo ISO. `/api/v1/reports` devuelve CSV UTF-8 con BOM para personas,
 organizaciones, afiliaciones, cargos y datos nativos. Límite 5.000 filas; restringir
 el filtro si se supera. El informe paginado no es una instantánea transaccional.
 
@@ -96,5 +97,5 @@ el filtro si se supera. El informe paginado no es una instantánea transaccional
 Una escritura con timeout puede haberse confirmado: leer antes de repetir.
 No hay claves generales de idempotencia ni transacciones HTTP por lotes.
 JSON estándar: 16 KiB; archivos: límite HTTP 8 MiB más límites del contenido
-decodificado. Se autoriza un único origen exacta. Preflight con `OPTIONS /api/…`;
+decodificado. Se autoriza un único origen exacta. Preflight con `OPTIONS /api/v1/…`;
 `Host` upstream `localhost` o `127.0.0.1`, con puerto opcional. Acceso remoto por proxy HTTPS.

@@ -1,22 +1,22 @@
 # REST contract and integration rules
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Language home](../README.md) · [OpenAPI](../../../openapi/club-platform.yaml)
 
 ## Real routes
 
-Release 0.5.0 uses `/api`, **not `/api/v1`**. `/health` is outside that prefix.
-The OpenAPI document describes HTTP behaviour; an internal application method does
-not imply an HTTP endpoint. The old draft's appointments, `/members`, audit listing
-and arbitrary plugin callbacks are not implemented routes.
+The current development API uses `/api/v1`. `/health` is outside that prefix. OpenAPI describes the implemented HTTP operations; internal methods are not automatically HTTP endpoints.
 
 | Area | Routes |
 |---|---|
-| Sessions | `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`, `POST /api/auth/password` |
-| People | `GET/POST /api/persons`, `GET/PUT /api/persons/{id}` |
-| Management | `GET/POST /api/management/{resource}` |
-| Files | `GET/POST /api/assets`, `GET /api/assets/{id}`, public `GET /api/branding` |
-| Extensions | `GET /api/extensions`, `POST /api/extensions/install` |
-| Documents | `POST /api/documents/render`, `GET /api/reports` |
+| Sessions | `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, `POST /api/v1/auth/password` |
+| People | `GET/POST /api/v1/persons`, `GET/PUT /api/v1/persons/{id}` |
+| Management | `GET/POST /api/v1/management/{resource}` |
+| Files | `GET/POST /api/v1/assets`, `GET /api/v1/assets/{id}`, public `GET /api/v1/branding` |
+| Extensions | `GET /api/v1/extensions`, `POST /api/v1/extensions/install` |
+| Documents | `POST /api/v1/documents/render`, `GET /api/v1/reports` |
 | Security/fields | User, group, role and field operations specified in OpenAPI |
 
 ## Authentication and representations
@@ -38,7 +38,7 @@ Create a person:
 {"given_name":"Erika","family_name":"Mustermann"}
 ```
 
-Update through `PUT /api/persons/{id}`:
+Update through `PUT /api/v1/persons/{id}`:
 
 ```json
 {"revision":"1","given_name":"Erika","family_name":"Muster"}
@@ -81,9 +81,9 @@ without a Data-URI prefix. `file`/`photo` belong to a person or organisation;
 metadata; single-item reads include content. Branding is intentionally readable
 before login, so its images must not contain confidential information.
 
-`/api/documents/render` receives `template_id`, `person_id`, `date` and returns
+`/api/v1/documents/render` receives `template_id`, `person_id`, `date` and returns
 `title` and `body`, not a PDF. Clients generate PDFs. The input date remains ISO
-regardless of display locale. `/api/reports` returns UTF-8 CSV with BOM for people,
+regardless of display locale. `/api/v1/reports` returns UTF-8 CSV with BOM for people,
 organisations, memberships, positions and native records. Narrow the filter for
 results exceeding 5,000 records. Multi-page reports are not transactional snapshots.
 
@@ -102,5 +102,5 @@ A timed-out write may already have committed. Read the current state before
 retrying. The contract provides no general idempotency keys or HTTP batch
 transactions. Standard JSON requests are limited to 16 KiB. Asset requests also
 face the 8-MiB HTTP limit and decoded-content limits. Only one exact configured
-browser origin is permitted; preflight uses `OPTIONS /api/…`. Upstream `Host` is
+browser origin is permitted; preflight uses `OPTIONS /api/v1/…`. Upstream `Host` is
 `localhost` or `127.0.0.1`, optionally with a port. Remote clients use the HTTPS proxy.

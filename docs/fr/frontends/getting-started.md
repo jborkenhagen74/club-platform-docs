@@ -1,5 +1,8 @@
 # Frontends et intégration web
 
+> Version cible 0.6.0, préparation G0 : API HTTP `/api/v1` et contrat `Client` commun avec `LocalClient`/`RestClient`. Le schéma 8 et l’ABI 2 restent inchangés. Les anciennes routes `/api/...` répondent 404. Mettre à jour serveur, bureau, portail et proxy ensemble. Les descriptions fonctionnelles ci-dessous proviennent de la base 0.5.0 et restent valables sauf mise à jour par cette note. Core Foundation II, avec ABI V3 et sept langues d’interface, n’est pas encore terminé.
+
+
 [Accueil](../README.md) · [REST](../api/overview.md) · [Installation](../installation.md)
 
 Le portail utilise React/TypeScript et Tailwind 4. `npm ci` suit le fichier de
@@ -7,13 +10,13 @@ verrouillage ; `npm run build` produit `dist/`. Code PDF et polices proviennent 
 build, chargés au besoin, sans CDN obligatoire. `examples/frontends/web-basic`
 démontre seulement connexion et liste des personnes.
 
-Servir navigateur et API derrière la même origine HTTPS. Le proxy transmet `/api/`
+Servir navigateur et API derrière la même origine HTTPS. Le proxy transmet `/api/v1/`
 à la boucle locale, avec `Host: 127.0.0.1:8080`, en conservant `Authorization` et
 `Origin`. Configurer exactement cette origine dans `--portal-origin`. Sans cela,
 les requêtes portant Origin sont refusées. Ne pas remplacer une configuration
 correcte par une autorisation universelle.
 
-Pour une supervision publique, configurer `/health` séparément : le proxy `/api/`
+Pour une supervision publique, configurer `/health` séparément : le proxy `/api/v1/`
 ne l’inclut pas. Ne pas journaliser corps de requêtes, mots de passe ou jetons.
 DNS, certificats et comptes de service relèvent de l’exploitation ; l’application
 ne gère pas automatiquement les certificats.

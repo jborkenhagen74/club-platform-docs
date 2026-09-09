@@ -1,5 +1,8 @@
 # Frontends und Webserver-Anbindung
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](../README.md) · [REST](../api/overview.md) · [Installation](../installation.md)
 
 Das mitgelieferte Portal ist ein Verwaltungsfrontend mit React/TypeScript und
@@ -12,14 +15,14 @@ zeigt nur Anmeldung und Personenliste, nicht den vollständigen Produktumfang.
 ## Transportvertrag
 
 Browser und öffentliche API sollten über denselben HTTPS-Ursprung erreichbar
-sein. `/api/` wird vom Webserver an den Loopback-Server weitergereicht. Der
+sein. `/api/v1/` wird vom Webserver an den Loopback-Server weitergereicht. Der
 Upstream-`Host` muss `127.0.0.1:8080` sein; `Authorization` und `Origin` bleiben
 erhalten. Der Serverstart enthält denselben exakten Ursprung als `--portal-origin`.
 Ohne Freigabe werden Browseranfragen mit Origin abgewiesen. Niemals `*` als
 Ersatz für eine passende Konfiguration verwenden.
 
 Ein öffentliches Gesundheitsmonitoring muss `/health` separat konfigurieren;
-die normale `/api/`-Weiterleitung umfasst diese Route nicht. Reverse Proxy und
+die normale `/api/v1/`-Weiterleitung umfasst diese Route nicht. Reverse Proxy und
 Server dürfen keine Passwort-/Token- oder Request-Body-Protokollierung betreiben.
 Für HTTPS-Zertifikat, DNS und Betriebskonto gelten die örtlichen Betriebsverfahren.
 Die Anwendung bringt keine automatische Zertifikatsverwaltung mit.

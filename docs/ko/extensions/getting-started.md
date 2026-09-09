@@ -1,5 +1,8 @@
 # 네이티브 확장 개발
 
+> 목표 버전 0.6.0의 준비 작업 G0입니다. HTTP API는 `/api/v1`이며 공통 `Client` 계약을 `LocalClient`와 `RestClient`가 구현합니다. 데이터베이스 스키마 8과 확장 ABI 2는 그대로입니다. 기존 `/api/...` 경로는 404를 반환합니다. 서버, 데스크톱, 포털 및 프록시를 함께 업데이트하십시오. 아래 기능 설명은 0.5.0 기준에서 작성되었으며 이 안내로 변경된 부분 외에는 계속 적용됩니다. ABI V3 및 일곱 UI 언어를 포함한 Core Foundation II는 아직 완료되지 않았습니다.
+
+
 [시작 페이지](../README.md) · [화면 계약](ui.md) · [예제](../../../examples/extensions/hello-extension/README.md)
 
 0.5.0 호스트는 **ABI 2**를 요구합니다. `sdk/extension_api.h`는 과거 ABI 1
@@ -44,13 +47,13 @@ PC에서 다시 로드하지 않습니다.
 ## 활성화와 데이터
 
 로그인한 관리자가 `Erweiterungen aktivieren`을 선택하거나
-`POST /api/extensions/install`에 `{}`를 보냅니다. `schema.manage`가 필요하며
+`POST /api/v1/extensions/install`에 `{}`를 보냅니다. `schema.manage`가 필요하며
 자료형 등록과 매니페스트 저장은 트랜잭션 및 감사 대상입니다.
-`GET /api/extensions`는 로드된 매니페스트와 `installed`를 표시합니다.
+`GET /api/v1/extensions`는 로드된 매니페스트와 `installed`를 표시합니다.
 동일 매니페스트의 재설치는 허용됩니다.
 
 현재 네이티브 레코드는 사람에게 속합니다. 예제 경로는
-`/api/management/ext:attendance.session`입니다. 관리 값에는 `person_id`도
+`/api/v1/management/ext:attendance.session`입니다. 관리 값에는 `person_id`도
 포함하며 호스트가 업무 검증 함수 호출 전에 이를 분리합니다.
 `records.read/write` 외에 `attendance.read/write`를 역할에 부여합니다.
 화면이 보인다고 서버 권한 검사를 대신하지 않습니다.

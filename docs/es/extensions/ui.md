@@ -1,5 +1,8 @@
 # Aportaciones declarativas a la interfaz
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](../README.md) · [Desarrollo](getting-started.md)
 
 ABI 2 describe tipos y campos. Escritorio y portal generan pestañas y formularios

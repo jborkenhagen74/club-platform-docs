@@ -1,5 +1,8 @@
 # Installation and initial setup
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Language home](README.md) · [Operations and recovery](operations.md)
 
 ## Preparation
@@ -98,7 +101,7 @@ npm run build
 ```
 
 Copy `dist/` contents to the HTTPS web server's document root. No Node process is
-needed to serve them. Proxy `/api/` to `127.0.0.1:8080`, set upstream `Host` to
+needed to serve them. Proxy `/api/v1/` to `127.0.0.1:8080`, set upstream `Host` to
 `127.0.0.1:8080`, and preserve `Origin` and `Authorization`. The configured
 `--portal-origin` must match the browser origin exactly, without a trailing slash.
 Version 0.5.0 operates at `/`; arbitrary subpath deployment is not a completed
@@ -128,7 +131,7 @@ location / {
     try_files $uri $uri/ /index.html;
 }
 
-location /api/ {
+location /api/v1/ {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host 127.0.0.1:8080;
     proxy_set_header Origin $http_origin;

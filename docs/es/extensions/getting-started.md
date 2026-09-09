@@ -1,5 +1,8 @@
 # Desarrollo de extensiones nativas
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](../README.md) · [Interfaz](ui.md) · [Ejemplo](../../../examples/extensions/hello-extension/README.md)
 
 El host 0.5.0 requiere **ABI 2**. `sdk/extension_api.h` conserva el borrador ABI 1;
@@ -44,12 +47,12 @@ del servidor en el equipo cliente.
 ## Activación y datos
 
 Un administrador conectado selecciona `Erweiterungen aktivieren` o envía `{}` a
-`POST /api/extensions/install`. Requiere `schema.manage`. Registro de tipos y
-manifiesto son transaccionales y auditados. `GET /api/extensions` presenta módulos
+`POST /api/v1/extensions/install`. Requiere `schema.manage`. Registro de tipos y
+manifiesto son transaccionales y auditados. `GET /api/v1/extensions` presenta módulos
 cargados e `installed`; reinstalar el mismo manifiesto es válido.
 
 Los registros nativos actualmente pertenecen a personas. Ejemplo:
-`/api/management/ext:attendance.session`. `values` incluye `person_id`, que el host
+`/api/v1/management/ext:attendance.session`. `values` incluye `person_id`, que el host
 retira antes de llamar al validador. Asignar a roles `attendance.read/write` además
 de `records.read/write`. La visibilidad de un botón no sustituye los permisos.
 

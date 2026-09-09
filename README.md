@@ -1,6 +1,6 @@
 # Club Platform — Documentation / Dokumentation
 
-**0.5.0 · 2026-09-09 · database schema 8 · native extension ABI 2**
+**Development target 0.6.0 · G0 preparation · schema 8 · native ABI 2**
 
 | Sprache / Language | Dokumentation / Documentation | Benutzerhandbuch / User manual |
 |---|---|---|
@@ -14,7 +14,7 @@ This repository contains the public documentation, REST contract, extension SDK 
 standalone integration examples. It follows the original `docs/`, `openapi/`, `sdk/`
 and `examples/` structure. The proprietary application implementation is not included.
 
-The edition documents implementation commit `320a4c2709c13dd56455768a2f8819a815ad3997`.
+The current API/client reference is implementation commit `427159c789ed19c1ab73f5241dad1ed7ae895316`. The functional baseline is 0.5.0. This edition additionally documents the `/api/v1` migration and the shared Client/LocalClient/RestClient boundary. The full 0.6.0 feature set is planned, not released.
 Windows builds and PostgreSQL restore require maintenance commit
 `6ebb363ec28ab8631fb82a88051351f87659b523`; see the translated operations chapters.
 It describes delivered functionality and explicitly identifies limitations; it does

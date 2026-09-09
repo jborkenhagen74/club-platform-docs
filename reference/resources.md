@@ -2,7 +2,7 @@
 
 [Deutsch](../docs/de/api/overview.md) · [English](../docs/en/api/overview.md) · [Français](../docs/fr/api/overview.md) · [Español](../docs/es/api/overview.md) · [한국어](../docs/ko/api/overview.md)
 
-**0.5.0 · schema 8 · API `/api`**
+**0.5.0 · schema 8 · API `/api/v1`**
 
 - **DE:** Die folgenden technischen Schlüssel werden nicht übersetzt. Alle `values` sind JSON-Zeichenketten. Sende bei normalen Datensätzen den vollständigen Feldsatz; optionale leere Werte sind `""`. Die Tabelle zeigt keine Bildschirmbeschriftungen. IDs referenzieren vorhandene Datensätze. Fachrollen und Organisationshierarchie gewähren keine Zugriffsrechte.
 - **EN:** Technical keys below are not translated. All `values` are JSON strings. Send the complete normal-record field set; optional empty values are `""`. These are not UI captions. IDs reference existing records. Business positions and organisation hierarchy do not grant access rights.
@@ -25,7 +25,7 @@
 | `departments` | `records.read / records.write` | `organization_id`, `name`, `sport` |
 | `fee_groups` | `memberships.read / memberships.write` | `organization_id`, `name`, `amount_cents`, `currency`, `interval` |
 
-`persons`: GET → `given_name`, `family_name`; POST uses `/api/persons` instead.
+`persons`: GET → `given_name`, `family_name`; POST uses `/api/v1/persons` instead.
 `person_identity`: POST → `given_name`, `family_name`, existing ID + revision.
 `organization_children`: GET view of `organizations`, `owner` = parent ID.
 
@@ -90,13 +90,13 @@ Native record owners are people. Activation requires `schema.manage`.
 
 ## Example / Beispiel / Exemple / Ejemplo / 예시
 
-`POST /api/management/organizations`:
+`POST /api/v1/management/organizations`:
 
 ```json
 {"id":"","revision":"0","values":{"name":"Example Sports School","organization_type":"sports_school"}}
 ```
 
-`POST /api/management/field_values` (replace IDs with actual field/person IDs):
+`POST /api/v1/management/field_values` (replace IDs with actual field/person IDs):
 
 ```json
 {"id":"e32d76cb-fd1a-435a-9cd0-62adcb959b70","revision":"0","values":{"entity_id":"d92d76cb-fd1a-435a-9cd0-62adcb959b70","type":"integer","value":"8","clear":"false"}}

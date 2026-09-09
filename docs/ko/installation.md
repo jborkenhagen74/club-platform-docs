@@ -1,5 +1,8 @@
 # 설치와 초기 설정
 
+> 목표 버전 0.6.0의 준비 작업 G0입니다. HTTP API는 `/api/v1`이며 공통 `Client` 계약을 `LocalClient`와 `RestClient`가 구현합니다. 데이터베이스 스키마 8과 확장 ABI 2는 그대로입니다. 기존 `/api/...` 경로는 404를 반환합니다. 서버, 데스크톱, 포털 및 프록시를 함께 업데이트하십시오. 아래 기능 설명은 0.5.0 기준에서 작성되었으며 이 안내로 변경된 부분 외에는 계속 적용됩니다. ABI V3 및 일곱 UI 언어를 포함한 Core Foundation II는 아직 완료되지 않았습니다.
+
+
 [시작 페이지](README.md) · [운영과 복원](operations.md)
 
 기존 설치를 변경하기 전에 검증된 백업을 만드십시오. 데이터, 설정, 프로그램은
@@ -87,7 +90,7 @@ npm run build
 ```
 
 `dist/`의 내용을 HTTPS 웹 루트에 복사합니다. 파일 제공에 Node 프로세스는
-필요하지 않습니다. `/api/`를 `127.0.0.1:8080`으로 전달하고 업스트림 `Host`를
+필요하지 않습니다. `/api/v1/`를 `127.0.0.1:8080`으로 전달하고 업스트림 `Host`를
 `127.0.0.1:8080`으로 설정하되 `Origin`과 `Authorization`은 보존합니다.
 `--portal-origin`은 브라우저 출처와 정확히 같아야 하며 끝에 슬래시를 넣지
 않습니다. 0.5.0의 포털 경로는 `/`이며 임의 하위 경로 배치는 완성된 설정 기능이 아닙니다.
@@ -116,7 +119,7 @@ location / {
     try_files $uri $uri/ /index.html;
 }
 
-location /api/ {
+location /api/v1/ {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host 127.0.0.1:8080;
     proxy_set_header Origin $http_origin;

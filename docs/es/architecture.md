@@ -1,5 +1,10 @@
 # Arquitectura y modelo de seguridad
 
+El controlador de escritorio utiliza exclusivamente la interfaz común `Client`. `LocalClient` accede a los servicios autenticados del núcleo dentro del proceso; `RestClient` realiza las mismas operaciones mediante `/api/v1`. La aplicación selecciona la implementación al iniciarse. El controlador UI no depende de los destinos de compilación host, application ni persistence.
+
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](README.md) · [Manual de usuario](user-manual.md)
 
 ## Alcance

@@ -1,5 +1,8 @@
 # Club Platform — Español
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Deutsch](../de/README.md) · [English](../en/README.md) · [Français](../fr/README.md) · [Español](../es/README.md) · [한국어](../ko/README.md)
 
 **0.5.0 · 2026-09-09 · Schema 8 · ABI 2**

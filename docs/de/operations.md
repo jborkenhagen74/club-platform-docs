@@ -1,5 +1,8 @@
 # Betrieb, Sicherung und Updates
 
+> Zielversion 0.6.0, Vorarbeit G0: HTTP-API `/api/v1` und gemeinsamer `Client` mit `LocalClient`/`RestClient`. Datenbankschema 8 und Extension ABI 2 bleiben bestehen. Alte `/api/...`-Pfade liefern 404. Server, Desktop, Portal und Proxy gemeinsam aktualisieren. Die folgenden Funktionsbeschreibungen stammen aus der 0.5.0-Basis und gelten weiterhin, soweit dieser Hinweis sie aktualisiert. Core Foundation II mit ABI V3 und sieben UI-Sprachen ist noch nicht abgeschlossen.
+
+
 [Sprachstart](README.md) · [Installation](installation.md)
 
 > Für Windows-Builds und die PostgreSQL-Wiederherstellung wird zusätzlich der Fehlerkorrektur-Commit `6ebb363ec28ab8631fb82a88051351f87659b523` benötigt. Er korrigiert das Windows-SDK-Symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` und ergänzt beim SQL-Export von `pg_restore` die Option `--file=-`. Schema und API bleiben bei diesem Fix unverändert. Vor dem Sitzungswiderruf wird außerdem der konfigurierte Suchpfad wiederhergestellt, den die Dump-Ausgabe zuvor geleert hat. Ein Regressionstest prüft, dass bei fehlgeschlagenem Widerruf auch die wiederhergestellten Tabellen zurückgerollt werden.

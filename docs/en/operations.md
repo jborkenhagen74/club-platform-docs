@@ -1,5 +1,8 @@
 # Operations, backups and updates
 
+> Target version 0.6.0, preparatory G0 work: HTTP API `/api/v1` and shared `Client` with `LocalClient`/`RestClient`. Database schema 8 and extension ABI 2 remain unchanged. Old `/api/...` paths return 404. Upgrade server, desktop, portal and proxy together. The functional descriptions below originate from the 0.5.0 baseline and remain applicable except where this notice updates them. Core Foundation II with ABI V3 and seven UI languages is not complete.
+
+
 [Language home](README.md) · [Installation](installation.md)
 
 > Windows builds and PostgreSQL restoration additionally require maintenance commit `6ebb363ec28ab8631fb82a88051351f87659b523`. It corrects the Windows SDK symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` and adds `--file=-` when exporting SQL with `pg_restore`. This fix does not change the schema or API. The configured search path is also restored before session revocation because the dump output clears it. A regression test verifies that failed revocation rolls back the restored tables as well.

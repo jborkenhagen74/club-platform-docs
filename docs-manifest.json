@@ -1,7 +1,7 @@
 {
-  "version": "0.5.0",
+  "version": "0.6.0",
   "edition": "2026-09-09",
-  "implementation_commit": "320a4c2709c13dd56455768a2f8819a815ad3997",
+  "implementation_commit": "427159c789ed19c1ab73f5241dad1ed7ae895316",
   "schema": 8,
   "abi": 2,
   "languages": [
@@ -23,5 +23,7 @@
     "frontends/getting-started.md",
     "versioning.md"
   ],
-  "maintenance_commit": "6ebb363ec28ab8631fb82a88051351f87659b523"
+  "maintenance_commit": "6ebb363ec28ab8631fb82a88051351f87659b523",
+  "scope": "G0 development preparation only; full Core Foundation II remains planned",
+  "functional_baseline_commit": "320a4c2709c13dd56455768a2f8819a815ad3997"
 }

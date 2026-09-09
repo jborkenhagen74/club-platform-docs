@@ -1,5 +1,8 @@
 # Frontends e integración con el servidor web
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](../README.md) · [REST](../api/overview.md) · [Instalación](../installation.md)
 
 El portal usa React/TypeScript y Tailwind 4. `npm ci` respeta el lockfile;
@@ -7,12 +10,12 @@ El portal usa React/TypeScript y Tailwind 4. `npm ci` respeta el lockfile;
 cargan desde el build cuando se necesitan, sin CDN obligatorio.
 `examples/frontends/web-basic` demuestra solo acceso y lista de personas.
 
-Servir portal y API bajo el mismo origen HTTPS. El proxy envía `/api/` al host
+Servir portal y API bajo el mismo origen HTTPS. El proxy envía `/api/v1/` al host
 local con `Host: 127.0.0.1:8080`, conservando `Authorization` y `Origin`.
 Configurar ese origen exacta mediante `--portal-origin`. Sin configuración se
 rechazan peticiones de navegador con Origin. No sustituirla por acceso comodín.
 
-Configurar `/health` aparte si se necesita supervisión pública; el proxy `/api/`
+Configurar `/health` aparte si se necesita supervisión pública; el proxy `/api/v1/`
 no lo incluye. No registrar cuerpos, contraseñas o tokens. DNS, certificados y
 cuentas de servicio son responsabilidad operativa; el producto no automatiza certificados.
 

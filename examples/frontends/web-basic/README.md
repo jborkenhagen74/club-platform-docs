@@ -2,7 +2,7 @@
 
 [Deutsch](../../../docs/de/frontends/getting-started.md) · [English](../../../docs/en/frontends/getting-started.md) · [Français](../../../docs/fr/frontends/getting-started.md) · [Español](../../../docs/es/frontends/getting-started.md) · [한국어](../../../docs/ko/frontends/getting-started.md)
 
-Serve this directory from the same HTTPS origin as the reverse-proxied `/api`.
+Serve this directory from the same HTTPS origin as the reverse-proxied `/api/v1`.
 Configure the server's exact allowed portal origin and rewrite the upstream Host to
 `127.0.0.1:8080`. Use the deployment configuration in the translated installation
 chapters. Opening `index.html` as `file://` or merely starting a static server without

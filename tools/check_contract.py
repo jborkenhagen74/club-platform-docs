@@ -8,15 +8,15 @@ root = Path(__file__).resolve().parents[1]
 spec = yaml.safe_load((root / 'openapi/club-platform.yaml').read_text(encoding='utf-8'))
 validate(spec)
 paths = spec['paths']; schemas = spec['components']['schemas']
-assert spec['info']['version'] == '0.5.0'
+assert spec['info']['version'] == '0.6.0'
 assert sum(len(p) for p in paths.values()) == 31
 assert schemas['Revision']['type'] == 'string'
 assert schemas['StringValues']['additionalProperties']['type'] == 'string'
-assert paths['/api/roles/permission']['post']['requestBody']['content']['application/json']['schema']['properties']['enabled']['type'] == 'boolean'
+assert paths['/api/v1/roles/permission']['post']['requestBody']['content']['application/json']['schema']['properties']['enabled']['type'] == 'boolean'
 assert 'next_cursor' not in schemas['AssetPage']['properties']
-assert paths['/api/branding']['get']['security'] == []
-assert paths['/api/auth/login']['post']['security'] == []
-assert not any('/api/v1' in path for path in paths)
+assert paths['/api/v1/branding']['get']['security'] == []
+assert paths['/api/v1/auth/login']['post']['security'] == []
+assert all(path == '/health' or path.startswith('/api/v1/') for path in paths)
 # Example manifest must agree with the documented native ABI and resource namespace.
 source = (root / 'examples/extensions/hello-extension/hello_extension.cpp').read_text()
 import json

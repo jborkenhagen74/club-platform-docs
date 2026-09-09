@@ -1,5 +1,10 @@
 # Architecture et modèle de sécurité
 
+Le contrôleur du bureau utilise uniquement l’interface commune `Client`. `LocalClient` accède aux services authentifiés du cœur dans le processus ; `RestClient` effectue les mêmes opérations via `/api/v1`. Le choix se fait au démarrage. Le contrôleur UI ne dépend pas des cibles de compilation host, application ou persistence.
+
+> Version cible 0.6.0, préparation G0 : API HTTP `/api/v1` et contrat `Client` commun avec `LocalClient`/`RestClient`. Le schéma 8 et l’ABI 2 restent inchangés. Les anciennes routes `/api/...` répondent 404. Mettre à jour serveur, bureau, portail et proxy ensemble. Les descriptions fonctionnelles ci-dessous proviennent de la base 0.5.0 et restent valables sauf mise à jour par cette note. Core Foundation II, avec ABI V3 et sept langues d’interface, n’est pas encore terminé.
+
+
 [Accueil](README.md) · [Manuel utilisateur](user-manual.md)
 
 ## Périmètre

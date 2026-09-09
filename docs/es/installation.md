@@ -1,5 +1,8 @@
 # Instalación y puesta en marcha
 
+> Versión objetivo 0.6.0, preparación G0: API HTTP `/api/v1` y contrato `Client` común con `LocalClient`/`RestClient`. Se mantienen el esquema 8 y la ABI 2. Las rutas antiguas `/api/...` devuelven 404. Actualiza servidor, escritorio, portal y proxy conjuntamente. Las descripciones funcionales proceden de la base 0.5.0 y siguen siendo aplicables salvo lo actualizado en esta nota. Core Foundation II con ABI V3 y siete idiomas de interfaz aún no está completo.
+
+
 [Inicio](README.md) · [Operación y recuperación](operations.md)
 
 Antes de modificar una instalación, crear una copia verificada. Separar datos,
@@ -88,7 +91,7 @@ npm run build
 ```
 
 Copiar el contenido de `dist/` a la raíz documental HTTPS. No se necesita un proceso
-Node para servirlo. Redirigir `/api/` a `127.0.0.1:8080`, fijar el `Host` de upstream
+Node para servirlo. Redirigir `/api/v1/` a `127.0.0.1:8080`, fijar el `Host` de upstream
 a `127.0.0.1:8080` y conservar `Origin` y `Authorization`. `--portal-origin` debe
 coincidir exactamente, sin barra final. El portal funciona en `/`; un subdirectorio
 arbitrario no es una configuración terminada en 0.5.0.
@@ -117,7 +120,7 @@ location / {
     try_files $uri $uri/ /index.html;
 }
 
-location /api/ {
+location /api/v1/ {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host 127.0.0.1:8080;
     proxy_set_header Origin $http_origin;

@@ -1,15 +1,16 @@
 openapi: 3.1.0
 info:
   title: Club Platform HTTP API
-  version: 0.5.0
-  description: Implemented contract at 320a4c2709c13dd56455768a2f8819a815ad3997 (2026-09-09),
-    schema 8. Local service binds 127.0.0.1. Deploy behind an HTTPS reverse proxy
-    preserving /api and rewriting upstream Host to localhost/127.0.0.1. Configure
-    one exact allowed browser Origin. Ordinary JSON bodies are limited to 16 KiB;
-    assets to 8 MiB. actor/actor_id are rejected. Transport-level errors may not use
-    the application JSON error shape. OPTIONS preflight for /api/* returns 204 only
-    for the configured Origin, otherwise 403 without JSON. No DELETE, audit-list or
-    /api/v1 routes are implemented.
+  version: 0.6.0
+  description: 'Development target 0.6.0, preparatory API/client refactor only; schema
+    8 and native ABI 2. All application routes are /api/v1; old /api/... and unsupported
+    versions return 404. /health remains unversioned. Local service binds 127.0.0.1.
+    Deploy behind an HTTPS reverse proxy preserving /api/v1 and rewriting upstream
+    Host to localhost/127.0.0.1. Configure one exact allowed browser Origin. Ordinary
+    JSON bodies: 16 KiB; assets: 8 MiB. actor/actor_id are rejected. Transport errors
+    may not use the JSON error shape. OPTIONS /api/v1/* returns 204 only for the configured
+    Origin; otherwise 403 without JSON. No DELETE or audit-list route is implemented
+    yet. Server, desktop, portal and proxy must be upgraded together.'
 servers:
 - url: http://127.0.0.1:8080
   description: Local development only; production clients use the configured HTTPS
@@ -75,7 +76,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       security: []
-  /api/auth/login:
+  /api/v1/auth/login:
     post:
       summary: Create an authenticated session
       operationId: post_api_auth_login
@@ -111,7 +112,7 @@ paths:
               - login
               - password
       security: []
-  /api/auth/me:
+  /api/v1/auth/me:
     get:
       summary: Read current session
       operationId: get_api_auth_me
@@ -131,7 +132,7 @@ paths:
         '404': *id004
         '409': *id005
         '500': *id006
-  /api/auth/logout:
+  /api/v1/auth/logout:
     post:
       summary: Revoke current session
       operationId: post_api_auth_logout
@@ -147,7 +148,7 @@ paths:
         '404': *id004
         '409': *id005
         '500': *id006
-  /api/auth/password:
+  /api/v1/auth/password:
     post:
       summary: Change own password and revoke sessions
       operationId: post_api_auth_password
@@ -178,7 +179,7 @@ paths:
               required:
               - old_password
               - new_password
-  /api/persons:
+  /api/v1/persons:
     get:
       summary: List persons
       operationId: get_api_persons
@@ -236,7 +237,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PersonInput'
-  /api/persons/{id}:
+  /api/v1/persons/{id}:
     get:
       summary: Read person
       operationId: get_api_persons_id
@@ -296,7 +297,7 @@ paths:
         required: true
         schema: *id008
         description: id
-  /api/management/{resource}:
+  /api/v1/management/{resource}:
     get:
       summary: List management records
       operationId: get_api_management_resource
@@ -364,7 +365,7 @@ paths:
               $ref: '#/components/schemas/ManagementSave'
       parameters:
       - *id011
-  /api/branding:
+  /api/v1/branding:
     get:
       summary: Read public login-screen branding
       operationId: get_api_branding
@@ -387,7 +388,7 @@ paths:
         '409': *id005
         '500': *id006
       security: []
-  /api/assets:
+  /api/v1/assets:
     post:
       summary: Upload an asset
       operationId: post_api_assets
@@ -477,14 +478,14 @@ paths:
         required: false
         schema: *id007
         description: after
-  /api/assets/{id}:
+  /api/v1/assets/{id}:
     get:
       summary: Read asset including Base64 content
       operationId: get_api_assets_id
       tags:
       - assets
       description: Requires records.read. Reads entity-owned assets only; public branding
-        is served by /api/branding.
+        is served by /api/v1/branding.
       responses:
         '200':
           description: Success
@@ -504,7 +505,7 @@ paths:
         required: true
         schema: *id008
         description: id
-  /api/extensions:
+  /api/v1/extensions:
     get:
       summary: List loaded extension manifests
       operationId: get_api_extensions
@@ -531,7 +532,7 @@ paths:
         '404': *id004
         '409': *id005
         '500': *id006
-  /api/extensions/install:
+  /api/v1/extensions/install:
     post:
       summary: Activate loaded extensions
       operationId: post_api_extensions_install
@@ -555,7 +556,7 @@ paths:
             schema:
               type: object
               properties: {}
-  /api/documents/render:
+  /api/v1/documents/render:
     post:
       summary: Render plain-text template
       operationId: post_api_documents_render
@@ -601,7 +602,7 @@ paths:
               - template_id
               - person_id
               - date
-  /api/reports:
+  /api/v1/reports:
     get:
       summary: Export filtered records as CSV
       operationId: get_api_reports
@@ -638,7 +639,7 @@ paths:
         required: false
         schema: *id007
         description: q
-  /api/users:
+  /api/v1/users:
     post:
       summary: Create login account
       operationId: post_api_users
@@ -672,7 +673,7 @@ paths:
               required:
               - login
               - password
-  /api/users/{id}/active:
+  /api/v1/users/{id}/active:
     post:
       summary: Enable or disable account
       operationId: post_api_users_id_active
@@ -706,7 +707,7 @@ paths:
         required: true
         schema: *id008
         description: id
-  /api/groups:
+  /api/v1/groups:
     post:
       summary: Create group
       operationId: post_api_groups
@@ -736,7 +737,7 @@ paths:
                 name: *id007
               required:
               - name
-  /api/roles:
+  /api/v1/roles:
     post:
       summary: Create role
       operationId: post_api_roles
@@ -766,7 +767,7 @@ paths:
                 name: *id007
               required:
               - name
-  /api/groups/membership:
+  /api/v1/groups/membership:
     post:
       summary: Set groups membership
       operationId: post_api_groups_membership
@@ -797,7 +798,7 @@ paths:
               - group_id
               - user_id
               - enabled
-  /api/groups/role:
+  /api/v1/groups/role:
     post:
       summary: Set groups role
       operationId: post_api_groups_role
@@ -828,7 +829,7 @@ paths:
               - group_id
               - role_id
               - enabled
-  /api/roles/permission:
+  /api/v1/roles/permission:
     post:
       summary: Set roles permission
       operationId: post_api_roles_permission
@@ -859,7 +860,7 @@ paths:
               - role_id
               - permission
               - enabled
-  /api/fields:
+  /api/v1/fields:
     post:
       summary: Define custom field
       operationId: post_api_fields
@@ -901,7 +902,7 @@ paths:
               - record_type
               - key
               - type
-  /api/fields/permissions:
+  /api/v1/fields/permissions:
     post:
       summary: Set group field permissions
       operationId: post_api_fields_permissions
@@ -933,7 +934,7 @@ paths:
               - group_id
               - read
               - write
-  /api/fields/type:
+  /api/v1/fields/type:
     post:
       summary: Migrate custom field type
       operationId: post_api_fields_type
@@ -963,7 +964,7 @@ paths:
               required:
               - field_id
               - type
-  /api/records/{id}/fields/{field_id}:
+  /api/v1/records/{id}/fields/{field_id}:
     get:
       summary: Read custom field value
       operationId: get_api_records_id_fields_field_id
