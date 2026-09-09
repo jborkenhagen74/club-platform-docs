@@ -1,37 +1,16 @@
-#include "extension_api.h"
+#include <extension_v2.h>
 
-struct ClubPlatformExtensionHandle {
-    const ClubPlatformHostApi* host;
+namespace {
+// The host validates all declared types, required fields and dates first.
+// This example has no extra business constraint and needs no private Core code.
+int validate(const char*, const char*) noexcept { return 1; }
+const ClubExtensionV2 extension{
+    2,
+    R"({"id":"attendance","name":"Attendance","version":"1.0.0","types":[{"key":"attendance.session","label":"Training attendance","fields":[{"key":"attended_on","label":"Date","type":"date"},{"key":"course","label":"Course","type":"text"}]}]})",
+    validate
 };
-
-extern "C" CLUBPLATFORM_EXTENSION_EXPORT ClubPlatformExtensionInfo clubplatform_extension_info(void) {
-    return {CLUBPLATFORM_EXTENSION_ABI_VERSION, "example.hello", "Hello Extension", "0.1.0"};
 }
 
-extern "C" CLUBPLATFORM_EXTENSION_EXPORT ClubPlatformExtensionHandle* clubplatform_extension_create(const ClubPlatformHostApi* host) {
-    if (host == nullptr || host->abi_version != CLUBPLATFORM_EXTENSION_ABI_VERSION) {
-        return nullptr;
-    }
-    return new ClubPlatformExtensionHandle{host};
-}
-
-extern "C" CLUBPLATFORM_EXTENSION_EXPORT int clubplatform_extension_start(ClubPlatformExtensionHandle* extension) {
-    if (extension == nullptr) {
-        return -1;
-    }
-    extension->host->register_permission("example.hello.read", "Read Hello Extension");
-    extension->host->register_view("example.hello.view", "qml", "qrc:/example/Hello.qml");
-    extension->host->register_menu_item("example.hello.menu", "main.extensions", "Hello", "example.hello.read", "example.hello.view");
-    extension->host->log(1, "example.hello", "Hello Extension started");
-    return 0;
-}
-
-extern "C" CLUBPLATFORM_EXTENSION_EXPORT void clubplatform_extension_stop(ClubPlatformExtensionHandle* extension) {
-    if (extension != nullptr) {
-        extension->host->log(1, "example.hello", "Hello Extension stopped");
-    }
-}
-
-extern "C" CLUBPLATFORM_EXTENSION_EXPORT void clubplatform_extension_destroy(ClubPlatformExtensionHandle* extension) {
-    delete extension;
+extern "C" CLUB_EXTENSION_EXPORT const ClubExtensionV2* clubplatform_extension_v2(void) {
+    return &extension;
 }

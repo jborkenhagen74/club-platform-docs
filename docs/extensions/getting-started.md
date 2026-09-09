@@ -1,7 +1,5 @@
-# Extension quick start
+# Club Platform 0.5.0
 
-Extensions use a versioned C ABI. This keeps the binary boundary stable across C++ compiler implementations while allowing each extension to use modern C++ internally.
+[Deutsch](../de/extensions/getting-started.md) · [English](../en/extensions/getting-started.md) · [Français](../fr/extensions/getting-started.md) · [Español](../es/extensions/getting-started.md) · [한국어](../ko/extensions/getting-started.md)
 
-An extension can register permissions, menu entries, views and REST routes through the host API. Future revisions will add typed registries for member-profile tabs, dashboard widgets, settings pages, scheduled jobs, persistence migrations and domain events.
-
-See `examples/extensions/hello-extension`.
+The maintained reference is available in the five languages above. Current HTTP routes use `/api/v1`, and native extensions use ABI 2. Historical ABI 1 callback proposals are not implemented contracts. The versioned HTTP routes replace the former `/api` routes; clients and server must be upgraded together.
