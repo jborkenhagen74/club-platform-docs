@@ -8,7 +8,7 @@ archivos y hashes de contraseñas: restringir acceso y proteger su destino.
 `scripts/pilot-*.py` pertenece al paquete de implementación, no a este repositorio
 público, y requiere Python 3.11 o posterior.
 
-> La compilación en Windows y la restauración PostgreSQL requieren además el commit correctivo `cd765ba08bd2cd8c21969eb8fc20a52a9659e214`. Corrige el símbolo del SDK de Windows `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` y añade `--file=-` al exportar SQL con `pg_restore`. No cambia el esquema ni la API.
+> La compilación en Windows y la restauración PostgreSQL requieren además el commit correctivo `6ebb363ec28ab8631fb82a88051351f87659b523`. Corrige el símbolo del SDK de Windows `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` y añade `--file=-` al exportar SQL con `pg_restore`. No cambia el esquema ni la API. También se restablece la ruta de búsqueda configurada antes de revocar sesiones, ya que el volcado la vacía. Una prueba de regresión verifica que, si falla la revocación, también se reviertan las tablas restauradas.
 
 ## SQLite
 

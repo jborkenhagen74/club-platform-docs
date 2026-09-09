@@ -7,7 +7,7 @@
 있으므로 접근과 저장 위치를 보호합니다. `scripts/pilot-*.py`는 구현 패키지의
 도구이며 이 공개 저장소에는 포함되지 않습니다. Python 3.11 이상이 필요합니다.
 
-> Windows 빌드와 PostgreSQL 복구에는 추가로 수정 커밋 `cd765ba08bd2cd8c21969eb8fc20a52a9659e214`가 필요합니다. Windows SDK 심볼을 `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS`로 수정하고 `pg_restore`의 SQL 출력에 `--file=-`를 추가합니다. 이 수정은 스키마나 API를 변경하지 않습니다.
+> Windows 빌드와 PostgreSQL 복구에는 추가로 수정 커밋 `6ebb363ec28ab8631fb82a88051351f87659b523`가 필요합니다. Windows SDK 심볼을 `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS`로 수정하고 `pg_restore`의 SQL 출력에 `--file=-`를 추가합니다. 이 수정은 스키마나 API를 변경하지 않습니다. 덤프 출력이 검색 경로를 비우므로 세션을 취소하기 전에 설정된 검색 경로도 복원합니다. 회귀 테스트는 세션 취소 실패 시 복원된 테이블도 함께 롤백되는지 확인합니다.
 
 ## SQLite
 

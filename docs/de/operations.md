@@ -2,7 +2,7 @@
 
 [Sprachstart](README.md) · [Installation](installation.md)
 
-> Für Windows-Builds und die PostgreSQL-Wiederherstellung wird zusätzlich der Fehlerkorrektur-Commit `cd765ba08bd2cd8c21969eb8fc20a52a9659e214` benötigt. Er korrigiert das Windows-SDK-Symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` und ergänzt beim SQL-Export von `pg_restore` die Option `--file=-`. Schema und API bleiben bei diesem Fix unverändert.
+> Für Windows-Builds und die PostgreSQL-Wiederherstellung wird zusätzlich der Fehlerkorrektur-Commit `6ebb363ec28ab8631fb82a88051351f87659b523` benötigt. Er korrigiert das Windows-SDK-Symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` und ergänzt beim SQL-Export von `pg_restore` die Option `--file=-`. Schema und API bleiben bei diesem Fix unverändert. Vor dem Sitzungswiderruf wird außerdem der konfigurierte Suchpfad wiederhergestellt, den die Dump-Ausgabe zuvor geleert hat. Ein Regressionstest prüft, dass bei fehlgeschlagenem Widerruf auch die wiederhergestellten Tabellen zurückgerollt werden.
 
 ## Betriebsverantwortung
 

@@ -2,7 +2,7 @@
 
 [Language home](README.md) · [Installation](installation.md)
 
-> Windows builds and PostgreSQL restoration additionally require maintenance commit `cd765ba08bd2cd8c21969eb8fc20a52a9659e214`. It corrects the Windows SDK symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` and adds `--file=-` when exporting SQL with `pg_restore`. This fix does not change the schema or API.
+> Windows builds and PostgreSQL restoration additionally require maintenance commit `6ebb363ec28ab8631fb82a88051351f87659b523`. It corrects the Windows SDK symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` and adds `--file=-` when exporting SQL with `pg_restore`. This fix does not change the schema or API. The configured search path is also restored before session revocation because the dump output clears it. A regression test verifies that failed revocation rolls back the restored tables as well.
 
 ## Operational ownership
 

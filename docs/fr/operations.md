@@ -8,7 +8,7 @@ contiennent données personnelles, fichiers et mots de passe hachés : restreind
 l’accès et protéger la destination. Les outils `scripts/pilot-*.py` appartiennent
 au paquet d’implémentation, pas à ce dépôt public ; Python 3.11 ou ultérieur est requis.
 
-> La compilation Windows et la restauration PostgreSQL nécessitent également le correctif `cd765ba08bd2cd8c21969eb8fc20a52a9659e214`. Il corrige le symbole du SDK Windows `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` et ajoute `--file=-` lors de l’export SQL par `pg_restore`. Le schéma et l’API restent inchangés.
+> La compilation Windows et la restauration PostgreSQL nécessitent également le correctif `6ebb363ec28ab8631fb82a88051351f87659b523`. Il corrige le symbole du SDK Windows `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` et ajoute `--file=-` lors de l’export SQL par `pg_restore`. Le schéma et l’API restent inchangés. Le chemin de recherche configuré est également rétabli avant la révocation des sessions, car le dump le vide. Un test de régression vérifie qu’un échec de révocation annule aussi la restauration des tables.
 
 ## SQLite
 
