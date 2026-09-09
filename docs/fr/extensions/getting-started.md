@@ -62,3 +62,11 @@ Un manifeste déjà installé mais différent est refusé au chargement. Changer
 numéro de version ne migre pas les données. Prévoir migration explicite et sauvegarde
 vérifiée avant évolution du schéma. Routes REST libres, tâches de fond et exécution
 de QML/JavaScript embarqué ne font pas partie d’ABI 2.
+
+## Chemins et diagnostics du chargeur
+
+Priorité : `--extensions`, puis `CLUBPLATFORM_EXTENSIONS`, puis `extensions` à la racine de l’installation, à côté de `bin` ou du paquet macOS. Un seul répertoire est parcouru. L’absence du répertoire par défaut permet un démarrage sans modules ; un chemin explicite absent bloque le démarrage. Les chemins explicites relatifs utilisent le répertoire de travail. Les fichiers sont triés par chemin et enregistrés ensemble après validation complète.
+
+Codes techniques : `file_not_found` (répertoire absent), `library_load_failed` (erreur du chargeur natif), `symbol_missing` (point d’entrée absent), `unsupported_abi` (ABI différente de 2), `invalid_manifest` (JSON/schéma invalide), `version_invalid` (version invalide), `duplicate_module` et `duplicate_type` (identifiants dupliqués), `dependency_missing` (module déclaré absent). Les dépendances natives manquantes produisent `library_load_failed` avec le message système.
+
+Le manifeste peut contenir `"dependencies": ["other_module"]`. Seule la présence est vérifiée, sans plages de versions, capacités ni ordre d’initialisation. `module_not_licensed` est réservé à la future phase de licences. L’ABI 2 reste valide.

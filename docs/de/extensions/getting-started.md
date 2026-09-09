@@ -68,3 +68,11 @@ Versionsnummer erhöhen allein migriert keine Daten. Eine explizite Migration un
 geprüfte Sicherung sind vor Schemaänderungen erforderlich. Nicht unterstützt:
 Hot Reload, frei definierte REST-Routen, Hintergrundjobs oder mitgebrachte QML-/JS-
 Ausführung über diesen ABI-Vertrag. Solche Ideen sind Zukunftsplanung.
+
+## Loader-Pfade und Diagnose
+
+Die Reihenfolge lautet: `--extensions`, dann `CLUBPLATFORM_EXTENSIONS`, dann `extensions` im Installationsstamm neben `bin` bzw. neben dem macOS-App-Bundle. Es wird genau ein Verzeichnis durchsucht. Ein fehlendes Standardverzeichnis erlaubt den Start ohne Module; ein fehlender expliziter Pfad bricht den Start ab. Relative explizite Pfade beziehen sich auf das Arbeitsverzeichnis. Kandidaten werden nach Pfad sortiert und erst nach vollständiger Prüfung gemeinsam registriert.
+
+Technische Codes: `file_not_found` (Verzeichnis fehlt), `library_load_failed` (Betriebssystem-Ladefehler), `symbol_missing` (Einstieg fehlt), `unsupported_abi` (nicht ABI 2), `invalid_manifest` (Schema/JSON ungültig), `version_invalid` (Version ungültig), `duplicate_module` und `duplicate_type` (doppelte IDs), `dependency_missing` (deklarierte Modul-ID fehlt). Native Bibliotheksabhängigkeiten erscheinen als `library_load_failed` mit der Betriebssystemmeldung.
+
+Optional darf das Manifest `"dependencies": ["other_module"]` enthalten. Dies prüft nur Anwesenheit; Versionsbereiche, Capabilities und Initialisierungsreihenfolge sind nicht enthalten. `module_not_licensed` ist für die spätere Lizenzphase reserviert. ABI 2 bleibt gültig.

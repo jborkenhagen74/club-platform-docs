@@ -62,3 +62,11 @@ PC에서 다시 로드하지 않습니다.
 마이그레이션되지는 않습니다. 명시적 마이그레이션과 검증된 백업이 필요합니다.
 임의 REST 경로, 백그라운드 작업, 동봉 QML/JavaScript 실행과 핫 리로드는
 ABI 2 범위 밖입니다.
+
+## 로더 경로와 진단
+
+우선순위는 `--extensions`, `CLUBPLATFORM_EXTENSIONS`, 설치 루트의 `extensions` 순서입니다. 기본 디렉터리는 `bin` 또는 macOS 앱 번들 옆에 있습니다. 하나의 디렉터리만 검색합니다. 기본 디렉터리가 없으면 모듈 없이 시작하지만 명시한 경로가 없으면 시작을 중단합니다. 명시한 상대 경로는 작업 디렉터리를 기준으로 합니다. 파일은 경로순으로 검사하며 전체 검사가 성공해야 함께 등록됩니다.
+
+기술 코드: `file_not_found`(디렉터리 없음), `library_load_failed`(네이티브 로더 오류), `symbol_missing`(진입점 없음), `unsupported_abi`(ABI 2 아님), `invalid_manifest`(잘못된 JSON/스키마), `version_invalid`(잘못된 버전), `duplicate_module` 및 `duplicate_type`(중복 ID), `dependency_missing`(선언된 모듈 ID 없음). 네이티브 라이브러리 의존성 오류는 운영체제 메시지와 함께 `library_load_failed`로 표시됩니다.
+
+매니페스트는 선택적으로 `"dependencies": ["other_module"]`을 포함할 수 있습니다. 존재 여부만 검사하며 버전 범위, 기능 또는 초기화 순서는 처리하지 않습니다. `module_not_licensed`는 향후 라이선스 단계용으로 예약되어 있습니다. ABI 2는 계속 유효합니다.

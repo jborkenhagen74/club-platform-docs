@@ -64,3 +64,11 @@ A changed installed manifest is rejected at load time. Merely increasing its
 version does not migrate data. Schema changes need an explicit migration and a
 verified backup. ABI 2 does not support arbitrary REST routes, background jobs,
 packaged QML/JavaScript execution or hot reload; those remain proposals.
+
+## Loader paths and diagnostics
+
+Precedence is `--extensions`, then `CLUBPLATFORM_EXTENSIONS`, then `extensions` in the installation root beside `bin` or the macOS app bundle. Exactly one directory is scanned. A missing default directory permits a core-only startup; a missing explicit path stops startup. Relative explicit paths use the working directory. Candidates are sorted by path and registered together only after every check succeeds.
+
+Technical codes: `file_not_found` (missing directory), `library_load_failed` (native loader error), `symbol_missing` (missing entry), `unsupported_abi` (not ABI 2), `invalid_manifest` (invalid JSON/schema), `version_invalid` (invalid version), `duplicate_module` and `duplicate_type` (duplicate IDs), `dependency_missing` (declared module ID absent). Native library dependencies report `library_load_failed` with the operating-system message.
+
+Manifests may optionally contain `"dependencies": ["other_module"]`. This checks presence only, without version ranges, capabilities or initialization ordering. `module_not_licensed` is reserved for the later licensing phase. ABI 2 remains supported.

@@ -59,3 +59,11 @@ de `records.read/write`. La visibilidad de un botón no sustituye los permisos.
 Se rechaza al cargar un manifiesto distinto del instalado. Subir su versión no
 migra datos: hace falta migración explícita y copia verificada. Rutas REST libres,
 tareas de fondo, QML/JavaScript ejecutable empaquetado y hot reload quedan fuera de ABI 2.
+
+## Rutas y diagnósticos del cargador
+
+Prioridad: `--extensions`, después `CLUBPLATFORM_EXTENSIONS` y finalmente `extensions` en la raíz de instalación, junto a `bin` o al paquete macOS. Se examina un solo directorio. Si falta el directorio predeterminado, se permite iniciar sin módulos; si falta una ruta explícita, se detiene el inicio. Las rutas explícitas relativas utilizan el directorio de trabajo. Los archivos se ordenan por ruta y se registran juntos tras validar el conjunto completo.
+
+Códigos técnicos: `file_not_found` (directorio ausente), `library_load_failed` (error del cargador nativo), `symbol_missing` (entrada ausente), `unsupported_abi` (ABI distinta de 2), `invalid_manifest` (JSON/esquema inválido), `version_invalid` (versión inválida), `duplicate_module` y `duplicate_type` (identificadores duplicados), `dependency_missing` (módulo declarado ausente). Las dependencias nativas producen `library_load_failed` con el mensaje del sistema.
+
+El manifiesto puede incluir `"dependencies": ["other_module"]`. Solo se comprueba la presencia, sin rangos de versiones, capacidades ni orden de inicialización. `module_not_licensed` queda reservado para la futura fase de licencias. La ABI 2 sigue vigente.

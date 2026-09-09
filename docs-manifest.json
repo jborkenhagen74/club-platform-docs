@@ -25,5 +25,6 @@
   ],
   "maintenance_commit": "6ebb363ec28ab8631fb82a88051351f87659b523",
   "scope": "G0 development preparation only; full Core Foundation II remains planned",
-  "functional_baseline_commit": "320a4c2709c13dd56455768a2f8819a815ad3997"
+  "functional_baseline_commit": "320a4c2709c13dd56455768a2f8819a815ad3997",
+  "loader_commit": "ef542d7f878b7490f648d752801aa5568ccd50c9"
 }
