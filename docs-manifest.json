@@ -1,0 +1,26 @@
+{
+  "version": "0.5.0",
+  "edition": "2026-09-09",
+  "implementation_commit": "320a4c2709c13dd56455768a2f8819a815ad3997",
+  "schema": 8,
+  "abi": 2,
+  "languages": [
+    "de",
+    "en",
+    "fr",
+    "es",
+    "ko"
+  ],
+  "chapters": [
+    "README.md",
+    "user-manual.md",
+    "architecture.md",
+    "installation.md",
+    "operations.md",
+    "api/overview.md",
+    "extensions/getting-started.md",
+    "extensions/ui.md",
+    "frontends/getting-started.md",
+    "versioning.md"
+  ]
+}

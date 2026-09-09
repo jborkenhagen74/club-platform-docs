@@ -29,16 +29,18 @@ jobs:
         run: cmake -S examples/extensions/hello-extension -B build/hello-extension -DCMAKE_BUILD_TYPE=Release
       - name: Build extension example
         run: cmake --build build/hello-extension --config Release --parallel
+      - name: Load and check ABI 2
+        run: ctest --test-dir build/hello-extension -C Release --output-on-failure
 
   contract-smoke-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Verify public contract files
-        shell: bash
+      - name: Install contract validator
+        run: python -m pip install -r requirements-docs.txt
+      - name: Verify documentation and contract
         run: |
-          test -s sdk/extension_api.h
-          test -s openapi/club-platform.yaml
-          grep -q "openapi: 3.1.0" openapi/club-platform.yaml
-          grep -q "CLUBPLATFORM_EXTENSION_ABI_VERSION" sdk/extension_api.h
+          python tools/check_docs.py
+          python tools/check_contract.py
+          node --check examples/frontends/web-basic/app.js

@@ -1,12 +1,5 @@
-# UI extension points
+# Club Platform 0.5.0
 
-Planned desktop UI contributions include:
+[Deutsch](../de/extensions/ui.md) · [English](../en/extensions/ui.md) · [Français](../fr/extensions/ui.md) · [Español](../es/extensions/ui.md) · [한국어](../ko/extensions/ui.md)
 
-- main menu and navigation entries
-- complete views
-- member/profile tabs
-- dashboard widgets
-- context actions
-- settings pages
-
-Where possible, extensions should register contributions declaratively. Qt/QML resources are referenced by a registered view ID instead of giving extensions unrestricted access to the main window.
+The maintained reference is available in the five languages above. Current HTTP routes use `/api`, and native extensions use ABI 2. Earlier ABI 1 and `/api/v1` proposals are not implemented contracts.

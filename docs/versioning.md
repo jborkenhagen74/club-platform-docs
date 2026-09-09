@@ -1,3 +1,5 @@
-# Versioning
+# Club Platform 0.5.0
 
-REST APIs are versioned by URL (`/api/v1`). The native extension ABI has an independent numeric ABI version. Breaking ABI changes require a new ABI version and compatibility checks before an extension is started.
+[Deutsch](de/versioning.md) · [English](en/versioning.md) · [Français](fr/versioning.md) · [Español](es/versioning.md) · [한국어](ko/versioning.md)
+
+The maintained reference is available in the five languages above. Current HTTP routes use `/api`, and native extensions use ABI 2. Earlier ABI 1 and `/api/v1` proposals are not implemented contracts.

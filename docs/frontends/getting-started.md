@@ -1,7 +1,5 @@
-# Frontend integration
+# Club Platform 0.5.0
 
-Frontends communicate with the central server over HTTPS. A frontend should never connect directly to PostgreSQL.
+[Deutsch](../de/frontends/getting-started.md) · [English](../en/frontends/getting-started.md) · [Français](../fr/frontends/getting-started.md) · [Español](../es/frontends/getting-started.md) · [한국어](../ko/frontends/getting-started.md)
 
-Typical calls include `/api/v1/me`, `/api/v1/members`, `/api/v1/appointments` and extension-specific resources. The server filters data according to the authenticated user's permissions.
-
-See `examples/frontends/web-basic`.
+The maintained reference is available in the five languages above. Current HTTP routes use `/api`, and native extensions use ABI 2. Earlier ABI 1 and `/api/v1` proposals are not implemented contracts.

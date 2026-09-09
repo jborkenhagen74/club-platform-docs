@@ -1,9 +1,27 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>Club Platform API example</title></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Club Platform API example</title>
+  <script src="app.js" defer></script>
+</head>
 <body>
-<button id="load">Load current user</button>
-<pre id="output"></pre>
-<script type="module" src="app.js"></script>
+  <main>
+    <h1>Club Platform — minimal API example</h1>
+    <p>This demonstration lists people through the authenticated API. It is not the full administration portal.</p>
+    <form id="login-form">
+      <p><label>Username <input id="login" autocomplete="username" required></label></p>
+      <p><label>Password <input id="password" type="password" autocomplete="current-password" required></label></p>
+      <button type="submit">Sign in</button>
+    </form>
+    <section id="session" hidden>
+      <button id="refresh" type="button">Refresh people</button>
+      <button id="more" type="button" hidden>Next page</button>
+      <button id="logout" type="button">Sign out</button>
+      <ul id="people"></ul>
+    </section>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
 </body>
 </html>
