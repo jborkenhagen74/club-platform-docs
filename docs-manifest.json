@@ -22,5 +22,6 @@
     "extensions/ui.md",
     "frontends/getting-started.md",
     "versioning.md"
-  ]
+  ],
+  "maintenance_commit": "cd765ba08bd2cd8c21969eb8fc20a52a9659e214"
 }

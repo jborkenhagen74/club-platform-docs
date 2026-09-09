@@ -15,6 +15,8 @@ standalone integration examples. It follows the original `docs/`, `openapi/`, `s
 and `examples/` structure. The proprietary application implementation is not included.
 
 The edition documents implementation commit `320a4c2709c13dd56455768a2f8819a815ad3997`.
+Windows builds and PostgreSQL restore require maintenance commit
+`cd765ba08bd2cd8c21969eb8fc20a52a9659e214`; see the translated operations chapters.
 It describes delivered functionality and explicitly identifies limitations; it does
 not turn future architecture proposals into supported API promises. Interface captions
 remain those of the current German application; translated manuals are not UI language packs.

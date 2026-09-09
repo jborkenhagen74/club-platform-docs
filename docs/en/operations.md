@@ -2,6 +2,8 @@
 
 [Language home](README.md) · [Installation](installation.md)
 
+> Windows builds and PostgreSQL restoration additionally require maintenance commit `cd765ba08bd2cd8c21969eb8fc20a52a9659e214`. It corrects the Windows SDK symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` and adds `--file=-` when exporting SQL with `pg_restore`. This fix does not change the schema or API.
+
 ## Operational ownership
 
 A dedicated service account owns the database file or PostgreSQL connection.

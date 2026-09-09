@@ -2,6 +2,8 @@
 
 [Sprachstart](README.md) · [Installation](installation.md)
 
+> Für Windows-Builds und die PostgreSQL-Wiederherstellung wird zusätzlich der Fehlerkorrektur-Commit `cd765ba08bd2cd8c21969eb8fc20a52a9659e214` benötigt. Er korrigiert das Windows-SDK-Symbol `LOAD_LIBRARY_SEARCH_DEFAULT_DIRS` und ergänzt beim SQL-Export von `pg_restore` die Option `--file=-`. Schema und API bleiben bei diesem Fix unverändert.
+
 ## Betriebsverantwortung
 
 Ein separates Betriebskonto besitzt die Datenbankdatei bzw. den PostgreSQL-Zugang.
