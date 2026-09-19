@@ -32,6 +32,10 @@ Im Produktivbetrieb liefert ein HTTPS-Reverse-Proxy das Portal aus und leitet `/
 
 ## Lizenzen und Module
 
+Die [Schritt-für-Schritt-Anleitung für alle Module](lizenz-alle-module.md) enthält
+die vollständige Modul-ID-Liste, Payload-Erstellung, Signatur, Registrierung und
+den Import in die Anwendung.
+
 1. Herausgeber- und Aktivierungsschlüsselpaar außerhalb des Repositories erzeugen und sicher verwahren.
 2. Eigenen Aktivierungsdienst hinter HTTPS bereitstellen. [Vollständige Betreiberanleitung](../../tools/activation/README.md).
 3. Lizenzpayload mit Modul-IDs, Nutzerlimit, Gültigkeit und Aktivierungsrichtlinie erstellen. Banking benötigt zusätzlich `finance`; die Bankimport-Funktion verwendet `banking`.
@@ -47,4 +51,3 @@ Schema 18 ergänzt Bankkonten und importierte Posten; 17 die Installationsaktivi
 Die [API-Übersicht](../api/overview.md) verlinkt die Teilverträge. API-Beträge sind dezimale Zeichenketten mit ganzzahligen kleinsten Währungseinheiten; UI-Beträge sind formatiert. Revisionen und Quell-IDs schützen Änderungen und Wiederholungen. Bankimport wird zuerst geprüft und erst nach Bestätigung gespeichert; Details im [Banking-Vertrag](../banking.md).
 
 ABI V3 verwendet einen stabilen C-Vertrag und Modulmanifeste. Native Module sind vertrauenswürdiger Code im Hostprozess, keine Sandbox. Datenbankzugriffe und Autorisierung bleiben im Host. Siehe [V3](../extension-v3.md) und [Platzhalter](placeholders.md). Die [Abnahmeübersicht](../status.md) trennt Implementierung von Releasefreigabe.
-
