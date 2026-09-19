@@ -16,9 +16,11 @@ matches, and atomically allocates partial or excess payments after confirmation.
 Reversals and retries preserve the existing history. Outgoing payments, unattended
 matching and direct bank connectivity are not implemented.
 
-The migration fixture correction passed Linux, PostgreSQL, both macOS builds,
-macOS installation, Qt and portal checks. Matching passed native macOS tests;
-its remaining platform and browser checks are pending. Windows dependency
+The native banking/matching implementation passed Linux, PostgreSQL, both macOS
+builds, macOS installation and Qt checks. The final portal correction passed all
+22 browser tests, including CSV import and confirmed allocation on desktop and
+mobile. The native matrix is rerunning for that portal-only correction; Windows
+has not yet completed a full run. Windows dependency
 compilation previously hit the 30-minute job limit: binary caching and a Windows
 60-minute cold-build limit have been added. These are development checks, not
 a production deployment or final pilot acceptance.
