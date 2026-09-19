@@ -22,6 +22,8 @@ Les cotisations utilisent des plans et des adhésions ; les achats utilisent pro
 
 ## Banque
 
+Choisissez éventuellement une créance ouverte. Les suggestions indiquent une référence ou un montant identique et nécessitent une confirmation. Le paiement partiel laisse le solde ouvert ; le trop-perçu reste disponible comme crédit. Affectez les autres créances dans le compte financier. Utilisez « Charger plus d’opérations » pour les imports volumineux.
+
 Activez Finance et Banking. Dans Finances, ouvrez Banque, rechargez les comptes et créez un compte avec organisation, nom et IBAN. La devise vient de l'organisation.
 
 Choisissez compte, CSV ou CAMT.053 et fichier UTF-8. Modifiez ou chargez la correspondance JSON des colonnes CSV ; le portail permet son export. Vérifiez dates, signes, devises et descriptions, puis confirmez l'import. L'import seul ne crée aucun paiement. Choisissez ensuite le compte financier et confirmez la comptabilisation.

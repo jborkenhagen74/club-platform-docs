@@ -22,6 +22,8 @@ Las cuotas usan planes y membresías; las compras usan productos y líneas. Las 
 
 ## Banca
 
+Selecciona, si procede, una cuenta por cobrar. Las sugerencias indican coincidencias de referencia o importe y requieren confirmación. Los pagos parciales dejan el resto pendiente; los excesos quedan disponibles como crédito. Asigna otras deudas desde la cuenta financiera. Usa « Cargar más movimientos » para importaciones grandes.
+
 Activa Finance y Banking. Abre Banca en Finanzas, carga las cuentas y crea una cuenta con organización, nombre e IBAN. La moneda procede de la organización.
 
 Selecciona cuenta, CSV o CAMT.053 y archivo UTF-8. Edita o carga el mapeo JSON de CSV; el portal permite exportarlo. Revisa fechas, signos, monedas y conceptos, y confirma la importación. Importar no crea pagos. Después selecciona la cuenta financiera y confirma el registro del ingreso.

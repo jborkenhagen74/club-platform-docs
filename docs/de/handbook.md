@@ -24,6 +24,8 @@ Beiträge verwenden Pläne und Mitgliedschaftszuordnungen; Käufe verwenden Prod
 
 ## Banking
 
+Wähle bei Bedarf eine offene Forderung. Die Vorschläge zeigen übereinstimmende Referenz oder Betrag und werden erst nach Bestätigung gebucht. Teilzahlungen lassen den Rest offen; Überzahlungen bleiben als Guthaben verfügbar. Weitere Forderungen kannst Du anschließend im Finanzkonto zuordnen. Größere Importe werden seitenweise angezeigt: „Weitere Buchungen laden“.
+
 Aktiviere Finance und Banking. Öffne im Finanzbereich Banking, lade die Konten und lege ein Bankkonto mit Organisation, IBAN und Name an. Die Währung stammt aus der Organisation.
 
 Wähle Konto, CSV oder CAMT.053 und die UTF-8-Datei. Für CSV kannst Du das JSON-Mapping bearbeiten oder laden; im Portal auch speichern. Prüfe Datum, Vorzeichen, Währung und Verwendungszweck in der Vorschau. Bestätige anschließend den Import. Erst die gesonderte, bestätigte Zuordnung zum Personenkonto erzeugt einen Zahlungseingang.

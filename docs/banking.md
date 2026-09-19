@@ -16,11 +16,18 @@ JSON mapping; the portal also exports that mapping. Review the preview, includin
 duplicates, then explicitly confirm import. Import does not create ledger entries.
 Load imported entries, select the correct person's finance account within the
 same organization and currency, then explicitly confirm posting. Credit entries
-become payments in the existing ledger. Use its existing allocation action for
-partial payments and multiple receivables; an overpayment stays unallocated.
+become payments in the existing ledger. Select an open receivable if desired:
+matching shows an exact reference (the receivable's source ID equals the bank
+reference or the complete remittance), an equal amount, or manual review.
+These are suggestions, never automatic bookings. The allocation shown is the
+smaller of payment and open receivable; partial payments leave the remaining
+debt open, overpayments stay unallocated. Payment and allocation commit together
+and retries cannot duplicate either. Changes since the suggestion are validated
+again when posting. Use the ledger allocation action to distribute remaining
+credit across additional receivables. Choosing no receivable posts credit only.
 Debit entries are retained for manual review and cannot become incoming payments.
-Automatic matching, outgoing-payment accounting, direct bank connections and SEPA
-export are not implemented in this first import increment.
+Unattended matching, outgoing-payment accounting, direct bank connections and
+SEPA export are not implemented.
 
 Repeated bank references with unchanged content are skipped. A changed amount or
 description under the same reference causes a conflict. Without a reference the
@@ -80,8 +87,15 @@ Bearer authentication. They run inside the shared authorized transaction.
 | account.create | organization_id, name, iban, currency | id |
 | preview | bank_account_id, format (`csv`/`camt053`), contents, mapping | rows, preview_hash |
 | import | same as preview, preview_hash, confirmed: true | imported count |
-| transactions | bank_account_id | rows (first 1,000) |
-| post | transaction_id, account_id, confirmed: true | existing/new payment id |
+| transactions | bank_account_id, optional after cursor | up to 100 rows, next_cursor (null at end) |
+| matches | transaction_id, account_id | transaction_id, open receivable rows with reason and allocation_amount |
+| post | transaction_id, account_id, confirmed: true; optional receivable_id and allocation_amount together | existing/new payment id |
+
+Amounts in the API are exact minor-unit strings. Matching is limited to the
+selected account in the same organization and currency. Repeat posting with a
+different account or allocation is a conflict, even after a reversal. Pagination
+uses the last row ID as `after`; use `next_cursor` until null. Reload from the
+first page after importing additional statements.
 
 Preview hash binds the reviewed normalized rows and their current duplicate state.
 If another import changes that state, generate a new preview. Banking operations

@@ -9,12 +9,19 @@ activation, finance/contributions/purchases, calendar/events, athlete licenses,
 permission self-protection, organization currencies and person module dossiers.
 
 Banking now has mapped UTF-8 CSV and bounded CAMT.053 import, preview, confirmed
-transaction persistence, duplicate detection and confirmed incoming-payment
-posting into the shared ledger. Native parser and GUI compilation passed the
-macOS CI runs; banking HTTP tests also passed. The portal check passed. A legacy
-migration test fixture has been corrected; the complete native matrix is being
-rerun. Outgoing payments, automatic matching and direct bank connectivity are
-not implemented. Phase 14 is therefore an import increment, not full acceptance.
+transaction persistence, duplicate detection, cursor pagination and confirmed
+incoming-payment posting into the shared ledger. Matching suggests open
+receivables in the selected account, distinguishes exact references from amount
+matches, and atomically allocates partial or excess payments after confirmation.
+Reversals and retries preserve the existing history. Outgoing payments, unattended
+matching and direct bank connectivity are not implemented.
+
+The migration fixture correction passed Linux, PostgreSQL, both macOS builds,
+macOS installation, Qt and portal checks. Matching passed native macOS tests;
+its remaining platform and browser checks are pending. Windows dependency
+compilation previously hit the 30-minute job limit: binary caching and a Windows
+60-minute cold-build limit have been added. These are development checks, not
+a production deployment or final pilot acceptance.
 
 ## Remaining gates
 
@@ -22,7 +29,7 @@ not implemented. Phase 14 is therefore an import increment, not full acceptance.
   full locale-aware document formatting/search, eighth-pack integration,
   Korean font embedding and PDF rendering. Equal key counts alone do not prove this.
 - Phase 6: discovery/load-failure management UI and full I18n acceptance.
-- Phase 14: reviewed matching rules and representative bank exports; no SEPA
+- Phase 14: representative bank exports and user acceptance of matching rules; no SEPA
   export is included in the current foundation scope.
 - Phase 15: final platform/package matrix, restored-backup pilot and user acceptance.
 - Operations: deploy the HTTPS activation service and configure the publisher

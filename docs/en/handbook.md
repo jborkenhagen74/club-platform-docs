@@ -22,6 +22,8 @@ Contributions use plans and membership assignments; purchases use products and i
 
 ## Banking
 
+Optionally select an open receivable. Suggestions show matching references or amounts and require confirmation. Partial payments leave the remainder open; excess payments remain available as credit. Allocate further receivables in the finance account. Large imports are paged: choose “Load more transactions”.
+
 Enable Finance and Banking. Open Banking inside Finance, reload accounts and create an organization bank account with name and IBAN. Currency comes from the organization.
 
 Select the account, CSV or CAMT.053 and a UTF-8 statement. Edit or load a JSON mapping for CSV; the portal can export it. Review date, sign, currency and description in the preview, then confirm import. Import alone creates no payment. Select the correct finance account and separately confirm posting.
