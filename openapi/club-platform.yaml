@@ -1,46 +1,67 @@
 openapi: 3.1.0
 info:
-  title: Club Platform API
-  version: 0.1.0
+  title: Club Platform authentication contract
+  version: 0.6.0-development-schema18
+  description: Authentication entrypoint; supplements are indexed in docs/api/overview.md.
 servers:
-  - url: https://example.invalid/api/v1
+  - url: /
+security:
+  - bearerAuth: []
 paths:
   /health:
     get:
-      summary: Health check
-      operationId: getHealth
+      security: []
+      responses:
+        '200': {description: Local server ready}
+  /api/v1/auth/login:
+    post:
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [login, password]
+              properties:
+                login: {type: string}
+                password: {type: string, format: password}
       responses:
         '200':
-          description: Service is healthy
+          description: Session and token; store token only in memory
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                required: [status]
-  /me:
+                allOf:
+                  - $ref: '#/components/schemas/Session'
+                  - type: object
+                    required: [token]
+                    properties:
+                      token: {type: string}
+        '401': {description: Invalid credentials or locked account}
+  /api/v1/auth/me:
     get:
-      summary: Current authenticated principal
-      operationId: getMe
       responses:
         '200':
-          description: Current principal
+          description: Current session
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Principal'
-        '401':
-          description: Not authenticated
+                $ref: '#/components/schemas/Session'
+        '401': {description: Invalid or expired session}
+  /api/v1/auth/logout:
+    post:
+      responses:
+        '204': {description: Session revoked}
+        '401': {description: Authentication required}
 components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
   schemas:
-    Principal:
+    Session:
       type: object
+      required: [user_id, login, expires_at]
       properties:
-        id:
-          type: string
-          format: uuid
-        displayName:
-          type: string
-      required: [id, displayName]
+        user_id: {type: string, format: uuid}
+        login: {type: string}
+        expires_at: {type: integer, format: int64, description: Unix seconds}

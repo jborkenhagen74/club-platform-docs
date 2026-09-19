@@ -1,0 +1,324 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Club Platform licensing and provisioning",
+    "version": "0.6.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/license": {
+      "get": {
+        "summary": "Read license status (schema.manage)",
+        "responses": {
+          "200": {
+            "description": "Successful result"
+          },
+          "400": {
+            "description": "Invalid license/catalog/input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission or entitlement missing"
+          },
+          "409": {
+            "description": "Revision conflict"
+          }
+        }
+      },
+      "post": {
+        "summary": "Import signed license (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "envelope",
+                  "revision"
+                ],
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "description": "Ed25519 envelope JSON as a string, at most 65536 UTF-8 bytes"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result"
+          },
+          "400": {
+            "description": "Invalid license/catalog/input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission or entitlement missing"
+          },
+          "409": {
+            "description": "Revision conflict"
+          }
+        }
+      }
+    },
+    "/modules/provision": {
+      "post": {
+        "summary": "Plan or install entitled native modules (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "catalog",
+                  "revision",
+                  "apply"
+                ],
+                "properties": {
+                  "catalog": {
+                    "type": "string",
+                    "description": "Signed catalog envelope JSON as a string"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "apply": {
+                    "type": "boolean",
+                    "description": "false validates/plans, true stages and atomically publishes the installation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful result"
+          },
+          "400": {
+            "description": "Invalid license/catalog/input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission or entitlement missing"
+          },
+          "409": {
+            "description": "Revision conflict"
+          }
+        }
+      }
+    },
+    "/license/activation/activate": {
+      "post": {
+        "summary": "activate installation activation (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "maxLength": 65536,
+                    "description": "Signed activation envelope JSON for import; omit for other actions"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "License activation status, or signed installation request for request"
+          },
+          "400": {
+            "description": "Invalid request or signed data"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission, invalid activation, or authority unavailable"
+          }
+        }
+      }
+    },
+    "/license/activation/renew": {
+      "post": {
+        "summary": "renew installation activation (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "maxLength": 65536,
+                    "description": "Signed activation envelope JSON for import; omit for other actions"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "License activation status, or signed installation request for request"
+          },
+          "400": {
+            "description": "Invalid request or signed data"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission, invalid activation, or authority unavailable"
+          }
+        }
+      }
+    },
+    "/license/activation/deactivate": {
+      "post": {
+        "summary": "deactivate installation activation (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "maxLength": 65536,
+                    "description": "Signed activation envelope JSON for import; omit for other actions"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "License activation status, or signed installation request for request"
+          },
+          "400": {
+            "description": "Invalid request or signed data"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission, invalid activation, or authority unavailable"
+          }
+        }
+      }
+    },
+    "/license/activation/request": {
+      "post": {
+        "summary": "request installation activation (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "maxLength": 65536,
+                    "description": "Signed activation envelope JSON for import; omit for other actions"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "License activation status, or signed installation request for request"
+          },
+          "400": {
+            "description": "Invalid request or signed data"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission, invalid activation, or authority unavailable"
+          }
+        }
+      }
+    },
+    "/license/activation/import": {
+      "post": {
+        "summary": "import installation activation (schema.manage)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "envelope": {
+                    "type": "string",
+                    "maxLength": 65536,
+                    "description": "Signed activation envelope JSON for import; omit for other actions"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "License activation status, or signed installation request for request"
+          },
+          "400": {
+            "description": "Invalid request or signed data"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission, invalid activation, or authority unavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

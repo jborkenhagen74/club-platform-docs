@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Club Platform — document and V3 module API supplement",
+    "version": "0.6.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/documents/placeholders": {
+      "get": {
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "person",
+                "organization",
+                "membership",
+                "global"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission-filtered descriptor items"
+          }
+        }
+      }
+    },
+    "/documents/preview": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "context",
+                  "draft"
+                ],
+                "properties": {
+                  "context": {
+                    "$ref": "#/components/schemas/Context"
+                  },
+                  "draft": {
+                    "$ref": "#/components/schemas/Template"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Plain-text rendered document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "body"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or ambiguous context"
+          },
+          "403": {
+            "description": "Missing permission"
+          }
+        }
+      }
+    },
+    "/documents/render": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Context"
+                  },
+                  {
+                    "required": [
+                      "template_id"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Plain-text rendered document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "body"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or ambiguous context"
+          },
+          "403": {
+            "description": "Missing permission"
+          },
+          "404": {
+            "description": "Template or context record missing"
+          }
+        }
+      }
+    },
+    "/extensions/{id}/state": {
+      "post": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "revision",
+                  "enabled"
+                ],
+                "properties": {
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "State changed"
+          },
+          "403": {
+            "description": "schema.manage required"
+          },
+          "409": {
+            "description": "Stale revision or unavailable dependency"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Context": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "template_id": {
+            "type": "string"
+          },
+          "person_id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "membership_id": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "calendar_entry_id": {
+            "type": "string"
+          },
+          "finance_account_id": {
+            "type": "string"
+          },
+          "address_id": {
+            "type": "string"
+          },
+          "email_id": {
+            "type": "string"
+          },
+          "phone_id": {
+            "type": "string"
+          },
+          "position_id": {
+            "type": "string"
+          },
+          "extension_record_id": {
+            "type": "string"
+          },
+          "document_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "language": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          }
+        }
+      },
+      "Template": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "body"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "person",
+              "organization",
+              "membership",
+              "global"
+            ],
+            "default": "person"
+          },
+          "language": {
+            "type": "string",
+            "default": "inherit"
+          },
+          "locale": {
+            "type": "string",
+            "default": "inherit"
+          },
+          "template_group_id": {
+            "type": "string",
+            "description": "UUID or empty"
+          }
+        }
+      }
+    }
+  }
+}

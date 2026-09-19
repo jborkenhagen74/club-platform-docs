@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "encoding": "UTF-8",
+  "delimiter": ";",
+  "header": true,
+  "skip_rows": 0,
+  "date_format": "DD.MM.YYYY",
+  "decimal_separator": ",",
+  "group_separator": ".",
+  "currency": "EUR",
+  "columns": {
+    "booking_date": "Buchungstag",
+    "amount": "Betrag",
+    "description": "Verwendungszweck",
+    "reference": "Bankreferenz",
+    "counterparty": "Name"
+  }
+}

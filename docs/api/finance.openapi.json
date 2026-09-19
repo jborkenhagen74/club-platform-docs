@@ -1,0 +1,1175 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Club Platform finance, contributions and purchases",
+    "version": "0.6.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/finance/accounts/": {
+      "get": {
+        "summary": "Read account and module selectors (finance.read, plus optional module read permissions).",
+        "description": "Each selector is bounded to 1000 records. Unlicensed or unauthorized optional module lists are empty.",
+        "responses": {
+          "200": {
+            "description": "Object with accounts, owners, organizations, memberships, plans, assignments, products and items arrays."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          }
+        }
+      }
+    },
+    "/finance/accounts/{account}": {
+      "get": {
+        "summary": "Read the shared ledger and derived balance (finance.read).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account, exact signed balance in cents, and immutable entries with open_amount/unallocated_amount where applicable."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          }
+        }
+      }
+    },
+    "/finance/commands/account.create": {
+      "post": {
+        "summary": "account.create",
+        "description": "Requires finance.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/account.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/receivable.create": {
+      "post": {
+        "summary": "receivable.create",
+        "description": "Requires finance.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/receivable.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/payment.create": {
+      "post": {
+        "summary": "payment.create",
+        "description": "Requires finance.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/payment.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/allocation.create": {
+      "post": {
+        "summary": "allocation.create",
+        "description": "Requires finance.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/allocation.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/entry.reverse": {
+      "post": {
+        "summary": "entry.reverse",
+        "description": "Requires finance.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/entry.reverse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/plan.create": {
+      "post": {
+        "summary": "plan.create",
+        "description": "Requires finance.write and contributions.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/plan.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/assignment.create": {
+      "post": {
+        "summary": "assignment.create",
+        "description": "Requires finance.write and contributions.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/assignment.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/assignment.end": {
+      "post": {
+        "summary": "assignment.end",
+        "description": "Requires finance.write and contributions.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/assignment.end"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/contributions.bill": {
+      "post": {
+        "summary": "contributions.bill",
+        "description": "Requires finance.write and contributions.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/contributions.bill"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/reminder.create": {
+      "post": {
+        "summary": "reminder.create",
+        "description": "Requires finance.write and contributions.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reminder.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/product.create": {
+      "post": {
+        "summary": "product.create",
+        "description": "Requires finance.write and purchases.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/product.create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/product.update": {
+      "post": {
+        "summary": "product.update",
+        "description": "Requires finance.write and purchases.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/product.update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/purchase.post": {
+      "post": {
+        "summary": "purchase.post",
+        "description": "Requires finance.write and purchases.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/purchase.post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    },
+    "/finance/commands/purchase.return": {
+      "post": {
+        "summary": "purchase.return",
+        "description": "Requires finance.write and purchases.write, installed/enabled/licensed modules. Writes and audit are atomic. Maximum body size 16 KiB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/purchase.return"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation succeeded; identical source_id and payload return the original result."
+          },
+          "400": {
+            "description": "Invalid input or unsupported operation."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Module entitlement, readiness or permission missing."
+          },
+          "404": {
+            "description": "Referenced record not found."
+          },
+          "409": {
+            "description": "Source reused with different input, stale revision, or financial invariant conflict."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "account.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "owner_id",
+          "organization_id",
+          "currency"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "owner_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "organization_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "enum": [
+              "EUR"
+            ]
+          }
+        }
+      },
+      "receivable.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "account_id",
+          "amount",
+          "booking_date",
+          "due_date",
+          "description"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "account_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "booking_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "payment.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "account_id",
+          "amount",
+          "booking_date",
+          "description",
+          "external_reference"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "account_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "booking_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "external_reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "allocation.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "payment_id",
+          "receivable_id",
+          "amount"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "payment_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "receivable_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          }
+        }
+      },
+      "entry.reverse": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "entry_id",
+          "booking_date",
+          "description"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "entry_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "booking_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "plan.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "organization_id",
+          "name",
+          "amount",
+          "currency",
+          "interval_months",
+          "valid_from",
+          "valid_until",
+          "due_day"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "organization_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "enum": [
+              "EUR"
+            ]
+          },
+          "interval_months": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "due_day": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          }
+        }
+      },
+      "assignment.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "membership_id",
+          "plan_id",
+          "account_id",
+          "valid_from",
+          "valid_until",
+          "discount_bps"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "membership_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "plan_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "account_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "custom_amount": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "discount_bps": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          }
+        }
+      },
+      "assignment.end": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "assignment_id",
+          "valid_until"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "assignment_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          }
+        }
+      },
+      "contributions.bill": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "assignment_id",
+          "through"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "assignment_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "through": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          }
+        }
+      },
+      "reminder.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "receivable_id",
+          "issued_on",
+          "deadline",
+          "fee",
+          "description"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "receivable_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "issued_on": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "fee": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "product.create": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "organization_id",
+          "name",
+          "description",
+          "price",
+          "currency"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "organization_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "price": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "enum": [
+              "EUR"
+            ]
+          }
+        }
+      },
+      "product.update": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "product_id",
+          "revision",
+          "name",
+          "description",
+          "price",
+          "active"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "product_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "price": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "purchase.post": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "account_id",
+          "booking_date",
+          "due_date",
+          "description",
+          "items"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "account_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "booking_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "required": [
+                "product_id",
+                "quantity"
+              ],
+              "properties": {
+                "product_id": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "purchase.return": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "item_id",
+          "quantity",
+          "booking_date",
+          "description"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable idempotency key within the owning module. Retain across transport retries."
+          },
+          "item_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "quantity": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Exact nonnegative integer encoded as a decimal string. Monetary fields are EUR cents."
+          },
+          "booking_date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO 8601 date, years 1900 through 9999."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ name: Documentation and Examples
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
       - "**"
@@ -42,3 +42,10 @@ jobs:
           test -s openapi/club-platform.yaml
           grep -q "openapi: 3.1.0" openapi/club-platform.yaml
           grep -q "CLUBPLATFORM_EXTENSION_ABI_VERSION" sdk/extension_api.h
+          python3 scripts/check-docs.py
+      - name: Install V3 example dependency
+        run: sudo apt-get update && sudo apt-get install -y nlohmann-json3-dev
+      - name: Build current V3 example
+        run: |
+          cmake -S sdk/examples/v3-extension -B build/v3 -DCLUB_SDK="$GITHUB_WORKSPACE/sdk/include"
+          cmake --build build/v3 --parallel 2
