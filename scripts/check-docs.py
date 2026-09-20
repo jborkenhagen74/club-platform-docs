@@ -12,7 +12,7 @@ keys = [p['key'] for p in catalogue]
 assert len(keys) == len(set(keys)) == 70
 for locale in ('de', 'en', 'fr', 'es', 'ko'):
     folder = root/'docs'/locale
-    for name in ('handbook.md', 'operations.md', 'placeholders.md'):
+    for name in ('handbook.md', 'operations.md', 'placeholders.md', 'formulare.md'):
         assert (folder/name).is_file(), (locale, name)
     text = (folder/'placeholders.md').read_text(encoding='utf-8')
     actual = re.findall(r'^\| `\{\{([^}]+)\}\}` \|', text, re.M)

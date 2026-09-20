@@ -4,6 +4,12 @@ Der Aktivierungsdienst gehört zum Herausgeber, nicht auf Kundenrechner. Die
 Lizenzprüfung im Kundenprogramm arbeitet mit Schema 17. Der Dienst wird separat
 bereitgestellt; dieses Repository richtet keinen öffentlichen Server automatisch ein.
 
+Für die geführte Lizenzerstellung und separate Herausgeber-Installer siehe
+[Build- und Lizenztool-Anleitung](../../docs/build-installers-publisher.md).
+Das Tool kann signierte Dateien über SSH mit `register-stdin` registrieren;
+der Dienst nimmt dabei ausschließlich ein signiertes Envelope über Standardeingabe
+entgegen (maximal 128 KiB). Die öffentliche HTTP-API erhält keine Verwaltungsroute.
+
 ## 1. Zwei Schlüsselpaare verwenden
 
 Den vorhandenen Lizenz-Herausgeberschlüssel behalten. Ein zusätzliches Schlüsselpaar

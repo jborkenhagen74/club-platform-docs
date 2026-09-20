@@ -69,8 +69,10 @@ neu laden, aktuelle Daten prüfen und die Änderung erneut ausführen.
   einschließlich Teilnehmerzustand unverändert.
 - `calendar.read`/`calendar.write` und `events.read`/`events.write` trennen Lesen
   und Verwaltung. Erinnerungen gehören dem angemeldeten Benutzer; andere Leser
-  können sie weder sehen noch bestätigen. Kalendertermine selbst sind für alle
-  Benutzer mit `calendar.read` sichtbar, keine privaten Kalender.
+  können sie weder sehen noch bestätigen. Zusätzlich gelten personenbezogene
+  Bereichsrechte: eigene verknüpfte Person, aktuelle Organisationsfunktion oder
+  explizite globale Freigabe. `calendar.read` allein öffnet keine fremden Personenakten.
+  Siehe [Sportlerlizenzen und Zugriffsbereiche](athlete-licenses.md).
 - Veranstaltungsprojektion im Kalender erfordert zusätzlich `events.read` und
   das aktive Ereignismodul. Eine Projektion erzeugt keine zweite Terminzeile.
   `events` veröffentlicht hierfür die Capability `calendar.source`.

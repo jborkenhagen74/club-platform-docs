@@ -1,5 +1,9 @@
 # Manual de usuario
 
+## Referencia ilustrada
+
+El [manual detallado ilustrado en alemán](../de/bedienung.md) describe los procedimientos actuales. La [referencia de formularios en español](formulare.md) enumera todos los campos financieros y de calendario. Las [capturas del piloto](../images/pilot/README.md) usan la interfaz alemana y distinguen navegador y aplicación Qt.
+
 ## Acceso y fichas
 
 Inicia sesión con tu cuenta. Los ajustes separan idioma y formato regional. Los módulos requieren licencia, activación y permisos. El gestor también muestra módulos detectados que todavía no están disponibles.

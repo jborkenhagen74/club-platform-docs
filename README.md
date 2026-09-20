@@ -4,6 +4,15 @@ Public documentation and examples for integrating with Club Platform.
 
 Development baseline: schema 18 / extension ABI V3. This is not a release claim.
 
+New: [ausführliche bebilderte Bedienungsanleitung (Deutsch)](docs/de/bedienung.md),
+[Formularatlas mit allen Aktionen](docs/de/formulare.md),
+[Pilot und Wiederherstellung](docs/pilot.md),
+[Screenshot-Verzeichnis](docs/images/pilot/README.md).
+
+Field-by-field form references: [EN](docs/en/formulare.md) ·
+[FR](docs/fr/formulare.md) · [ES](docs/es/formulare.md) · [한국어](docs/ko/formulare.md).
+Screenshots retain their German UI labels so they can be compared with the tested build.
+
 | Language | User guide | Operations and integration | Complete placeholders |
 |---|---|---|---|
 | Deutsch | [Handbuch](docs/de/handbook.md) | [Betrieb](docs/de/operations.md) | [70 Platzhalter](docs/de/placeholders.md) |
@@ -11,6 +20,8 @@ Development baseline: schema 18 / extension ABI V3. This is not a release claim.
 | Français | [Manuel](docs/fr/handbook.md) | [Exploitation](docs/fr/operations.md) | [70 variables](docs/fr/placeholders.md) |
 | Español | [Manual](docs/es/handbook.md) | [Operación](docs/es/operations.md) | [70 marcadores](docs/es/placeholders.md) |
 | 한국어 | [사용 설명서](docs/ko/handbook.md) | [운영](docs/ko/operations.md) | [자리표시자 70개](docs/ko/placeholders.md) |
+
+Builds: [Windows, macOS, Linux installers and native license publisher](docs/build-installers-publisher.md).
 
 Current technical references:
 

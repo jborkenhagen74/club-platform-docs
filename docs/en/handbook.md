@@ -1,5 +1,9 @@
 # User handbook
 
+## Illustrated reference
+
+The [complete illustrated German manual](../de/bedienung.md) covers the current workflows. The [English form reference](formulare.md) lists every finance and scheduling field. [Pilot screenshots](../images/pilot/README.md) use the German interface; desktop browser and native Qt captures are labelled separately.
+
 ## Sign-in and records
 
 Sign in with your user account. Settings separate interface language from formatting locale. Module availability requires licensing, activation and user permissions. The extension manager also displays discovered modules that are not yet usable.

@@ -1,8 +1,12 @@
 # Benutzerhandbuch
 
+Diese Seite ist der Schnelleinstieg. Die [ausführliche Bedienungsanleitung mit
+Screenshots](bedienung.md) erklärt sämtliche Funktionsbereiche Schritt für Schritt.
+Der [Formularatlas](formulare.md) führt jede Finanz-/Terminaktion mit ihren Feldern auf.
+
 ## Einstieg und Stammdaten
 
-Melde Dich mit Deinem Benutzerkonto an. Unter Einstellungen kannst Du Sprache und Format-Locale getrennt wählen. Sichtbare Module hängen sowohl von ihrer gültigen Lizenz und Aktivierung als auch von Deinen Rechten ab. Die Modulverwaltung zeigt zusätzlich gefundene, aber noch nicht nutzbare Module.
+Melde Dich mit Deinem Benutzerkonto an. Unter Einstellungen kannst Du Sprache und Format-Locale getrennt wählen. Die Modulnavigation berücksichtigt gültige Lizenz, Aktivierung und Betriebsbereitschaft. Für den Zugriff werden zusätzlich Deine Rechte geprüft; ein sichtbarer Menüpunkt erteilt keine Berechtigung. Die Modulverwaltung zeigt auch gefundene, aber noch nicht nutzbare Module.
 
 Lege Personen und Organisationen an. In der Personenakte verwaltest Du Stammdaten, Kontakte, Adressen, Mitgliedschaften, Funktionen sowie Dateien. Organisationen können hierarchisch zugeordnet werden. Lade Nachweise im passenden Dateien-/Dokumentenbereich hoch. Ein Benutzerkonto kann genau einer Person zugeordnet werden; diese Verknüpfung steuert personenbezogene Ansichten.
 

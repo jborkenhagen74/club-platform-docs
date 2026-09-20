@@ -1,5 +1,9 @@
 # Manuel utilisateur
 
+## Référence illustrée
+
+Le [manuel détaillé illustré en allemand](../de/bedienung.md) décrit les procédures actuelles. La [référence française des formulaires](formulare.md) liste chaque champ financier et de planification. Les [captures du pilote](../images/pilot/README.md) utilisent l’interface allemande et distinguent navigateur et application Qt.
+
 ## Connexion et dossiers
 
 Connectez-vous avec votre compte. Les paramètres séparent langue d'interface et paramètres régionaux. Les modules nécessitent une licence, une activation et les droits appropriés. Le gestionnaire affiche aussi les modules découverts mais indisponibles.

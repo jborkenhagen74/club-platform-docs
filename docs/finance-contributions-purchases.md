@@ -40,7 +40,7 @@ payload = dict(license_id="local-finance-demo", edition="development",
                modules=["martial", "finance", "contributions", "purchases"])
 Path("build/finance-demo/payload.json").write_text(json.dumps(payload))
 PY
-build/user-macos-vscode-debug/tools/distribution/clubplatform-sign sign license \
+build/user-macos-vscode-debug/tools/distribution/clubplatform-sign sign license-legacy \
   build/finance-demo/keys/secret.hex build/finance-demo/payload.json build/finance-demo/license.json
 export CLUBPLATFORM_LICENSE_PUBLIC_KEY="$(cat build/finance-demo/keys/public.hex)"
 export CLUBPLATFORM_INITIAL_LICENSE="$PWD/build/finance-demo/license.json"
