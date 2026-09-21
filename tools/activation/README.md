@@ -10,6 +10,24 @@ Das Tool kann signierte Dateien über SSH mit `register-stdin` registrieren;
 der Dienst nimmt dabei ausschließlich ein signiertes Envelope über Standardeingabe
 entgegen (maximal 128 KiB). Die öffentliche HTTP-API erhält keine Verwaltungsroute.
 
+## Lizenzmodus im Lizenztool wählen
+
+Für eine installationsgebundene Lizenz **Ohne Online-Aktivierung** ausgeschaltet
+lassen. Die tatsächliche HTTPS-Adresse und `activation/public.hex` hinterlegen,
+Installationslimit und Offline-Frist (1–90 Tage) wählen. **Dauerhafte
+Offline-Aktivierung erlauben** ausgeschaltet lassen, wenn regelmäßig online erneuert
+werden muss. Jede neue signierte Lizenz beim Dienst registrieren, bevor sie auf dem
+Kundenrechner aktiviert wird. Der Host versucht Erneuerungen automatisch; ein
+Netzausfall beendet eine noch gültige Aktivierung nicht sofort. Dies ist keine
+Prüfung bei jedem Programmstart und kein Modus mit permanenter Internetpflicht.
+
+Eine ausdrücklich signierte Standalone-Lizenz benötigt diesen Dienst nicht. Dafür
+müssen Lizenztool und Kundenprogramm den Standalone-Modus unterstützen. Im
+signierten Payload muss `activation_mode` den Wert `standalone` haben; ein
+`activation`-Objekt darf dabei nicht vorhanden sein. Die bestehende Datei mit einer
+Test-URL nicht manuell editieren, sondern neu ausstellen. Der Import erfolgt über
+**Lizenzdatei importieren**, nicht über **Aktivierungsdatei importieren**.
+
 ## 1. Zwei Schlüsselpaare verwenden
 
 Den vorhandenen Lizenz-Herausgeberschlüssel behalten. Ein zusätzliches Schlüsselpaar

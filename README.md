@@ -23,6 +23,12 @@ Screenshots retain their German UI labels so they can be compared with the teste
 
 Builds: [Windows, macOS, Linux installers and native license publisher](docs/build-installers-publisher.md).
 
+Detailed German guides (21 September 2026):
+
+- Builds and installers for Desktop, Server and Publisher: [Markdown](docs/de/build-und-installer.md) · [PDF](docs/pdf/Club-Platform-Build-und-Installer-DE.pdf)
+- External module development without private Core source: [Markdown](docs/de/module-entwicklung-ohne-core.md) · [PDF](docs/pdf/Club-Platform-Modulentwicklung-DE.pdf)
+
+
 Current technical references:
 
 - [Banking: mapped CSV and CAMT.053](docs/banking.md), [mapping example](resources/banking/csv-mapping.json)

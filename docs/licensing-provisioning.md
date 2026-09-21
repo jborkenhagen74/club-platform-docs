@@ -1,4 +1,5 @@
-> Seit Schema 17: Für neue Lizenzdateien Aktivierungs-URL und Aktivierungs-Public-Key konfigurieren. Kundenpakete erhalten einen fest eingebauten Herausgeber-Schlüssel. Siehe [Aktivierungsanleitung](../tools/activation/README.md). Die bisherigen ungebundenen Lizenzdateien gelten nur noch in Entwicklungsbuilds; für geschützte Produktionspakete müssen sie neu ausgestellt werden.
+> Aktueller Stand: Kundenpakete erhalten einen fest eingebauten Herausgeber-Public-Key. Neue Lizenzen können entweder installationsgebunden mit Aktivierungsrichtlinie oder ausdrücklich signiert mit `activation_mode: "standalone"` ohne Aktivierungsobjekt ausgestellt werden. Alte ungebundene Testdateien sind davon zu unterscheiden. Siehe [aktuelle Lizenzabläufe](de/build-und-installer.md) und [Aktivierungsanleitung](../tools/activation/README.md). Die folgenden Phasenabschnitte dokumentieren außerdem den historischen Stand.
+
 
 # Phase 7 und 8: Lizenzierung und Modulinstallation
 
@@ -42,8 +43,11 @@ Schreibrechte und ein Administratorrecht ersetzt keine Modullizenz.
   angemeldeten Benutzern. Nach erneuter Freischaltung sind die Daten wieder verfügbar.
 * Wartungsende begrenzt **neue Paketversionen** anhand von `released_at`;
   es beendet nicht selbst die Laufzeit einer noch gültigen Lizenz.
-* Offline-Lizenzen benötigen keinen Kontakt zu einem Lizenzserver. Eine zentrale
-  Online-Sperrliste oder ein Abonnement-/Zahlungsdienst gehört nicht zu diesem Stand.
+* Standalone-Lizenzen benötigen keinen Aktivierungsdienst. Installationsgebundene
+  Lizenzen können über den Aktivierungsdienst registriert, erneuert und gesperrt
+  werden. Eine genehmigte dauerhafte Offline-Aktivierung ist ein eigener Ablauf;
+  sie lässt sich nicht sofort aus der Ferne widerrufen. Zahlungsabwicklung ist
+  davon unabhängig.
 
 Beispiel des unsignierten Hersteller-Eingabedokuments:
 

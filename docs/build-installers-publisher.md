@@ -1,5 +1,7 @@
 # Builds, Installer und grafische Lizenzerstellung
 
+Ausführliche Schritt-für-Schritt-Anleitung: [Markdown](de/build-und-installer.md) · [PDF](pdf/Club-Platform-Build-und-Installer-DE.pdf).
+
 Die Skripte bauen auf dem jeweiligen Zielsystem: Windows auf Windows, macOS auf
 macOS und Linux auf Linux. Ein Mac erzeugt keine Windows-EXE. Die Architektur
 folgt dem ausgewählten Compiler/Qt-SDK bzw. dem optionalen CMake-Preset.
@@ -180,9 +182,10 @@ Automatisiert vorgesehen: Buildplanung für alle drei Systeme, Schlüsselgrenzen
 Datum/Modulvalidierung, eingebetteter Signierer und sichere CLI-Registrierung.
 Die Qt-CI baut das Herausgeberwerkzeug und führt dessen native Tests aus.
 Lokal geprüft: Python-Tests und Paketstruktur mit synthetischem Inhalt.
-Die neuen nativen Builds, GUI-Bedienung und plattformspezifischen Installer sind
-noch nicht abgenommen: die aktuellen GitHub-Jobs scheitern vor dem ersten Schritt.
-Dieser Status ersetzt weder einen erfolgreichen CI-Lauf noch einen Installationstest.
+Der macOS-Publisher-Installer wurde vom Betreiber erfolgreich installiert.
+Eine vollständige Abnahme aller nativen Builds, GUI-Abläufe und plattformspezifischen
+Installer ist damit nicht belegt. Den aktuellen CI-Status separat prüfen;
+diese Dokumentation behauptet keinen erfolgreichen aktuellen CI-Lauf.
 
 ## Signierte Lizenz ohne Online-Aktivierung
 
