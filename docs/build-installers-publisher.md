@@ -18,7 +18,16 @@ Python auf dem Rechner, auf dem das fertige Lizenztool verwendet wird.
 - **macOS:** Xcode/Command Line Tools, CMake, Ninja nach Bedarf sowie die
   Homebrew-Abhängigkeiten der Entwicklungsanleitung. `QT_ROOT` auf
   `$HOME/Qt/6.11.2/macos` setzen; `ICU_ROOT` bei Bedarf auf den Homebrew-ICU-Prefix.
-  `productbuild` und `pkgbuild` gehören zu den macOS-Werkzeugen.
+  `productbuild`, `pkgbuild` und `pkgutil` gehören zu den macOS-Werkzeugen.
+  Das `.pkg` wird direkt mit diesen Werkzeugen erstellt. Nutzdaten und
+  Installer-Metadaten liegen dabei in getrennten Verzeichnissen. Vor der
+  Ausgabe prüft `pkgutil` das Installationsziel und die enthaltenen Dateien.
+  Die App wird fest unter `/Applications` installiert und nicht in einen
+  vorhandenen Entwicklungs-Build umgeleitet.
+
+  Ein kleiner Pakettest ohne Qt-Build und ohne Installation ist möglich:
+  `python3 tests/build_scripts_tests.py`. Auf macOS erstellt und entpackt
+  dieser Test zusätzlich ein echtes Testpaket mit den nativen Werkzeugen.
 - **Linux:** C++23-Compiler, Qt und Entwicklungspakete für SQLite, libsodium,
   cpp-httplib, nlohmann-json, curl, ICU und libxml2. DEB benötigt `dpkg-deb` und
   `dpkg-shlibdeps` (dpkg-dev), RPM zusätzlich `rpmbuild`.
@@ -174,3 +183,27 @@ Lokal geprüft: Python-Tests und Paketstruktur mit synthetischem Inhalt.
 Die neuen nativen Builds, GUI-Bedienung und plattformspezifischen Installer sind
 noch nicht abgenommen: die aktuellen GitHub-Jobs scheitern vor dem ersten Schritt.
 Dieser Status ersetzt weder einen erfolgreichen CI-Lauf noch einen Installationstest.
+
+## Signierte Lizenz ohne Online-Aktivierung
+
+Im aktualisierten Lizenztool unter **Lizenz** die Option **Ohne Online-Aktivierung
+(keine Installationsbindung)** aktivieren. Unter **Einrichtung** ist nur der private
+Herausgeberschlüssel erforderlich; Aktivierungsadresse und Aktivierungsschlüssel
+werden in diesem Modus nicht verwendet. Module, Benutzerlimit und Laufzeit setzen,
+dann **Nur signierte Lizenzdatei erstellen** wählen.
+
+Die Lizenz in eine ebenfalls aktualisierte Desktop-/Server-Version importieren.
+Sie gilt unmittelbar nach erfolgreicher lokaler Signatur- und Laufzeitprüfung;
+**Installation aktivieren** ist nicht erforderlich. Der Desktop-Installer muss
+weiterhin mit dem zum Herausgeberschlüssel gehörenden `issuer/public.hex` gebaut
+werden. Beide Programme müssen neu gebaut und installiert werden; eine alte
+Lizenz mit Test-URL wird durch das Update nicht automatisch umgewandelt.
+
+Dieser Modus enthält die ausdrücklich signierte Richtlinie
+`activation_mode: "standalone"`. Er benötigt keinen Aktivierungsdienst und keine
+Registrierung. Er erzwingt weder ein Installationslimit noch einen Online-Widerruf;
+die Datei kann auf andere Installationen mit demselben Vertrauensschlüssel kopiert
+werden. Signatur, Laufzeit, Benutzerlimit und Modulberechtigungen werden weiterhin
+lokal geprüft. Alte Lizenzen ohne diese ausdrückliche Richtlinie bleiben von der
+bestehenden Legacy-Regel abhängig. Eine Online-Lizenz lässt sich nicht durch
+manuelles Ändern der JSON-Datei umwandeln: Die Signatur würde ungültig.
