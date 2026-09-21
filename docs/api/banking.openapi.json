@@ -1,0 +1,391 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Club Platform Banking",
+    "version": "1.0.0-pilot"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/finance/commands/banking.accounts": {
+      "post": {
+        "summary": "accounts",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [],
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.account.create": {
+      "post": {
+        "summary": "account.create",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "organization_id",
+                  "name",
+                  "iban",
+                  "currency"
+                ],
+                "properties": {
+                  "organization_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "iban": {
+                    "type": "string"
+                  },
+                  "currency": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.preview": {
+      "post": {
+        "summary": "preview",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "bank_account_id",
+                  "format",
+                  "contents"
+                ],
+                "properties": {
+                  "bank_account_id": {
+                    "type": "string"
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": [
+                      "csv",
+                      "camt053"
+                    ]
+                  },
+                  "contents": {
+                    "type": "string"
+                  },
+                  "mapping": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.import": {
+      "post": {
+        "summary": "import",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "bank_account_id",
+                  "format",
+                  "contents",
+                  "preview_hash",
+                  "confirmed"
+                ],
+                "properties": {
+                  "bank_account_id": {
+                    "type": "string"
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": [
+                      "csv",
+                      "camt053"
+                    ]
+                  },
+                  "contents": {
+                    "type": "string"
+                  },
+                  "mapping": {
+                    "type": "object"
+                  },
+                  "preview_hash": {
+                    "type": "string"
+                  },
+                  "confirmed": {
+                    "type": "boolean",
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.transactions": {
+      "post": {
+        "summary": "transactions",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "bank_account_id"
+                ],
+                "properties": {
+                  "bank_account_id": {
+                    "type": "string"
+                  },
+                  "after": {
+                    "type": "string",
+                    "pattern": "^([0-9a-f]{64})?$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.post": {
+      "post": {
+        "summary": "post",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "transaction_id",
+                  "account_id",
+                  "confirmed"
+                ],
+                "properties": {
+                  "transaction_id": {
+                    "type": "string"
+                  },
+                  "account_id": {
+                    "type": "string"
+                  },
+                  "confirmed": {
+                    "type": "boolean",
+                    "const": true
+                  },
+                  "receivable_id": {
+                    "type": "string"
+                  },
+                  "allocation_amount": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  }
+                },
+                "dependentRequired": {
+                  "receivable_id": [
+                    "allocation_amount"
+                  ],
+                  "allocation_amount": [
+                    "receivable_id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    },
+    "/finance/commands/banking.matches": {
+      "post": {
+        "summary": "matches",
+        "description": "Requires ready finance and banking modules, finance.write and banking.write. See docs/banking.md for mapping, limits and idempotency.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "transaction_id",
+                  "account_id"
+                ],
+                "properties": {
+                  "transaction_id": {
+                    "type": "string"
+                  },
+                  "account_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; documented in banking.md"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing permission or module unavailable"
+          },
+          "409": {
+            "description": "Changed preview or conflicting reference"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

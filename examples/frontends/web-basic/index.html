@@ -2,7 +2,11 @@
 <html lang="en">
 <head><meta charset="utf-8"><title>Club Platform API example</title></head>
 <body>
+<form id="login"><label>Login <input name="login" autocomplete="username" required></label>
+<label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+<button>Sign in</button></form>
 <button id="load">Load current user</button>
+<button id="logout">Sign out</button>
 <pre id="output"></pre>
 <script type="module" src="app.js"></script>
 </body>
