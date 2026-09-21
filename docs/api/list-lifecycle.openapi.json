@@ -1,0 +1,434 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Club Platform — ListQuery and lifecycle API addition",
+    "version": "1.0.0-pilot",
+    "description": "Phase 1/2 addition. Other existing /api/v1 routes are outside this document."
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/management/{resource}": {
+      "get": {
+        "operationId": "queryManagement",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 256
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "id"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "asc"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "archived",
+                "all"
+              ],
+              "default": "active"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 16,
+                  "items": {
+                    "$ref": "#/components/schemas/Filter"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized page; next_cursor is null at end",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query, type or revision"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          },
+          "404": {
+            "description": "Record or resource not found"
+          },
+          "409": {
+            "description": "Stale revision, current archive state or blocking reference"
+          }
+        }
+      }
+    },
+    "/api/v1/management/{resource}/{id}": {
+      "delete": {
+        "operationId": "deleteManagementRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "expected_revision"
+                ],
+                "properties": {
+                  "expected_revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Action committed atomically with audit"
+          },
+          "400": {
+            "description": "Invalid query, type or revision"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          },
+          "404": {
+            "description": "Record or resource not found"
+          },
+          "409": {
+            "description": "Stale revision, current archive state or blocking reference"
+          }
+        }
+      }
+    },
+    "/api/v1/management/{resource}/{id}/archive": {
+      "post": {
+        "operationId": "archiveManagementRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "expected_revision"
+                ],
+                "properties": {
+                  "expected_revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Action committed atomically with audit"
+          },
+          "400": {
+            "description": "Invalid query, type or revision"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          },
+          "404": {
+            "description": "Record or resource not found"
+          },
+          "409": {
+            "description": "Stale revision, current archive state or blocking reference"
+          }
+        }
+      }
+    },
+    "/api/v1/management/{resource}/{id}/restore": {
+      "post": {
+        "operationId": "restoreManagementRecord",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "expected_revision"
+                ],
+                "properties": {
+                  "expected_revision": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Action committed atomically with audit"
+          },
+          "400": {
+            "description": "Invalid query, type or revision"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          },
+          "404": {
+            "description": "Record or resource not found"
+          },
+          "409": {
+            "description": "Stale revision, current archive state or blocking reference"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Filter": {
+        "type": "object",
+        "required": [
+          "field",
+          "op",
+          "type",
+          "value"
+        ],
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "ne",
+              "lt",
+              "le",
+              "gt",
+              "ge",
+              "contains"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "integer",
+              "decimal",
+              "boolean",
+              "date"
+            ]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ManagementRow": {
+        "type": "object",
+        "required": [
+          "id",
+          "revision",
+          "values",
+          "labels"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ListPage": {
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagementRow"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,5 @@
+/* HISTORICAL ABI-1 PROPOSAL ONLY. Not implemented by host 0.5.0.
+   For supported native extensions use extension_v2.h and sdk/README.md. */
 #ifndef CLUBPLATFORM_EXTENSION_API_H
 #define CLUBPLATFORM_EXTENSION_API_H
 
