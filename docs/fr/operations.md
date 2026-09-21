@@ -48,3 +48,6 @@ L'[index API](../api/overview.md) décrit les contrats. Les montants API sont de
 
 ABI V3 utilise une interface C et des manifestes. Les extensions natives sont du code de confiance dans le processus, sans sandbox. Le serveur possède persistance et autorisation. Voir [V3](../extension-v3.md), [variables](placeholders.md), [état d'acceptation](../status.md).
 
+
+
+Historical supplementary backup and restore instructions: [0.6 G0 operations](operations-0.6-g0.md). Current schema and licensing rules above take precedence.

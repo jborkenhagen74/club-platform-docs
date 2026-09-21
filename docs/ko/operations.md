@@ -48,3 +48,6 @@ http://127.0.0.1:5173
 
 ABI V3는 C 인터페이스와 매니페스트를 사용합니다. 네이티브 확장은 프로세스 안의 신뢰 코드이며 샌드박스가 아닙니다. 저장과 권한 검사는 호스트가 담당합니다. [V3](../extension-v3.md), [자리표시자](placeholders.md), [검증 상태](../status.md)를 참고하세요.
 
+
+
+Historical supplementary backup and restore instructions: [0.6 G0 operations](operations-0.6-g0.md). Current schema and licensing rules above take precedence.

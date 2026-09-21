@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Club Platform \u2014 ListQuery and lifecycle API addition",
-    "version": "0.6.0",
+    "title": "Club Platform — ListQuery and lifecycle API addition",
+    "version": "1.0.0-pilot",
     "description": "Phase 1/2 addition. Other existing /api/v1 routes are outside this document."
   },
   "security": [

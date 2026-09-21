@@ -51,3 +51,6 @@ Schema 18 ergänzt Bankkonten und importierte Posten; 17 die Installationsaktivi
 Die [API-Übersicht](../api/overview.md) verlinkt die Teilverträge. API-Beträge sind dezimale Zeichenketten mit ganzzahligen kleinsten Währungseinheiten; UI-Beträge sind formatiert. Revisionen und Quell-IDs schützen Änderungen und Wiederholungen. Bankimport wird zuerst geprüft und erst nach Bestätigung gespeichert; Details im [Banking-Vertrag](../banking.md).
 
 ABI V3 verwendet einen stabilen C-Vertrag und Modulmanifeste. Native Module sind vertrauenswürdiger Code im Hostprozess, keine Sandbox. Datenbankzugriffe und Autorisierung bleiben im Host. Siehe [V3](../extension-v3.md) und [Platzhalter](placeholders.md). Die [Abnahmeübersicht](../status.md) trennt Implementierung von Releasefreigabe.
+
+
+Historical supplementary backup and restore instructions: [0.6 G0 operations](operations-0.6-g0.md). Current schema and licensing rules above take precedence.

@@ -2,7 +2,9 @@
 
 Public documentation and examples for integrating with Club Platform.
 
-Development baseline: schema 18 / extension ABI V3. This is not a release claim.
+**Club Platform 1.0.0 Pilot · schema 18 · extension ABI V3.**
+
+[Current pilot status and upgrade instructions](docs/release-1.0-pilot.md). Pilot is a prerelease channel; native acceptance remains a separate gate.
 
 New: [ausführliche bebilderte Bedienungsanleitung (Deutsch)](docs/de/bedienung.md),
 [Formularatlas mit allen Aktionen](docs/de/formulare.md),
@@ -52,3 +54,9 @@ Use `sdk/include/clubplatform/extension_v3.h` and `sdk/examples/v3-extension` fo
 - `examples/frontends` – minimal browser/client examples
 
 The proprietary Club Platform implementation is intentionally not contained in this repository.
+
+## Earlier multilingual chapters
+
+The original 0.5/0.6 G0 chapters are retained and explicitly marked as historical: [DE](docs/de/README.md), [EN](docs/en/README.md), [FR](docs/fr/README.md), [ES](docs/es/README.md), [KO](docs/ko/README.md). Use the current handbooks, API supplements and ABI-V3 guide for the 1.0 pilot.
+
+[Contribution and documentation checks](CONTRIBUTING.md).

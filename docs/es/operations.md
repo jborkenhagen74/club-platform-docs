@@ -48,3 +48,6 @@ El [índice API](../api/overview.md) reúne los contratos. Los importes API son 
 
 ABI V3 usa una interfaz C y manifiestos. Las extensiones nativas son código de confianza dentro del proceso, sin aislamiento. Persistencia y autorización pertenecen al servidor. Véanse [V3](../extension-v3.md), [marcadores](placeholders.md) y [estado de aceptación](../status.md).
 
+
+
+Historical supplementary backup and restore instructions: [0.6 G0 operations](operations-0.6-g0.md). Current schema and licensing rules above take precedence.

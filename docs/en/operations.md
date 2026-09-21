@@ -48,3 +48,6 @@ See the [API index](../api/overview.md). API money values are integer minor-unit
 
 ABI V3 uses a stable C boundary and manifests. Native extensions are trusted in-process code, not sandboxed. Persistence and authorization belong to the host. See [V3](../extension-v3.md), [placeholders](placeholders.md) and [acceptance status](../status.md).
 
+
+
+Historical supplementary backup and restore instructions: [0.6 G0 operations](operations-0.6-g0.md). Current schema and licensing rules above take precedence.

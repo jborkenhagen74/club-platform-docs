@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Club Platform authentication contract
-  version: 0.6.0-development-schema18
+  version: 1.0.0-pilot
   description: Authentication entrypoint; supplements are indexed in docs/api/overview.md.
 servers:
   - url: /

@@ -7,7 +7,7 @@ using nlohmann::json;
 #endif
 namespace {
 std::string declaration() {
-    json m={{"id","sample"},{"name_key","module.sample.name"},{"version","1.0.0"},{"abi",3},{"core",{{"minimum","0.6.0"},{"maximum_exclusive","0.7.0"}}},
+    json m={{"id","sample"},{"name_key","module.sample.name"},{"version","1.0.0"},{"abi",3},{"core",{{"minimum","1.0.0"},{"maximum_exclusive","2.0.0"}}},
         {"accepts_v2",true},{"schema_version",1},{"migrations",json::array({{{"version",1},{"definition","Initial sample note records"}}})},
         {"permissions",{"sample.read","sample.write","sample.archive","sample.restore","sample.delete"}},
         {"capabilities",json::array({{{"key","document.placeholder-provider"},{"version",1}},{{"key","record.references"},{"version",1}}})},

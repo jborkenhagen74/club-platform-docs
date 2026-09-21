@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Club Platform licensing and provisioning",
-    "version": "0.6.0"
+    "version": "1.0.0-pilot"
   },
   "servers": [
     {

@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "edition": "2026-09-21",
+  "schema": 18,
+  "abi": 3,
+  "languages": [
+    "de",
+    "en",
+    "fr",
+    "es",
+    "ko"
+  ],
+  "chapters": [
+    "README.md",
+    "user-manual.md",
+    "architecture.md",
+    "installation.md",
+    "operations.md",
+    "api/overview.md",
+    "extensions/getting-started.md",
+    "extensions/ui.md",
+    "frontends/getting-started.md",
+    "versioning.md"
+  ],
+  "scope": "1.0 pilot; legacy G0 chapters retained and explicitly labelled",
+  "release_channel": "pilot",
+  "historical_baseline": {
+    "implementation_commit": "427159c789ed19c1ab73f5241dad1ed7ae895316",
+    "maintenance_commit": "6ebb363ec28ab8631fb82a88051351f87659b523",
+    "functional_baseline_commit": "320a4c2709c13dd56455768a2f8819a815ad3997",
+    "loader_commit": "ef542d7f878b7490f648d752801aa5568ccd50c9"
+  }
+}

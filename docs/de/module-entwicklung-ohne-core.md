@@ -2,9 +2,11 @@
 
 Entwickleranleitung für das öffentliche SDK · Deutsch · Stand 21.09.2026
 
-Zielstand: Club Platform 0.6.0, Schema 18, Extension ABI V3; abgeglichen mit Produktcommit `5679c9fd868559e12b2140d0da136e2a79879a3b`. Herausgeber: Bunker Development. Diese Anleitung richtet sich an externe Entwickler, die keinen Zugriff auf das private Produktrepository haben.
+Zielstand: Club Platform 1.0.0 Pilot, Schema 18, Extension ABI V3; Pilot-Integrationsstand; Ausgangscode vor Versionssetzung `5679c9f`. Herausgeber: Bunker Development. Diese Anleitung richtet sich an externe Entwickler, die keinen Zugriff auf das private Produktrepository haben.
 
 PDF: [Modulentwicklung ohne Core-Quellcode](../pdf/Club-Platform-Modulentwicklung-DE.pdf). Ergänzend: [ABI-V3-Referenz](../extension-v3.md), [Dokumentplatzhalter](../document-placeholders.md), [Lizenzierung und Kataloge](../licensing-provisioning.md).
+
+**Veröffentlichungskanal: Pilot.** Produktversion 1.0.0; Pakete tragen `-pilot`. [Upgradehinweise und Abnahmeumfang](../release-1.0-pilot.md).
 
 ## 1. Was ist ohne Quellcode möglich?
 
@@ -27,7 +29,7 @@ Native Module laufen im Hostprozess und sind vertrauenswürdiger Code, keine San
 Vor der Implementierung folgende Punkte festhalten:
 
 1. Eindeutige Modul-ID, beispielsweise `acmenotes`, und zugehörige Berechtigungs-/Datensatzschlüssel. Diese IDs nach Auslieferung stabil halten.
-2. Unterstützte Hostversionen, Betriebssysteme und Architekturen. Für den hier beschriebenen Stand ist der Beispielbereich `>= 0.6.0` und `< 0.7.0`.
+2. Unterstützte Hostversionen, Betriebssysteme und Architekturen. Für den hier beschriebenen Stand ist der Beispielbereich `>= 1.0.0` und `< 2.0.0`.
 3. Fachliche Daten, Beziehungen zu Personen/Organisationen, Archivierung und Verhalten bei endgültigem Löschen.
 4. Benötigte andere Module und versionierte Capabilities.
 5. Testhost, Administratorzugang und Lizenz mit der eigenen Modul-ID sowie gegebenenfalls ihren Abhängigkeiten.
@@ -39,16 +41,16 @@ Die grafische Publisher-App bietet derzeit eine feste Liste der mitgelieferten F
 
 ## 3. Öffentliches SDK beziehen
 
-Bis diese Dokumentation in den Standardbranch integriert ist, den Doku-PR-Branch verwenden:
+Der integrierte Pilotstand liegt im Standardbranch `main`:
 
 ```bash
-git clone --branch docs/banking-activation-placeholders \
+git clone --branch main \
   https://github.com/jborkenhagen74/club-platform-docs.git
 cd club-platform-docs
 git log -1 --oneline
 ```
 
-Unter PowerShell den Clone-Befehl in eine Zeile schreiben. Nach Integration kann der Standardbranch genutzt werden. Den für die Entwicklung verwendeten Commit dokumentieren, damit SDK und Beispiel reproduzierbar bleiben.
+Unter PowerShell den Clone-Befehl in eine Zeile schreiben. Den für die Entwicklung verwendeten Commit dokumentieren, damit SDK und Beispiel reproduzierbar bleiben.
 
 | Datei / Verzeichnis | Zweck |
 |---|---|
@@ -192,8 +194,8 @@ Ein minimales fachliches Manifest kann so aussehen; es muss als `manifest_json` 
   "version": "1.0.0",
   "abi": 3,
   "core": {
-    "minimum": "0.6.0",
-    "maximum_exclusive": "0.7.0"
+    "minimum": "1.0.0",
+    "maximum_exclusive": "2.0.0"
   },
   "schema_version": 1,
   "migrations": [

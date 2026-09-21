@@ -16,3 +16,5 @@ licensing are independent checks. Errors use appropriate HTTP status and an
 
 These are versioned supplements, not a claim that every legacy route already
 has a complete OpenAPI schema. [Acceptance status](../status.md).
+
+The earlier comprehensive [schema-8 G0 contract](../../openapi/archive/club-platform-0.6-g0.yaml) is preserved as historical reference. Its pagination, lifecycle and licensing descriptions are superseded by the current supplements above.

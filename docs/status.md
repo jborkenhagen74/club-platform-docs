@@ -1,7 +1,8 @@
 # Development and acceptance status
 
-Baseline: `feature/calendar-events`, schema 18, extension ABI V3.
-Documentation synchronization does not merge or publish a software release.
+Baseline: **1.0.0 Pilot**, schema 18, extension ABI V3; integration through develop to main.
+The pilot label does not certify production acceptance. Current pre-integration GitHub jobs failed before test steps; historical green runs below are evidence only for their named commits.
+See [pilot rollout and module upgrade](release-1.0-pilot.md).
 
 Implemented: typed list operations and lifecycle, V3 extensions, document
 registry, seven UI language packs, signed licensing/provisioning, installation

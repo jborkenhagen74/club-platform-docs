@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Club Platform Banking",
-    "version": "1.0.0-development"
+    "version": "1.0.0-pilot"
   },
   "servers": [
     {

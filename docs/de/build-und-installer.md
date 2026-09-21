@@ -2,9 +2,11 @@
 
 Detaillierte Arbeitsanleitung für Bunker Development · Deutsch · Stand 21.09.2026
 
-Quellstand: Club Platform 0.6.0, Datenbankschema 18, Commit `5679c9fd868559e12b2140d0da136e2a79879a3b` im Entwicklungszweig `feature/calendar-events`. Diese Anleitung beschreibt diesen Entwicklungsstand, keine bereits abgenommene Produktfreigabe. Die Befehle wurden mit den vorhandenen Buildskripten und CMake-Dateien abgeglichen. Der macOS-Publisher-Installer wurde vom Betreiber erfolgreich installiert; daraus folgt keine Abnahme aller anderen Pakete.
+Quellstand: Club Platform 1.0.0, Datenbankschema 18, Pilot-Integrationsstand auf `main` (Ausgangscommit vor Versionssetzung: `5679c9f`). Diese Anleitung beschreibt diesen Entwicklungsstand, keine bereits abgenommene Produktfreigabe. Die Befehle wurden mit den vorhandenen Buildskripten und CMake-Dateien abgeglichen. Der macOS-Publisher-Installer wurde vom Betreiber erfolgreich installiert; daraus folgt keine Abnahme aller anderen Pakete.
 
 PDF: [Builds und Installer](../pdf/Club-Platform-Build-und-Installer-DE.pdf). Ergänzend: [Module ohne Core-Quellcode](module-entwicklung-ohne-core.md), [Aktivierungsdienst](../../tools/activation/README.md).
+
+**Veröffentlichungskanal: Pilot.** Produktversion 1.0.0; Pakete tragen `-pilot`. [Upgradehinweise und Abnahmeumfang](../release-1.0-pilot.md).
 
 ## 1. Welche Version benötige ich?
 
@@ -30,7 +32,7 @@ Die folgenden Befehle beginnen im Stammverzeichnis des privaten Repositorys `clu
 Bei einem neuen Checkout:
 
 ```bash
-git clone --branch feature/calendar-events \
+git clone --branch main \
   https://github.com/jborkenhagen74/club-platform.git
 cd club-platform
 git status --short
@@ -113,7 +115,7 @@ bash scripts/create-publisher-installer.sh --generator Ninja
 open out/installers
 ```
 
-Im Finder die neu erstellte `.pkg` mit `publisher` im Namen öffnen. Beispiel auf Apple Silicon: `club-platform-publisher-0.6.0-macos-arm64.pkg`. Nach Abschluss starten:
+Im Finder die neu erstellte `.pkg` mit `publisher` im Namen öffnen. Beispiel auf Apple Silicon: `club-platform-publisher-1.0.0-pilot-macos-arm64.pkg`. Nach Abschluss starten:
 
 ```bash
 open /Applications/ClubPlatformPublisher/clubplatform-license-tool.app
