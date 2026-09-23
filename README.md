@@ -60,3 +60,12 @@ The proprietary Club Platform implementation is intentionally not contained in t
 The original 0.5/0.6 G0 chapters are retained and explicitly marked as historical: [DE](docs/de/README.md), [EN](docs/en/README.md), [FR](docs/fr/README.md), [ES](docs/es/README.md), [KO](docs/ko/README.md). Use the current handbooks, API supplements and ABI-V3 guide for the 1.0 pilot.
 
 [Contribution and documentation checks](CONTRIBUTING.md).
+
+## Trainingsausbau (Feature-Stand)
+
+- [Wearable-Import, Diagramme und lokale KI](docs/de/training-wearables-ai.md)
+- [Trainingsanwesenheit und Freigaben](docs/training-attendance.md)
+- [Wearable-Handbuch als PDF](docs/pdf/Club-Platform-Training-Wearables-KI-DE.pdf)
+
+Der Feature-Stand benötigt Host-Schema 19 und Training 1.1.0.
+Der veröffentlichte 1.0-Pilot-Stand wird dadurch noch nicht ersetzt.

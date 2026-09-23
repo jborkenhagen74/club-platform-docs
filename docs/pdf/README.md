@@ -34,3 +34,5 @@ Nach Änderungen beide PDFs neu erzeugen und alle Seiten visuell prüfen, etwa m
 `pdftoppm -png -r 100 DATEI.pdf AUSGABEPREFIX`. Besonders Tabellen, lange Befehle,
 Seitenumbrüche und Umlaute kontrollieren. Die Linkprüfung allein ersetzt diese
 Sichtprüfung nicht. Änderungen an Markdown und zugehörigen PDFs gemeinsam committen.
+
+[Training, Wearables und lokale KI (Feature-Stand)](Club-Platform-Training-Wearables-KI-DE.pdf) – [Markdown](../de/training-wearables-ai.md).
