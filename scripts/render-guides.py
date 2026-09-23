@@ -65,10 +65,11 @@ def inline(value):
     return ''.join(result)
 
 class Guide(BaseDocTemplate):
-    def __init__(self, path, short_title, digest):
+    def __init__(self, path, short_title, digest, feature=False):
         super().__init__(str(path), pagesize=A4, rightMargin=43, leftMargin=43,
             topMargin=53, bottomMargin=46, title=short_title,
-            author='Bunker Development', subject='Club Platform 1.0.0 | 21.09.2026')
+            author='Bunker Development', subject='Club Platform Training 1.1.0 | 23.09.2026' if feature else 'Club Platform 1.0.0 | 21.09.2026')
+        self.feature = feature
         self.short_title = short_title
         self.digest = digest
         frame = Frame(self.leftMargin, self.bottomMargin, self.width, self.height,
@@ -79,7 +80,7 @@ class Guide(BaseDocTemplate):
         canvas.setFont('Body', 7)
         canvas.setFillColor(colors.HexColor('#526571'))
         canvas.drawString(43, A4[1]-31, 'BUNKER DEVELOPMENT  /  CLUB PLATFORM')
-        canvas.drawRightString(A4[0]-43, A4[1]-31, 'Dokumentation · 21.09.2026')
+        canvas.drawRightString(A4[0]-43, A4[1]-31, 'Feature-Dokumentation · 23.09.2026' if self.feature else 'Dokumentation · 21.09.2026')
         canvas.setStrokeColor(colors.HexColor('#c9d7db'))
         canvas.line(43, 35, A4[0]-43, 35)
         canvas.drawString(43, 23, self.short_title + ' · MD ' + self.digest[:10])
@@ -157,21 +158,25 @@ def flowables(text, width):
 
 GUIDES = [
     ('build-und-installer', 'Club-Platform-Build-und-Installer-DE', 'Builds und Installer'),
-    ('module-entwicklung-ohne-core', 'Club-Platform-Modulentwicklung-DE', 'Modulentwicklung ohne Core')]
+    ('module-entwicklung-ohne-core', 'Club-Platform-Modulentwicklung-DE', 'Modulentwicklung ohne Core'),
+    ('training-wearables-ai', 'Club-Platform-Training-Wearables-KI-DE', 'Training, Wearables und lokale KI')]
 
 def main():
+    import sys
     out = ROOT/'docs/pdf'
     out.mkdir(exist_ok=True)
     for source, target, title in GUIDES:
+        if len(sys.argv)>1 and source not in sys.argv[1:]:
+            continue
         path = ROOT/'docs/de'/f'{source}.md'
         raw = path.read_bytes()
         text = raw.decode('utf-8')
-        doc = Guide(out/f'{target}.pdf', title, hashlib.sha256(raw).hexdigest())
+        doc = Guide(out/f'{target}.pdf', title, hashlib.sha256(raw).hexdigest(), source=='training-wearables-ai')
         toc = TableOfContents()
         toc.levelStyles = [S['TOCGuide']]
         story = [Spacer(1, 45), Paragraph('Club Platform', S['H3Guide']),
             Paragraph(title, S['TitleGuide']),
-            Paragraph('Detaillierte Anleitung · Deutsch<br/>Version 1.0.0 Pilot · ABI V3 · Stand 21.09.2026', S['Text']),
+            Paragraph('Detaillierte Anleitung · Deutsch<br/>' + ('Feature-Stand · Training 1.1.0 · 23.09.2026' if source=='training-wearables-ai' else 'Version 1.0.0 Pilot · ABI V3 · Stand 21.09.2026'), S['Text']),
             Spacer(1, 18), Paragraph('Bunker Development', S['H3Guide']),
             Paragraph('Diese PDF wird aus der Markdown-Dokumentation erzeugt. Für das Kopieren längerer Befehle die verlinkte Markdown-Fassung verwenden; lange Codezeilen können im Druck umbrechen. Relative Verweise beziehen sich auf das öffentliche Doku-Repository.', S['Text']),
             Paragraph('<a href="https://github.com/jborkenhagen74/club-platform-docs/blob/main/docs/de/'+source+'.md" color="#245c70">Markdown-Fassung im Doku-Repository öffnen</a>', S['Text']),
