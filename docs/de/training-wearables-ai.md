@@ -1,7 +1,7 @@
 # Wearable-Import, Trainingsauswertung und lokale KI
 
 Stand: 23.09.2026 · Feature-Branch `feature/training-wearable-import`.
-Training-Extension 1.1.0, Extension-Schema 2, Host-Schema 19, ABI V3.
+Training-Extension 1.2.0, Extension-Schema 2, Host-Schema 20, ABI V3.
 Dieser Stand ergänzt die [Trainings- und Anwesenheitsbasis](../training-attendance.md).
 Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 
@@ -9,25 +9,104 @@ Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 
 | Konzept | Implementierter Stand | Noch offen |
 |---|---|---|
-| Sportneutraler Trainingskern | Separate Analysebibliothek, Geräte/manuelle Einheiten, importierte Einheiten mit Samples, Segmenten und Qualitätsangaben | Persistente Athletenprofile, individuelle Zonenversionen, Recovery-Daten |
-| Nachvollziehbare Imports | Unveränderte UTF-8-Datei im Import-Batch, SHA-256, eindeutige Person/Quelle/Einheit, transaktionaler Import | Hintergrundimport großer Archive, Korrektur-/Löschverfahren |
+| Sportneutraler Trainingskern | Geräte, Einheiten, Samples/Segmente; persistente Trainingsprofile mit unveränderlichen Zonenversionen; tägliche Recovery-Einträge | Weitere Athletenstammdaten und validierte Recovery-Modelle |
+| Nachvollziehbare Imports | Originaldatei mit SHA-256; transaktionaler Import; Metadatenkorrektur mit Historie; Batch-Export und endgültige Löschung | Hintergrundimport großer Archive; Korrektur von Messwerten und Zeitstempeln |
 | Anbieter | CSV mit Mapping, normalisiertes JSON, TCX, GPX, Apple-Health-XML | Verifizierte Mi-Fitness-Beispieldatei, Android-Health-Connect-App, Strava-OAuth-Synchronisation |
 | Berechnungen | Version `training-v1`, zeitgewichteter Puls, Zonenzeiten, Abdeckung, Messlücken, Session-RPE-Last | Erweiterte Recovery-/Belastungsmodelle, Taekwondo-spezifische Metriken |
-| Grafiken | Pulskurve, Zonenanteile, Wochen-/Monatsdauer, Einheitenvergleich in Desktop und Portal | Überlagerung normalisierter Pulskurven, weitergehende Filter und Vergleichsberichte |
-| Berechtigungen | Explizite Person, Speicherfreigabe, benannte Trainerfreigaben, getrennte Rohdaten-/KI-Zwecke, Audit, Widerruf | Sorgeberechtigtenverfahren, Aufbewahrungs-/Löschprozess, gesonderter Exportdienst |
-| KI | Optionaler lokaler Chat-Completions-Dienst; ausschließlich berechnete Kennzahlen; keine Datenbank-/Aktionswerkzeuge | Frei wählbarer entfernter Self-hosted-/Cloud-Endpunkt, persistierte Modell-/Promptversionen |
-| Automatisierung | Kern benötigt kein n8n | Signierte Ereignisse und n8n-Workflows |
+| Grafiken | Pulskurve, Zonen, Wochen/Monate; Überlagerung von 2–4 normalisierten Kurven; Aktivitäts-/Gerätefilter und JSON-Auswertungsbericht | Druckfertige Vergleichsberichte und zusätzliche Filter |
+| Berechtigungen | Personenreichweite und getrennte Freigaben; Audit/Widerruf; Export, Batch-Löschung und vollständige Trainingsdatenlöschung | Sorgeberechtigtenverfahren und automatische Aufbewahrungsfristen |
+| KI | Lokaler Dienst als Standard; optionaler HTTPS-Endpunkt mit separater Remote-Freigabe; gespeicherte Modell-/Prompt-Metadaten und Eingabe-Hash | Verifikation konkreter entfernter Provider und signierter Modellpakete |
+| Automatisierung | Signierter, personenbezogener Ereignisabruf mit Cursor und separater Automationsfreigabe; Verifikationsbeispiel für n8n | Ausgehende Webhook-Zustellung mit Wiederholungen und geprüfter importierbarer n8n-Workflow |
 
 Diese Tabelle ist zugleich die offene Umsetzungsliste. Der generische CSV-Import
 ist keine direkte Mi-Fitness-, Health-Connect- oder Strava-Kontoverbindung.
 Anwesenheiten bleiben separat: Eine importierte Einheit erzeugt keine Teilnahme.
 
+## Neue Arbeitsbereiche in Desktop und Portal
+
+Die Trainingsansicht trennt **Auswertung**, **Import**, **Trainingsprofil**,
+**Recovery** und **Datenverwaltung**. Erstellung und Datenverwaltung stehen
+so außerhalb der eigentlichen Auswertung. Alle Texte liegen in den sieben
+Sprachpaketen; Diagramme verwenden die Oberflächenfarbe und unterschiedliche
+Linienarten, damit der Vergleich auch bei hohem Kontrast verständlich bleibt.
+
+### Trainingsprofil und Zonenversionen
+
+1. **Trainingsprofil → Neu laden** öffnet den aktuellen Stand. Version 0 bedeutet:
+   noch kein Profil gespeichert.
+2. Vier aufsteigende Pulsgrenzen zwischen 20 und 260 eingeben und speichern.
+   Es erfolgt keine automatische altersabhängige Zonenvorgabe.
+3. Jede Speicherung erzeugt eine neue unveränderliche Profilversion. Gleichzeitige
+   Änderungen werden mit einem Konflikt abgewiesen; danach neu laden.
+4. Unter **Auswertung** die Option **Gespeicherte Pulszonen verwenden** aktivieren.
+   Ohne diese Option gelten die vier explizit eingegebenen Grenzen.
+5. Die API kann mit `zone_boundaries: null` und `profile_revision: 1` eine frühere
+   Konfiguration verwenden. Ohne Revisionsangabe gilt das neueste Profil.
+   Antworten nennen die verwendete `profile_revision`; 0 steht für manuelle Grenzen.
+
+Die Version ist eine Berechnungskonfiguration, keine rückwirkende Änderung einer
+Originalmessung. Ein Profil enthält derzeit Zonengrenzen und eine optionale
+Bezeichnung; es ist noch kein vollständiger sportmedizinischer Athletenpass.
+
+### Recovery erfassen
+
+Unter **Recovery** zunächst die Einträge laden. Den Zeitraum dafür unter
+**Auswertung** einstellen. Ein vorhandener Tag kann ausgewählt und bearbeitet
+werden; für einen neuen Tag das Datum eingeben. Die API verwendet Mitternacht UTC.
+
+Optionale Werte: Schlafstunden (0–24), Müdigkeit und Muskelkater (je 0–10),
+Ruhepuls (0–260 bpm) sowie HRV (0–1000 ms). Leer bedeutet unbekannt, nicht null
+Stunden oder optimale Erholung. Die Grenzen sind technische Eingabegrenzen.
+Die Anwendung erstellt daraus keinen medizinischen Erholungs- oder Risikoscore.
+Speichern prüft die Revision, damit ein anderer Bearbeiter nicht überschrieben wird.
+Trainer benötigen für die Detailansicht die `raw`-Freigabe, zum Schreiben `write`.
+
+### Vergleichen und korrigieren
+
+Aktivitäts- und Gerätefilter vergleichen den vollständigen gespeicherten Wert;
+leer bedeutet alle. In der Einheitenliste zwei bis vier Einheiten markieren und
+**Kurven vergleichen** wählen. Die Zeitachse ist auf 0–100 % der jeweiligen Dauer
+normiert. Lücken über 30 Sekunden werden weiterhin nicht verbunden; es werden
+keine künstlichen Messwerte interpoliert. Die Linienarten entsprechen der Legende.
+Ein gleicher Prozentwert ist keine Zusage gleicher sportlicher Belastung.
+
+**Auswertung als JSON exportieren** speichert die aktuell angezeigten berechneten
+Kennzahlen samt Algorithmen-/Profilversion. Dieser Bericht ist kein druckfertiges PDF.
+
+Eine Einheit öffnen, **Einheit korrigieren** aufklappen/aktivieren und Titel,
+Aktivität oder subjektive RPE ändern. Die API erlaubt zusätzlich Segmentkorrekturen.
+Zeitstempel, Quelle, Identität und Messwerte bleiben unverändert. Jeder erfolgreiche
+Schreibvorgang erhöht die Revision; der vorherige normalisierte Stand bleibt
+in einer Korrekturhistorie. Die Originaldatei und ihr Hash bleiben unverändert.
+Eine spätere Auswertung verwendet die korrigierten Angaben.
+
+### Export und endgültige Löschung
+
+Unter **Datenverwaltung → Neu laden** erscheinen die Imports dieser Person.
+**Import exportieren** erzeugt JSON mit Originaldatei, Hash, Quelle und den aktuell
+normalisierten Einheiten. Hierfür gilt die `raw`-Freigabe; der Export kann Daten
+enthalten, die in der Oberfläche nicht sichtbar sind, beispielsweise GPS-Inhalte.
+
+**Löschen** entfernt einen bestätigten Batch samt Einheiten und Korrekturhistorie.
+Ein erneuter Import derselben Datei ist anschließend möglich. Nur das mit der
+Person verknüpfte Konto mit `training.write`, `training.delete`, `records.read`
+und `records.write` darf löschen. Ein Trainer oder Administrator ohne diese
+Personenverknüpfung darf es auch mit Wildcard-Recht nicht. Löschung bleibt nach
+Widerruf der Speicherfreigabe möglich.
+
+**Trainingsdaten endgültig löschen** entfernt sämtliche importierten und manuellen
+Trainingseinheiten, Geräte, Profilversionen, Recovery-Einträge, Korrekturhistorien
+und KI-Laufmetadaten dieser Person. Die Trainingsfreigaben werden widerrufen.
+Anwesenheit, Personendaten und der minimale Audit-Nachweis bleiben erhalten.
+Bereits exportierte Dateien und ältere Backups werden dadurch nicht verändert.
+Ein automatischer Fristenlauf und eine Oberfläche für Sorgeberechtigte fehlen noch.
+
 ## Einrichtung und Rechte
 
 1. Host und Desktop/Portal aus demselben Feature-Stand bauen und installieren.
    ICU, libxml2 und libcurl gehören bereits zu den Host-Abhängigkeiten.
-2. Vor dem Update eine Datenbanksicherung erstellen. Der Host legt Migration 19
-   an; anschließend unter **Erweiterungen** `training` auf Version 1.1.0 aktualisieren.
+2. Vor dem Update eine Datenbanksicherung erstellen. Der Host legt Migration 20
+   an; anschließend unter **Erweiterungen** `training` auf Version 1.2.0 aktualisieren.
 3. Eine gültige Lizenz mit Modul `training` verwenden. `attendance` ist optional
    und separat zu lizenzieren. Die KI benötigt keine zusätzliche Modul-ID.
 4. Das Benutzerkonto mit der Sportlerperson verknüpfen. Im Personendossier unter
@@ -72,7 +151,7 @@ importiert erkannt. Eine bekannte Einheitskennung in einer veränderten Datei
 führt zu einem Konflikt; vorhandene Daten werden nicht überschrieben.
 Gibt es keine externe Kennung, verwendet der Import Start, Ende und Aktivität.
 Die Dateierkennung berücksichtigt keine nachträglich geänderte CSV-Zuordnung:
-Ein Import ist kein Korrekturwerkzeug. Originaldateien unverändert aufbewahren.
+Ein erneuter Import ist kein Korrekturwerkzeug. Für Metadaten die separate Korrektur verwenden; Originaldateien unverändert aufbewahren.
 
 ### Unterstützte Dateiformate
 
@@ -155,7 +234,7 @@ gewählten Einheiten. Leere Perioden werden nicht als Nullbalken ergänzt.
 
 Vier aufsteigende Pulsgrenzen definieren fünf Zonen. Die angezeigten Beispielwerte
 100/120/140/160 müssen bewusst angepasst werden; es gibt keine automatische
-Altersformel oder gespeicherte individuelle Zonenkonfiguration.
+Altersformel. Individuelle Zonenversionen werden separat im Trainingsprofil gespeichert.
 Grenzwertgleichheit gehört zur jeweils höheren Zone.
 
 - Die Pulskurve zeigt bpm über Minuten seit Trainingsbeginn. Lücken zwischen
@@ -208,17 +287,42 @@ $env:CLUBPLATFORM_TRAINING_AI_MODEL = 'local'
    Systemdienst müssen die Variablen in dessen Startkonfiguration gesetzt sein;
    ein Export in einem anderen Terminal reicht nicht.
 5. Die benannte `ai`-Freigabe und das Rollenrecht `training.ai` einrichten.
-6. In der Auswertung Zeitraum und Zonen festlegen, **Lokale KI-Erklärung** wählen.
+6. In der Auswertung Zeitraum und Zonen festlegen, **KI-Erklärung** wählen.
 
-Erlaubt ist ausschließlich `http://127.0.0.1:<port>/v1/chat/completions`.
-Keine Weiterleitungen, Proxys, Cloud-Adressen oder API-Schlüssel in dieser
-Ausbaustufe. Verbindungstimeout 3 Sekunden, Gesamtzeit 12 Sekunden; ein langsames
-Modell liefert einen sichtbaren Fehler. Der RemoteClient wartet bis zu 20 Sekunden.
+Standard ist `http://127.0.0.1:<port>/v1/chat/completions`.
+Weiterleitungen und Proxys sind deaktiviert. Verbindungstimeout 3 Sekunden,
+Gesamtzeit 12 Sekunden; der RemoteClient wartet bis zu 20 Sekunden.
 Maximal 32 KB berechnete Eingabedaten, 64 KB Antwort und 12.000 Zeichen Erklärung.
+
+Ein entfernter Self-hosted- oder Cloud-Dienst ist ausdrücklich optional:
+
+```sh
+export CLUBPLATFORM_TRAINING_AI_REMOTE=true
+export CLUBPLATFORM_TRAINING_AI_URL=https://ai.example.org/v1/chat/completions
+export CLUBPLATFORM_TRAINING_AI_MODEL=your-versioned-model
+# Optional: API-Schlüssel ausschließlich in der Host-Umgebung setzen.
+# CLUBPLATFORM_TRAINING_AI_API_KEY
+```
+
+Der Host-Administrator wählt den Endpunkt. Anfragen aus Desktop/Portal können
+keine Zieladresse vorgeben. Entfernte Ziele müssen HTTPS mit gültigem Zertifikat
+und dem Pfad `/v1/chat/completions` verwenden; URL-Zugangsdaten, Query-Parameter,
+Weiterleitungen und Proxy-Nutzung sind nicht zugelassen.
+Zusätzlich zur `ai`-Freigabe ist für jeden HTTPS-Aufruf eine benannte
+`ai_remote`-Freigabe nötig, auch beim eigenen Konto. Beide werden vor und nach
+Inference geprüft. Ohne explizites Host-Opt-in erfolgt kein entfernter Aufruf.
+Die technische Anbindung wurde lokal getestet, nicht gegen einen echten
+Cloud-Account oder einen konkreten entfernten Modellserver.
+
+Nach erfolgreicher erneuter Autorisierung speichert der Host den konfigurierten
+Modellnamen, Provider-Typ, Promptversion `training-explanation-v1`,
+Algorithmusversion und SHA-256 der de-identifizierten Eingabekennzahlen.
+Die generierte Erklärung selbst wird nicht als Trainingsdatensatz persistiert.
+Der Modellname ist kein kryptografischer Beleg des tatsächlich geladenen Modells.
 
 Übertragen werden Zeitabdeckung, Pulskennzahlen, Zonen und RPE-Last. Entfernt
 werden Personen-/Datensatzkennungen, Titel, Aktivitäten, Zeitstempel, Rohdatei
-und Samples. Der lokale Dienst erhält keine Datenbankverbindung, Werkzeuge,
+und Samples. Der Dienst erhält keine Datenbankverbindung, Werkzeuge,
 Dateizugriffe oder ausführbaren Aufgaben von Club Platform. Seine eigene
 Konfiguration und Protokollierung bleiben Verantwortung des Betreibers.
 
@@ -237,11 +341,22 @@ Authentifizierte POST-Endpunkte:
 /api/v1/training/commands/summary
 /api/v1/training/commands/detail
 /api/v1/training/commands/ai
+/api/v1/training/commands/profile
+/api/v1/training/commands/profile-save
+/api/v1/training/commands/recovery
+/api/v1/training/commands/recovery-save
+/api/v1/training/commands/batches
+/api/v1/training/commands/export-batch
+/api/v1/training/commands/delete-batch
+/api/v1/training/commands/correct
+/api/v1/training/commands/purge
+/api/v1/training/commands/curves
+/api/v1/training/commands/events
 ```
 
 Alle Anfragen enthalten `person_id`. Import/Vorschau zusätzlich `format`,
 `provider`, `content` und optional `mapping`. Detail benötigt `id`.
-Summary/KI benötigen `from`, `until` und `zone_boundaries` (Array aus vier Zahlen).
+Summary/KI benötigen `from`, `until` und `zone_boundaries` (vier Zahlen oder `null` für das Profil).
 Die Grenzen sind exklusiv/inklusiv wie oben beschrieben.
 
 Fehler: 400 ungültige Eingaben, 403 fehlende Rechte/Freigaben, 404 unbekannte
@@ -249,6 +364,53 @@ Einheit, 409 Dublette mit verändertem Inhalt oder nicht verfügbarer KI-Dienst.
 Import-Batches, Samples und Einheiten liegen in der Host-Datenbank und sind
 Bestandteil ihrer Sicherung. Rohdateien können zusätzliche sensible Daten
 enthalten, auch wenn die normalisierte Ansicht diese nicht zeigt.
+
+### Neue REST-Nutzdaten
+
+Alle Beispiele benötigen zusätzlich `person_id`. Die Operation steht hinter
+`/api/v1/training/commands/`.
+
+| Operation | Weitere Felder |
+|---|---|
+| `profile` | Optional `revision`; ohne Angabe neueste Version |
+| `profile-save` | `expected_revision`, `zone_boundaries`, optional `label` |
+| `recovery` | `from`, `until` (exklusiv) |
+| `recovery-save` | `day` (UTC-Mitternacht), `expected_revision`; optionale numerische Werte `sleep_hours`, `fatigue`, `soreness`, `resting_hr`, `hrv_ms` |
+| `batches` | Keine |
+| `export-batch` | `batch_id` |
+| `delete-batch` | `batch_id`, identischer `confirm_batch_id`, aktueller `fingerprint` |
+| `correct` | `id`, `expected_revision`, `changes` mit `title`, `activity`, `rpe` und/oder `segments` |
+| `purge` | `confirm_person_id`, identisch mit `person_id` |
+| `curves` | `ids` mit 2–4 unterschiedlichen Einheits-UUIDs derselben Person |
+| `events` | `after`: letzter erfolgreich verarbeiteter Cursor, initial 0 |
+
+Für Profil und Recovery gilt `expected_revision: 0` beim Neuanlegen. Eine unbekannte
+Profilrevision liefert ein leeres Profil; eine Auswertung damit wird abgewiesen.
+Summary/KI unterstützen zusätzlich `activity` und `device` als exakte Filter.
+Kurven, Originalexport und Recovery-Details benötigen die `raw`-Freigabe;
+Profil/Batchliste/Auswertung benötigen für Trainer `summary`.
+Korrekturen und Dateneingaben benötigen Schreibrechte und für Trainer `write`.
+
+## Signierte Ereignisse für n8n
+
+Der optionale Abruf liefert maximal 100 Ereignisse pro Seite. Der Host benötigt
+`CLUBPLATFORM_TRAINING_EVENT_KEY`: einen zufälligen 32-Byte-Schlüssel als
+64-stellige Hex-Zeichenfolge. Der Konsument benötigt `records.read`,
+`training.read`, `training.automation`, die Personenreichweite und eine explizite
+benannte `automation`-Freigabe. Auch das eigene Konto braucht diese Freigabe.
+
+Die Antwort enthält `payload` als exakte JSON-Zeichenfolge, `signature` als
+HMAC-SHA256-Hexwert und `algorithm`. Der Konsument verifiziert die unveränderten
+UTF-8-Bytes, Schema `training-events-v1`, die erwartete Person und ein höchstens
+fünf Minuten altes `issued_at`. Ereignisse anhand `id` deduplizieren und
+`next_cursor` erst nach erfolgreicher Verarbeitung der Seite speichern.
+
+Die Ereignisse enthalten Typ, ID, Sequenz und Zeitpunkt; keine Messwerte,
+Freitexte oder Originaldateien. Datenquelle ist der minimale Audit-Nachweis.
+Ein Widerruf sperrt auch den historischen Abruf. Die signierte Schnittstelle
+ist ein Pull-Verfahren; ausgehende Webhooks und eine Zustellwarteschlange sind
+noch nicht implementiert. Einrichtung und ein ausführbarer Python-Verifikator
+stehen im Produkt-Repository unter `examples/integrations/n8n/`.
 
 ## Prüfung vor Freigabe
 
@@ -260,5 +422,5 @@ npm run build --prefix apps/portal
 Automatische Tests prüfen Zeitzonen, Schaltjahre, CSV-Mapping, XML-Formate,
 DTD-/Entity-Ablehnung, Messlücken, Zonen, Dubletten, Transaktionen, Freigaben
 und tatsächliche HTTP-Kommunikation mit einem lokalen KI-Testdienst.
-Der KI-Test kontrolliert entfernte Identitäten und blockierten Aufruf nach Widerruf.
+Die HTTP-Tests kontrollieren entfernte Identitäten, blockierte KI-Aufrufe nach Widerruf, Profilrevisionen, Recovery-Validierung, Kurven-/Exportrechte, unveränderte Originaldateien, Löschbestätigungen und signierte Ereignisse.
 Desktop/QML sowie Windows/macOS müssen zusätzlich in der nativen CI geprüft werden.

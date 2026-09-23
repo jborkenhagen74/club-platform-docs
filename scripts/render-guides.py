@@ -68,7 +68,7 @@ class Guide(BaseDocTemplate):
     def __init__(self, path, short_title, digest, feature=False):
         super().__init__(str(path), pagesize=A4, rightMargin=43, leftMargin=43,
             topMargin=53, bottomMargin=46, title=short_title,
-            author='Bunker Development', subject='Club Platform Training 1.1.0 | 23.09.2026' if feature else 'Club Platform 1.0.0 | 21.09.2026')
+            author='Bunker Development', subject='Club Platform Training 1.2.0 | 23.09.2026' if feature else 'Club Platform 1.0.0 | 21.09.2026')
         self.feature = feature
         self.short_title = short_title
         self.digest = digest
@@ -176,7 +176,7 @@ def main():
         toc.levelStyles = [S['TOCGuide']]
         story = [Spacer(1, 45), Paragraph('Club Platform', S['H3Guide']),
             Paragraph(title, S['TitleGuide']),
-            Paragraph('Detaillierte Anleitung · Deutsch<br/>' + ('Feature-Stand · Training 1.1.0 · 23.09.2026' if source=='training-wearables-ai' else 'Version 1.0.0 Pilot · ABI V3 · Stand 21.09.2026'), S['Text']),
+            Paragraph('Detaillierte Anleitung · Deutsch<br/>' + ('Feature-Stand · Training 1.2.0 · 23.09.2026' if source=='training-wearables-ai' else 'Version 1.0.0 Pilot · ABI V3 · Stand 21.09.2026'), S['Text']),
             Spacer(1, 18), Paragraph('Bunker Development', S['H3Guide']),
             Paragraph('Diese PDF wird aus der Markdown-Dokumentation erzeugt. Für das Kopieren längerer Befehle die verlinkte Markdown-Fassung verwenden; lange Codezeilen können im Druck umbrechen. Relative Verweise beziehen sich auf das öffentliche Doku-Repository.', S['Text']),
             Paragraph('<a href="https://github.com/jborkenhagen74/club-platform-docs/blob/main/docs/de/'+source+'.md" color="#245c70">Markdown-Fassung im Doku-Repository öffnen</a>', S['Text']),
