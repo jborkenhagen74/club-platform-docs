@@ -1,7 +1,7 @@
 # Wearable-Import, Trainingsauswertung und lokale KI
 
 Stand: 23.09.2026 · Feature-Branch `feature/training-wearable-import`.
-Training-Extension 1.2.0, Extension-Schema 2, Host-Schema 20, ABI V3.
+Training-Extension 1.3.0, Extension-Schema 3, Host-Schema 21, ABI V3.
 Dieser Stand ergänzt die [Trainings- und Anwesenheitsbasis](../training-attendance.md).
 Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 
@@ -10,11 +10,11 @@ Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 | Konzept | Implementierter Stand | Noch offen |
 |---|---|---|
 | Sportneutraler Trainingskern | Geräte, Einheiten, Samples/Segmente; persistente Trainingsprofile mit unveränderlichen Zonenversionen; tägliche Recovery-Einträge | Weitere Athletenstammdaten und validierte Recovery-Modelle |
-| Nachvollziehbare Imports | Originaldatei mit SHA-256; transaktionaler Import; Metadatenkorrektur mit Historie; Batch-Export und endgültige Löschung | Hintergrundimport großer Archive; Korrektur von Messwerten und Zeitstempeln |
-| Anbieter | CSV mit Mapping, normalisiertes JSON, TCX, GPX, Apple-Health-XML | Verifizierte Mi-Fitness-Beispieldatei, Android-Health-Connect-App, Strava-OAuth-Synchronisation |
+| Nachvollziehbare Imports | Originaldatei mit SHA-256; transaktionaler Import; Metadatenkorrektur mit Historie; Batch-Export und endgültige Löschung; persistente Hintergrundaufträge | Korrektur von Messwerten und Zeitstempeln |
+| Anbieter | CSV mit Mapping, normalisiertes JSON, TCX, GPX, Apple-Health-XML; Mi-Fitness-CSV und ZIP anhand eines Originalexports geprüft | Android-Health-Connect-App, Strava-OAuth-Synchronisation |
 | Berechnungen | Version `training-v1`, zeitgewichteter Puls, Zonenzeiten, Abdeckung, Messlücken, Session-RPE-Last | Erweiterte Recovery-/Belastungsmodelle, Taekwondo-spezifische Metriken |
 | Grafiken | Pulskurve, Zonen, Wochen/Monate; Überlagerung von 2–4 normalisierten Kurven; Aktivitäts-/Gerätefilter und JSON-Auswertungsbericht | Druckfertige Vergleichsberichte und zusätzliche Filter |
-| Berechtigungen | Personenreichweite und getrennte Freigaben; Audit/Widerruf; Export, Batch-Löschung und vollständige Trainingsdatenlöschung | Sorgeberechtigtenverfahren und automatische Aufbewahrungsfristen |
+| Berechtigungen | Personenreichweite und getrennte Freigaben; Audit/Widerruf; Export, Batch-Löschung und vollständige Trainingsdatenlöschung; befristet geprüfte Sorgeberechtigte; bestätigte automatische Aufbewahrungsfristen | Externe Nachweisprüfung bleibt organisatorisch erforderlich |
 | KI | Lokaler Dienst als Standard; optionaler HTTPS-Endpunkt mit separater Remote-Freigabe; gespeicherte Modell-/Prompt-Metadaten und Eingabe-Hash | Verifikation konkreter entfernter Provider und signierter Modellpakete |
 | Automatisierung | Signierter, personenbezogener Ereignisabruf mit Cursor und separater Automationsfreigabe; Verifikationsbeispiel für n8n | Ausgehende Webhook-Zustellung mit Wiederholungen und geprüfter importierbarer n8n-Workflow |
 
@@ -88,10 +88,10 @@ normalisierten Einheiten. Hierfür gilt die `raw`-Freigabe; der Export kann Date
 enthalten, die in der Oberfläche nicht sichtbar sind, beispielsweise GPS-Inhalte.
 
 **Löschen** entfernt einen bestätigten Batch samt Einheiten und Korrekturhistorie.
-Ein erneuter Import derselben Datei ist anschließend möglich. Nur das mit der
-Person verknüpfte Konto mit `training.write`, `training.delete`, `records.read`
+Ein erneuter Import derselben Datei ist anschließend möglich. Das mit der
+Person verknüpfte Konto oder eine gültig geprüfte sorgeberechtigte Person mit `training.write`, `training.delete`, `records.read`
 und `records.write` darf löschen. Ein Trainer oder Administrator ohne diese
-Personenverknüpfung darf es auch mit Wildcard-Recht nicht. Löschung bleibt nach
+Personenverknüpfung oder geprüfte Sorgeberechtigung darf es auch mit Wildcard-Recht nicht. Löschung bleibt nach
 Widerruf der Speicherfreigabe möglich.
 
 **Trainingsdaten endgültig löschen** entfernt sämtliche importierten und manuellen
@@ -99,14 +99,14 @@ Trainingseinheiten, Geräte, Profilversionen, Recovery-Einträge, Korrekturhisto
 und KI-Laufmetadaten dieser Person. Die Trainingsfreigaben werden widerrufen.
 Anwesenheit, Personendaten und der minimale Audit-Nachweis bleiben erhalten.
 Bereits exportierte Dateien und ältere Backups werden dadurch nicht verändert.
-Ein automatischer Fristenlauf und eine Oberfläche für Sorgeberechtigte fehlen noch.
+Aufbewahrungsfristen und Sorgeberechtigungen werden ebenfalls in der Datenverwaltung bearbeitet; Details stehen am Ende dieser Anleitung.
 
 ## Einrichtung und Rechte
 
 1. Host und Desktop/Portal aus demselben Feature-Stand bauen und installieren.
-   ICU, libxml2 und libcurl gehören bereits zu den Host-Abhängigkeiten.
-2. Vor dem Update eine Datenbanksicherung erstellen. Der Host legt Migration 20
-   an; anschließend unter **Erweiterungen** `training` auf Version 1.2.0 aktualisieren.
+   ICU, libxml2, zlib und libcurl gehören bereits zu den Host-Abhängigkeiten.
+2. Vor dem Update eine Datenbanksicherung erstellen. Der Host legt Migration 21
+   an; anschließend unter **Erweiterungen** `training` auf Version 1.3.0 aktualisieren.
 3. Eine gültige Lizenz mit Modul `training` verwenden. `attendance` ist optional
    und separat zu lizenzieren. Die KI benötigt keine zusätzliche Modul-ID.
 4. Das Benutzerkonto mit der Sportlerperson verknüpfen. Im Personendossier unter
@@ -424,3 +424,92 @@ DTD-/Entity-Ablehnung, Messlücken, Zonen, Dubletten, Transaktionen, Freigaben
 und tatsächliche HTTP-Kommunikation mit einem lokalen KI-Testdienst.
 Die HTTP-Tests kontrollieren entfernte Identitäten, blockierte KI-Aufrufe nach Widerruf, Profilrevisionen, Recovery-Validierung, Kurven-/Exportrechte, unveränderte Originaldateien, Löschbestätigungen und signierte Ereignisse.
 Desktop/QML sowie Windows/macOS müssen zusätzlich in der nativen CI geprüft werden.
+
+
+## Mi-Fitness-Originalexport und ZIP-Import
+
+Unter **Import** kann die vollständige Mi-Fitness-ZIP gewählt werden. Desktop und
+Portal wählen für ZIP-Dateien automatisch `mi-fitness-zip` und kodieren die Datei
+für den Transport als Base64. Eine einzelne `hlth_center_sport_record.csv` kann
+mit `mi-fitness-csv` importiert werden. Für Textdateien gelten 2 MiB, für ZIP-Dateien
+16 MiB komprimiert, 64 MiB insgesamt entpackt und höchstens 256 Archiveinträge.
+Es werden keine Dateien auf dem Server-Dateisystem entpackt. Pfadtraversierung,
+Symlinks, verschlüsselte Archive, fehlerhafte Prüfsummen und uneindeutige relevante
+CSV-Dateien werden abgelehnt.
+
+Der Adapter liest `hlth_center_sport_record.csv` und optional
+`hlth_center_fitness_data.csv`. Herstellerwerte wie Dauer, Distanz, Kalorien und
+mittlerer Puls bleiben als `source_metrics` erhalten. Sie erzeugen keine
+synthetische Pulskurve. `start_time` und `end_time` bestimmen die Zeitspanne;
+eine abweichende Herstellerdauer wird als Qualitätswarnung ausgewiesen.
+GPX-Downloadlinks werden nicht abgerufen; aggregierte Tageswerte ersetzen keine
+Rohmessungen. ZIP-Exporte müssen genau ein Quellkonto enthalten.
+
+Puls und Einheit werden standardmäßig nur bei identischer Quellenkennung `Sid`
+verbunden. Eine Zuordnung verschiedener Quellen muss ausdrücklich unter Mapping
+angegeben werden, beispielsweise mit erfundenen Kennungen:
+
+```json
+{"source_map":{"app-source":"wearable-source"}}
+```
+
+Die verwendete Quellenkennung und Qualitätswarnungen erscheinen in der Vorschau.
+Reguläre `heart_rate`-Werte haben Vorrang vor `single_heart_rate`; widersprüchliche
+Werte gleicher Priorität werden als fehlend behandelt. Eine geänderte Zuordnung
+überschreibt keinen bestehenden Import: zuerst den alten Batch prüfen/exportieren
+und ausdrücklich löschen, danach erneut importieren.
+
+Der privat bereitgestellte Originalexport vom 23.09.2026 enthält zwei Einheiten.
+Bei strikter Quellenzuordnung besitzen beide keine passenden Rohpulswerte. Bei
+expliziter Zuordnung von App zu Armband stehen für die Geheinheit sechs Werte zur
+Verfügung; für die Laufeinheit fehlen passende Werte weiterhin. Persönliche
+Kennungen und Originaldateien sind nicht Bestandteil des Repositorys oder der CI.
+
+Der Batch-Export enthält `raw_encoding` (`utf-8` oder `base64`) und `format`.
+Bei ZIP erhält Base64-Dekodierung von `raw_content` die unveränderten Archivbytes.
+Der SHA-256-Fingerprint bezieht sich auf die UTF-8-Bytes von `raw_content`, bei ZIP
+also auf die gespeicherte Base64-Zeichenfolge.
+
+## Hintergrundaufträge
+
+**Import im Hintergrund** legt einen dauerhaften Auftrag an. Mit
+**Importaufträge aktualisieren** werden Status und Ergebnis neu geladen; wartende
+oder laufende Aufträge können abgebrochen werden. Es gibt höchstens einen aktiven
+Auftrag je Person und eine Warteschlangengrenze von acht aktiven Aufträgen im
+Einzelhostbetrieb. Der Worker verarbeitet seriell, prüft Berechtigungen vor dem
+Parsen und erneut vor dem Speichern und schreibt Einheiten transaktional.
+
+Nach einem Prozessabbruch kann ein laufender Auftrag nach Ablauf seiner
+zehnminütigen Bearbeitungsfrist erneut übernommen werden. Eine eindeutige
+Bearbeitungskennung verhindert das Speichern durch einen veralteten Worker.
+Abbruch und vollständige Trainingsdatenlöschung verhindern spätere Übernahme
+der Ergebnisse. Nach Abschluss, Fehler oder Abbruch wird die Auftragskopie der
+Quelldatei entfernt; erfolgreiche Originalimporte bleiben im zugehörigen Batch.
+Die Fehleranzeige enthält keine Originaldateien oder vertraulichen Messwerte.
+
+## Sorgeberechtigte und automatische Löschung
+
+Unter **Datenverwaltung** lädt eine berechtigte Verwaltungsperson die vorhandenen
+Sorgeberechtigungen und bestätigt Benutzer-ID, Nachweisreferenz und Ablaufdatum.
+Erforderlich ist `training.guardians.manage`; niemand darf die eigene
+Sorgeberechtigung bestätigen. Die Laufzeit beträgt höchstens 366 Tage. Die
+Software dokumentiert die Prüfung, ersetzt aber nicht die Prüfung des Nachweises.
+Geprüfte Sorgeberechtigte benötigen zusätzlich die normalen Trainingsrechte.
+
+Eine aktive Sorgeberechtigung erlaubt die Verwaltung der Trainingsdaten und
+Freigaben der betroffenen Person. Neu erteilte Trainingsfreigaben speichern ihren
+Urheber. Nach Ablauf oder Widerruf einer Sorgeberechtigung vermitteln dessen
+Freigaben keinen Zugriff mehr; ein ausdrücklicher Widerruf setzt sie zusätzlich
+auf zurückgezogen. Frühere Freigaben ohne Urheberzuordnung bleiben kompatibel.
+Anwesenheitsfreigaben sind von diesem Verfahren unabhängig.
+
+**Automatische Löschung** ist standardmäßig deaktiviert (`0`). Athlet oder
+geprüfte sorgeberechtigte Person kann mit Löschrecht und ausdrücklicher Bestätigung
+1 bis 3650 Tage einstellen. Der Host prüft fällige Daten ungefähr jede Minute.
+Import-Batches werden nach ihrem Importzeitpunkt gelöscht, manuelle Einheiten nach
+Trainingsdatum, Recovery nach Tagesdatum, KI-Metadaten und abgeschlossene Aufträge
+nach Erstellzeitpunkt. Alte Profilversionen werden entfernt, die aktuelle Version
+bleibt erhalten. Geräte, Freigaben, Sorgeberechtigungsnachweise und Audit-Einträge
+werden durch diese Frist nicht gelöscht. Fehlt dem Urheber der Löschregel die
+aktuelle Berechtigung, wird die Regel nicht ausgeführt. Änderungen verwenden eine
+Revisionsprüfung, damit parallele Bearbeitung keine Regel unbemerkt überschreibt.
