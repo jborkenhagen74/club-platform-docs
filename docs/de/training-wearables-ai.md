@@ -16,7 +16,7 @@ Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 | Grafiken | Pulskurve, Zonen, Wochen/Monate; Überlagerung von 2–4 normalisierten Kurven; Aktivitäts-/Gerätefilter und JSON-Auswertungsbericht | Druckfertige Vergleichsberichte und zusätzliche Filter |
 | Berechtigungen | Personenreichweite und getrennte Freigaben; Audit/Widerruf; Export, Batch-Löschung und vollständige Trainingsdatenlöschung; befristet geprüfte Sorgeberechtigte; bestätigte automatische Aufbewahrungsfristen | Externe Nachweisprüfung bleibt organisatorisch erforderlich |
 | KI | Lokaler Dienst als Standard; optionaler HTTPS-Endpunkt mit separater Remote-Freigabe; gespeicherte Modell-/Prompt-Metadaten und Eingabe-Hash | Verifikation konkreter entfernter Provider und signierter Modellpakete |
-| Automatisierung | Signierter, personenbezogener Ereignisabruf mit Cursor und separater Automationsfreigabe; Verifikationsbeispiel für n8n | Ausgehende Webhook-Zustellung mit Wiederholungen und geprüfter importierbarer n8n-Workflow |
+| Automatisierung | Signierter, personenbezogener Ereignisabruf mit Cursor und separater Automationsfreigabe; optionaler Webhook-Dispatcher mit dauerhaftem Cursor, Wiederholungen und importierbarer n8n-Prüfvorlage | Abnahme des Workflows in der konkreten n8n-Installation |
 
 Diese Tabelle ist zugleich die offene Umsetzungsliste. Der generische CSV-Import
 ist keine direkte Mi-Fitness-, Health-Connect- oder Strava-Kontoverbindung.
@@ -408,8 +408,8 @@ fünf Minuten altes `issued_at`. Ereignisse anhand `id` deduplizieren und
 Die Ereignisse enthalten Typ, ID, Sequenz und Zeitpunkt; keine Messwerte,
 Freitexte oder Originaldateien. Datenquelle ist der minimale Audit-Nachweis.
 Ein Widerruf sperrt auch den historischen Abruf. Die signierte Schnittstelle
-ist ein Pull-Verfahren; ausgehende Webhooks und eine Zustellwarteschlange sind
-noch nicht implementiert. Einrichtung und ein ausführbarer Python-Verifikator
+ist ein Pull-Verfahren; der optionale Dispatcher ergänzt ausgehende Zustellung
+mit dauerhaftem Cursor und Wiederholungen. Einrichtung und Python-Verifikator
 stehen im Produkt-Repository unter `examples/integrations/n8n/`.
 
 ## Prüfung vor Freigabe
@@ -513,3 +513,36 @@ bleibt erhalten. Geräte, Freigaben, Sorgeberechtigungsnachweise und Audit-Eintr
 werden durch diese Frist nicht gelöscht. Fehlt dem Urheber der Löschregel die
 aktuelle Berechtigung, wird die Regel nicht ausgeführt. Änderungen verwenden eine
 Revisionsprüfung, damit parallele Bearbeitung keine Regel unbemerkt überschreibt.
+
+
+## Optionaler Webhook-Dispatcher und n8n-Vorlage
+
+Im Produkt-Repository unter `examples/integrations/n8n/` ergänzt
+`deliver-training-events.py` den signierten Abruf um ausgehende Zustellung.
+Ein externer Zeitplan startet den Einzellauf mit einer privaten SQLite-Statusdatei.
+Diese enthält nur Konfigurationshash, Cursor, Fehlerzahl und nächsten Versuch;
+Originaldateien, Messwerte und Zugangsdaten werden dort nicht gespeichert.
+Die README erklärt die erforderlichen Umgebungsvariablen und Ausführung.
+
+Jeder Zustellversuch ruft die Ereignisse erneut mit aktueller Berechtigung ab.
+Ein Widerruf verhindert weitere Zustellungen; bereits versandte oder laufende
+Anfragen können nicht zurückgerufen werden. Nur eine HTTP-200-Antwort mit dem
+passenden `accepted_cursor` bestätigt die vollständige Seite. Ansonsten bleibt
+der Cursor erhalten. Wiederholungen beginnen nach 30 Sekunden und verdoppeln
+sich bis höchstens einer Stunde. Ein neuer Scheduler-Aufruf führt den Versuch aus.
+Außerhalb von Loopback gilt HTTPS; Weiterleitungen und Umgebungsproxies sind aus.
+
+Zustellung erfolgt mindestens einmal: Empfänger müssen nach Ereignis-ID
+idempotent arbeiten. Der zusätzlich übertragene `Idempotency-Key` kennzeichnet
+eine unveränderte Seite; durch neue Ereignisse können sich Seitengrenzen ändern.
+Ein Absturz nach Verarbeitung und vor Bestätigung kann erneute Zustellung auslösen.
+
+`training-webhook.workflow.json` ist eine inaktive, geheimnisfreie n8n-Importvorlage.
+Sie prüft Signatur, Person, Zeitfenster und Reihenfolge und bestätigt anschließend
+nur den Empfang. Sie erzeugt keine Anwesenheit und verändert keine Trainingsdaten.
+Eigene idempotente Verarbeitung gehört zwischen Prüfung und Bestätigung.
+Python-Tests prüfen Wiederholungen, Widerruf, Neustartzustand und HTTP-Weiterleitungen;
+Node.js-Tests führen den unveränderten Prüfcode mit gültigen und manipulierten
+Umschlägen aus. Import und Ausführung in der tatsächlich eingesetzten n8n-Version
+mit deren Task-Runner- und Geheimnisrichtlinien bleiben als Abnahmeschritt offen.
+Es wurde kein externer Webhook aktiviert oder mit persönlichen Daten angesprochen.
