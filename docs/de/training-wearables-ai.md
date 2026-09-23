@@ -1,25 +1,28 @@
 # Wearable-Import, Trainingsauswertung und lokale KI
 
 Stand: 23.09.2026 · Feature-Branch `feature/training-wearable-import`.
-Training-Extension 1.3.0, Extension-Schema 3, Host-Schema 21, ABI V3.
+Training-Extension 1.4.0, Extension-Schema 4, Host-Schema 21, ABI V3.
 Dieser Stand ergänzt die [Trainings- und Anwesenheitsbasis](../training-attendance.md).
 Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 
 ## Abgleich mit dem Konzept vom 21.09.2026
 
-| Konzept | Implementierter Stand | Noch offen |
+| Konzept | Implementierter Stand | Betriebsabnahme / Grenze |
 |---|---|---|
-| Sportneutraler Trainingskern | Geräte, Einheiten, Samples/Segmente; persistente Trainingsprofile mit unveränderlichen Zonenversionen; tägliche Recovery-Einträge | Weitere Athletenstammdaten und validierte Recovery-Modelle |
-| Nachvollziehbare Imports | Originaldatei mit SHA-256; transaktionaler Import; Metadatenkorrektur mit Historie; Batch-Export und endgültige Löschung; persistente Hintergrundaufträge | Korrektur von Messwerten und Zeitstempeln |
-| Anbieter | CSV mit Mapping, normalisiertes JSON, TCX, GPX, Apple-Health-XML; Mi-Fitness-CSV und ZIP anhand eines Originalexports geprüft | Android-Health-Connect-App, Strava-OAuth-Synchronisation |
-| Berechnungen | Version `training-v1`, zeitgewichteter Puls, Zonenzeiten, Abdeckung, Messlücken, Session-RPE-Last | Erweiterte Recovery-/Belastungsmodelle, Taekwondo-spezifische Metriken |
-| Grafiken | Pulskurve, Zonen, Wochen/Monate; Überlagerung von 2–4 normalisierten Kurven; Aktivitäts-/Gerätefilter und JSON-Auswertungsbericht | Druckfertige Vergleichsberichte und zusätzliche Filter |
-| Berechtigungen | Personenreichweite und getrennte Freigaben; Audit/Widerruf; Export, Batch-Löschung und vollständige Trainingsdatenlöschung; befristet geprüfte Sorgeberechtigte; bestätigte automatische Aufbewahrungsfristen | Externe Nachweisprüfung bleibt organisatorisch erforderlich |
-| KI | Lokaler Dienst als Standard; optionaler HTTPS-Endpunkt mit separater Remote-Freigabe; gespeicherte Modell-/Prompt-Metadaten und Eingabe-Hash | Verifikation konkreter entfernter Provider und signierter Modellpakete |
-| Automatisierung | Signierter, personenbezogener Ereignisabruf mit Cursor und separater Automationsfreigabe; optionaler Webhook-Dispatcher mit dauerhaftem Cursor, Wiederholungen und importierbarer n8n-Prüfvorlage | Abnahme des Workflows in der konkreten n8n-Installation |
+| Trainingskern | Versionierte Zonen, Athletenprofil mit Größe, Gewicht, Ruhe-/Maximalpuls, Erfahrung, Trainingsziel und dominanter Seite; Recovery-Baseline | Keine klinisch validierte Diagnose oder Verletzungsprognose |
+| Imports und Korrekturen | Original und Hash unverändert; begründete Messwert-/Zeitkorrekturen, Historie, Revisionen, Export, Löschung, Hintergrundaufträge | Originale bleiben bis zur bestätigten Löschung erhalten |
+| Anbieter | CSV, JSON, TCX, GPX, Apple Health, Mi Fitness; Android-Health-Connect-Begleiter; private Strava-OAuth-Liveansicht | Health Connect auf realem Gerät und Strava mit registriertem App-Konto abnehmen |
+| Berechnungen | Zeitgewichteter Puls, Zonen, Abdeckung, RPE-Last; 7-/28-Tage-Last, Monotonie, Strain; persönliche 28-Tage-Recovery-Baseline; Runden-/Segmentmetriken und manuelle Taekwondo-Zähler | Fehlende Daten bleiben unbekannt; keine automatische Erkennung von Treffern aus Pulsdaten |
+| Berichte | Kurven, Zonen, Wochen/Monate, 2–4 Kurven; Dauer-/Abdeckungs-/RPE-Filter; PDF-Berichte in Portal und Desktop | Portal-PDF kann geladene Vergleichskurven einschließen; Desktop-PDF vergleicht Kennzahlen und Segmente tabellarisch |
+| Berechtigungen | Getrennte Freigaben; zusätzliches Rohkorrekturrecht; Sorgeberechtigte, Widerruf, automatische Löschung | Prüfung von Sorgeberechtigungsnachweisen bleibt organisatorisch |
+| KI | OpenAI-kompatible Chat-Completions und native Ollama-API; echte TLS-Vertragsprüfung mit Testserver; Ed25519-/SHA-256-Prüfung von GGUF-Paketen | Ein konkretes externes Anbieter-Konto und das tatsächlich geladene Runtime-Modell sind damit nicht attestiert |
+| Automatisierung | Signierter Abruf, dauerhafter Webhook-Dispatcher, Wiederholungen, n8n-Prüfvorlage | Die tatsächliche n8n-Installation nimmt der Betreiber manuell ab |
 
-Diese Tabelle ist zugleich die offene Umsetzungsliste. Der generische CSV-Import
-ist keine direkte Mi-Fitness-, Health-Connect- oder Strava-Kontoverbindung.
+Die Entwicklungsfunktionen sind umgesetzt. Die genannten Betriebsabnahmen sind
+keine bereits durchgeführten Live-Tests. Strava-API-Daten werden wegen der seit
+01.06.2026 geltenden Anbietervorgaben weder importiert noch mit anderen Daten oder
+KI ausgewertet. Quellen: [Strava API Policy](https://www.strava.com/legal/api_policy),
+[Health Connect](https://developer.android.com/health-and-fitness/health-connect/get-started).
 Anwesenheiten bleiben separat: Eine importierte Einheit erzeugt keine Teilnahme.
 
 ## Neue Arbeitsbereiche in Desktop und Portal
@@ -45,8 +48,10 @@ Linienarten, damit der Vergleich auch bei hohem Kontrast verständlich bleibt.
    Antworten nennen die verwendete `profile_revision`; 0 steht für manuelle Grenzen.
 
 Die Version ist eine Berechnungskonfiguration, keine rückwirkende Änderung einer
-Originalmessung. Ein Profil enthält derzeit Zonengrenzen und eine optionale
-Bezeichnung; es ist noch kein vollständiger sportmedizinischer Athletenpass.
+Originalmessung. Zusätzlich sind Größe (cm), Gewicht (kg), Ruhepuls, gemessener
+Maximalpuls, Erfahrung (Jahre), geplante Trainingstage/Woche, dominante Seite und
+Trainingsziel optional. Leere Zahlen bedeuten unbekannt. Diese Werte ändern die
+expliziten Zonengrenzen nicht automatisch. Das Profil ist kein medizinischer Pass.
 
 ### Recovery erfassen
 
@@ -70,12 +75,19 @@ normiert. Lücken über 30 Sekunden werden weiterhin nicht verbunden; es werden
 keine künstlichen Messwerte interpoliert. Die Linienarten entsprechen der Legende.
 Ein gleicher Prozentwert ist keine Zusage gleicher sportlicher Belastung.
 
-**Auswertung als JSON exportieren** speichert die aktuell angezeigten berechneten
-Kennzahlen samt Algorithmen-/Profilversion. Dieser Bericht ist kein druckfertiges PDF.
+**PDF-Auswertungsbericht** exportiert den aktuell angezeigten Stand einschließlich
+UTC-Zeitraum, Filtern, Profilversion, Zonengrenzen, Abdeckung und Segmenten. Das
+Portal nimmt bereits geladene Vergleichskurven auf; der Desktop erstellt einen
+tabellarischen PDF-Vergleich. Zusätzliche Filter sind Mindest-/Höchstdauer in
+Minuten, Mindestabdeckung (0–1) und RPE-Unter-/Obergrenze. Ein RPE-Filter schließt
+Einheiten ohne RPE aus. Nach Filteränderungen zuerst neu laden.
 
 Eine Einheit öffnen, **Einheit korrigieren** aufklappen/aktivieren und Titel,
 Aktivität oder subjektive RPE ändern. Die API erlaubt zusätzlich Segmentkorrekturen.
-Zeitstempel, Quelle, Identität und Messwerte bleiben unverändert. Jeder erfolgreiche
+Unter **Messwerte und Zeiten korrigieren** können zusätzlich `start`, `end`,
+`samples` und `segments` als JSON korrigiert werden. Rohänderungen verlangen
+`training.correct_raw`, eine Begründung und die Bestätigung der Einheits-ID.
+Quelle und Importidentität bleiben unverändert. Jeder erfolgreiche
 Schreibvorgang erhöht die Revision; der vorherige normalisierte Stand bleibt
 in einer Korrekturhistorie. Die Originaldatei und ihr Hash bleiben unverändert.
 Eine spätere Auswertung verwendet die korrigierten Angaben.
@@ -106,7 +118,7 @@ Aufbewahrungsfristen und Sorgeberechtigungen werden ebenfalls in der Datenverwal
 1. Host und Desktop/Portal aus demselben Feature-Stand bauen und installieren.
    ICU, libxml2, zlib und libcurl gehören bereits zu den Host-Abhängigkeiten.
 2. Vor dem Update eine Datenbanksicherung erstellen. Der Host legt Migration 21
-   an; anschließend unter **Erweiterungen** `training` auf Version 1.3.0 aktualisieren.
+   an; anschließend unter **Erweiterungen** `training` auf Version 1.4.0 aktualisieren.
 3. Eine gültige Lizenz mit Modul `training` verwenden. `attendance` ist optional
    und separat zu lizenzieren. Die KI benötigt keine zusätzliche Modul-ID.
 4. Das Benutzerkonto mit der Sportlerperson verknüpfen. Im Personendossier unter
@@ -306,7 +318,7 @@ export CLUBPLATFORM_TRAINING_AI_MODEL=your-versioned-model
 
 Der Host-Administrator wählt den Endpunkt. Anfragen aus Desktop/Portal können
 keine Zieladresse vorgeben. Entfernte Ziele müssen HTTPS mit gültigem Zertifikat
-und dem Pfad `/v1/chat/completions` verwenden; URL-Zugangsdaten, Query-Parameter,
+und dem Pfad `/v1/chat/completions` oder `/api/chat` verwenden; URL-Zugangsdaten, Query-Parameter,
 Weiterleitungen und Proxy-Nutzung sind nicht zugelassen.
 Zusätzlich zur `ai`-Freigabe ist für jeden HTTPS-Aufruf eine benannte
 `ai_remote`-Freigabe nötig, auch beim eigenen Konto. Beide werden vor und nach
@@ -379,7 +391,9 @@ Alle Beispiele benötigen zusätzlich `person_id`. Die Operation steht hinter
 | `batches` | Keine |
 | `export-batch` | `batch_id` |
 | `delete-batch` | `batch_id`, identischer `confirm_batch_id`, aktueller `fingerprint` |
-| `correct` | `id`, `expected_revision`, `changes` mit `title`, `activity`, `rpe` und/oder `segments` |
+| `correct` | `id`, `expected_revision`, `changes`; bei Messwert-/Zeitänderungen zusätzlich `reason`, `confirm_session_id` |
+| `history` | `id`; letzte 50 vorherige Stände |
+| `recovery-analysis` | `day` als UTC-Mitternacht |
 | `purge` | `confirm_person_id`, identisch mit `person_id` |
 | `curves` | `ids` mit 2–4 unterschiedlichen Einheits-UUIDs derselben Person |
 | `events` | `after`: letzter erfolgreich verarbeiteter Cursor, initial 0 |
@@ -388,7 +402,7 @@ Für Profil und Recovery gilt `expected_revision: 0` beim Neuanlegen. Eine unbek
 Profilrevision liefert ein leeres Profil; eine Auswertung damit wird abgewiesen.
 Summary/KI unterstützen zusätzlich `activity` und `device` als exakte Filter.
 Kurven, Originalexport und Recovery-Details benötigen die `raw`-Freigabe;
-Profil/Batchliste/Auswertung benötigen für Trainer `summary`.
+Profil und Änderungshistorie benötigen ebenfalls `raw`; Batchliste/Auswertung benötigen für Trainer `summary`.
 Korrekturen und Dateneingaben benötigen Schreibrechte und für Trainer `write`.
 
 ## Signierte Ereignisse für n8n
@@ -546,3 +560,145 @@ Node.js-Tests führen den unveränderten Prüfcode mit gültigen und manipuliert
 Umschlägen aus. Import und Ausführung in der tatsächlich eingesetzten n8n-Version
 mit deren Task-Runner- und Geheimnisrichtlinien bleiben als Abnahmeschritt offen.
 Es wurde kein externer Webhook aktiviert oder mit persönlichen Daten angesprochen.
+
+
+## Ergänzungen in Training 1.4
+
+### Belastung, Recovery und Taekwondo
+
+Die Auswertung liefert `load_statistics` mit zwei Fenstern (7 und 28 Tage), die
+am exklusiven `until` enden. Erfasste Last ist RPE × Dauer in Minuten. Enthält
+der gewählte Zeitraum das Fenster nicht vollständig oder fehlt bei einer
+erfassten Einheit die RPE, bleiben Monotonie und Strain unbekannt. Ansonsten ist
+Monotonie der mittlere tägliche erfasste Load geteilt durch dessen
+Populationsstandardabweichung; Strain ist Gesamtload × Monotonie. Bei
+Standardabweichung null werden beide nicht berechnet. Tage ohne Aufzeichnung
+sind **keine bestätigten Ruhetage**. Filter gelten auch für diese Statistik;
+sie beschreibt dann ausschließlich die gefilterte Auswahl.
+
+`recovery-analysis` benötigt `day` als UTC-Mitternacht und vergleicht diesen Tag
+mit den vorherigen 28 Tagen. Pro Messgröße sind mindestens sieben vorherige
+Beobachtungen nötig. Mittelwert, Standardabweichung und Differenz sind nachvollziehbar;
+bei konstanter Basis gibt es keinen standardisierten Abstand. Die Anzeige ist
+kein klinisch validierter Erholungsindex und empfiehlt keine Belastungssteigerung.
+Algorithmen: `recorded-load-v1`, `personal-recovery-baseline-v1`.
+
+Segmente können `kind` (`work`, `rest`, `round`, `technique`) und
+`manual_counts` (`kicks`, `punches`, `points`, `penalties`; ganze Zahlen 0–100000)
+enthalten. Diese Zähler werden manuell erfasst, nicht aus Pulsdaten geschätzt.
+Je Segment erscheinen Dauer, abgedeckte Zeit, Abdeckung, zeitgewichteter Puls,
+Spitzenpuls und Zonenzeiten. Halteintervalle sind wie im Hauptdiagramm auf
+30 Sekunden begrenzt und werden an beiden Segmentgrenzen abgeschnitten.
+
+### Rohkorrekturen und API
+
+`correct` akzeptiert zusätzlich zu den Metadaten `start`, `end` und `samples`.
+Bei diesen Feldern sind `reason`, `confirm_session_id` und das zusätzliche Recht
+`training.correct_raw` erforderlich; auch eine Trainerfreigabe für `raw` bleibt
+notwendig. `expected_revision` schützt vor konkurrierenden Änderungen.
+Die Startzeit wird im Suchindex mitgeändert. `history` mit `id` liefert die letzten
+50 vorherigen Stände. Originaldatei und Fingerprint ändern sich nie dadurch.
+Die Qualitätsanzeige kennzeichnet eine Messwertkorrektur; alle Auswertungen
+verwenden anschließend die korrigierte Version.
+
+### Health Connect auf Android
+
+Das Produkt enthält unter `apps/health-connect/` einen nativen Kotlin-Begleiter.
+Der Club-Platform-Kern bleibt C++. Voraussetzungen: Android 9 oder neuer,
+verfügbares Health Connect, Leserechte für Training und Herzfrequenz sowie ein
+HTTPS-Host mit gültigem Zertifikat. Der Begleiter schreibt keine Daten in
+Health Connect und besitzt keine Hintergrund- oder Werbeberechtigungen.
+
+1. Projekt mit JDK 17, Android SDK 36 und Gradle 8.13 bauen:
+   `gradle -p apps/health-connect :app:assembleDebug :app:testDebugUnitTest :app:lintDebug`.
+   Der separate GitHub-Workflow erzeugt eine Debug-APK; eine signierte
+   Produktionsverteilung gehört zur Betreiberfreigabe.
+2. APK installieren, Datenschutzhinweis lesen und beide Leserechte freigeben.
+3. HTTPS-Server, Benutzername, Passwort und Ziel-Personen-ID eingeben; anmelden.
+4. UTC-Tag innerhalb der letzten 30 Tage wählen und Trainings laden.
+5. Training wählen, Vorschau laden und Zielperson, Zeitraum und Samplezahl prüfen.
+6. Import ausdrücklich bestätigen. Der Host prüft zusätzlich seine Freigaben.
+
+Workout und Puls müssen dieselbe Health-Connect-Quell-App haben. Die App liest
+alle Seiten; fehlender Puls bleibt leer. Uploads sind auf 2 MiB begrenzt.
+Unveränderte Wiederholungen erkennt der Host als Dublette; geänderte Quellen
+überschreiben keine korrigierte Einheit. Passwörter, Tokens und Vorschauen werden
+nicht dauerhaft gespeichert. Beim Verlassen wird die Vorschau gelöscht.
+Widerruf in Health Connect verhindert neue Lesevorgänge; bereits importierte
+Daten löscht man separat unter Training → Datenverwaltung.
+
+### Strava: private OAuth-Liveansicht
+
+Der Hostbetreiber registriert eine Strava-App und konfiguriert:
+
+```text
+CLUBPLATFORM_STRAVA_CLIENT_ID=<registrierte numerische ID>
+CLUBPLATFORM_STRAVA_CLIENT_SECRET=<geheim>
+CLUBPLATFORM_STRAVA_REDIRECT_URI=https://club.example/api/v1/training/strava/callback
+```
+
+Callback-Domain in Strava freigeben. Unter **Datenverwaltung → Strava** den Hinweis
+bestätigen, verbinden, bei Strava `activity:read` gewähren und die vollständige
+Rückleitungs-URL in die Anwendung kopieren. Die Callback-Seite selbst tauscht
+keine Tokens aus. Erst der angemeldete ursprüngliche Athlet kann mit dem einmaligen,
+zehn Minuten gültigen Zustand den Austausch abschließen.
+
+**Neu laden** liest höchstens die letzten 30 Aktivitäten als Namen, Zeit,
+Sportart und Link. Es gibt keine Datenbankimporte, Exportberichte, Trainer-/Elternsicht,
+Hintergrundsynchronisation, KI-Nutzung oder Kombination mit anderen Trainingsdaten.
+Die Anzeige wird nach spätestens einer Minute geleert. Tokens liegen nur im
+Hostspeicher, sind an diese Anmeldung gebunden und höchstens eine Stunde nutzbar;
+ein Neustart verlangt erneute Verbindung. Beim Tokenrefresh wird der Refresh-Token
+ersetzt. Abmelden allein widerruft nicht die App-Freigabe bei Strava: Dafür
+**Verbindung widerrufen** verwenden oder die Strava-Einstellungen für Apps öffnen.
+Bei Netzfehlern werden lokale Verbindungsdaten verworfen; einen ausstehenden
+anbieterweiten Widerruf in Strava selbst durchführen.
+
+Die API-Operationen heißen `strava-begin` (`consent: true`), `strava-finish`
+(`code`, `state`, `scope`), `strava-sync` und `strava-disconnect`. Sie stehen
+nur dem aktiv mit der Person verknüpften Benutzer offen. HTTP-Antworten sind
+`no-store`. `CLUBPLATFORM_STRAVA_TEST_ORIGIN` erlaubt ausschließlich einen lokalen
+HTTP-Testserver unter `127.0.0.1`; diese Variable gehört nicht in den Produktivbetrieb.
+
+### Ollama und signierte GGUF-Pakete
+
+Neben `/v1/chat/completions` unterstützt der Host die native Ollama-Route
+`http://127.0.0.1:11434/api/chat`, mit `stream: false` und begrenzter Tokenzahl.
+HTTPS benötigt weiterhin Betreiber-Opt-in und die separate `ai_remote`-Freigabe.
+`CLUBPLATFORM_TRAINING_AI_CA_FILE` kann eine betreiberseitige private CA-Datei
+angeben; Zertifikats- und Hostnamenprüfung bleiben eingeschaltet.
+
+Für ein signiertes Modellpaket einen privaten Ordner mit GGUF-Datei und
+signiertem `manifest.json` bereitstellen. Unsigniertes Payload-Beispiel:
+
+```json
+{"schema":"training-model-v1","model_id":"training-local","format":"gguf","file":"training.gguf","size":12345,"sha256":"<SHA-256 der GGUF-Datei>","license":"<Lizenzbezeichnung>"}
+```
+
+`size`, Hash und Lizenz durch die tatsächlichen Werte ersetzen. Signieren:
+
+```sh
+clubplatform-sign sign model publisher-secret.hex model-payload.json model-package/manifest.json
+```
+
+Hostkonfiguration:
+
+```text
+CLUBPLATFORM_TRAINING_AI_MODEL=training-local
+CLUBPLATFORM_TRAINING_MODEL_PACKAGE=/operator/model-package
+CLUBPLATFORM_TRAINING_MODEL_PUBLIC_KEY=<vertrauenswürdiger Ed25519-Public-Key als Hex>
+```
+
+Vor jedem Modellaufruf prüft der Host Signatur, Modell-ID, Dateiname, Größe,
+GGUF-Kennung und SHA-256. Manipulationen verhindern die Übermittlung von Daten.
+Das Paketverzeichnis muss betreiberseitig schreibgeschützt sein. Es findet kein
+Download oder Ausführen fremden Codes statt. Ohne Paketkonfiguration bleibt der
+bestehende Dienstbetrieb möglich, mit `model_package.verified: false`.
+Die signierte Datei attestiert nicht, welche Bytes eine getrennte Runtime
+wirklich geladen hat; entsprechend bleibt `runtime_attested: false`.
+
+Automatisierte Vertragsprüfungen verwenden synthetische Daten gegen einen
+OpenAI-kompatiblen Testdienst, einen Ollama-Testdienst und einen tatsächlichen
+HTTPS-Testdienst mit expliziter Test-CA. Sie prüfen außerdem Signatur-/Hashfehler,
+Remote-Einwilligung und Widerruf während laufender Anfragen. Diese Tests ersetzen
+keine Abnahme eines konkreten Cloud-Kontos mit dessen eigenen Bedingungen.
