@@ -179,7 +179,7 @@ def main():
             Paragraph('Detaillierte Anleitung · Deutsch<br/>' + ('Feature-Stand · Training 1.2.0 · 23.09.2026' if source=='training-wearables-ai' else 'Version 1.0.0 Pilot · ABI V3 · Stand 21.09.2026'), S['Text']),
             Spacer(1, 18), Paragraph('Bunker Development', S['H3Guide']),
             Paragraph('Diese PDF wird aus der Markdown-Dokumentation erzeugt. Für das Kopieren längerer Befehle die verlinkte Markdown-Fassung verwenden; lange Codezeilen können im Druck umbrechen. Relative Verweise beziehen sich auf das öffentliche Doku-Repository.', S['Text']),
-            Paragraph('<a href="https://github.com/jborkenhagen74/club-platform-docs/blob/main/docs/de/'+source+'.md" color="#245c70">Markdown-Fassung im Doku-Repository öffnen</a>', S['Text']),
+            Paragraph('<a href="https://github.com/jborkenhagen74/club-platform-docs/blob/'+('feature/training-wearable-import' if source=='training-wearables-ai' else 'main')+'/docs/de/'+source+'.md" color="#245c70">Markdown-Fassung im Doku-Repository öffnen</a>', S['Text']),
             Spacer(1, 20), Paragraph('Inhalt', S['H3Guide']), toc, PageBreak()]
         story.extend(flowables(text, doc.width))
         doc.multiBuild(story)
