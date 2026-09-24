@@ -1,6 +1,6 @@
 # Training & Wearables und Trainingsanwesenheit – erster Ausbau
 
-Stand: 22.09.2026. Branch `feature/training-attendance`, auf dem deklarativen
+Stand: 24.09.2026; Rechte und Arbeitsbereiche aktualisiert. Branch `feature/training-attendance`, auf dem deklarativen
 Extension-Refactoring aufgebaut. Beide Module verwenden ABI V3 und eingebettete
 JSON-Definitionen. Ein nachträgliches Bearbeiten externer JSON-Dateien ändert keine
 installierte Binärdatei.
@@ -46,11 +46,21 @@ Die Host-Freigabeprüfung liegt zentral in
 
 ## Freigaben und Rechte
 
-Ein Administrator erhält durch `*` **keinen automatischen Trainingszugriff auf
-andere Personen**. Jede Person verwaltet ihre eigenen Freigaben im jeweiligen
-Personendossier. Dafür benötigt ihr verknüpftes Konto die Modulrechte
-`<modul>.read`, `<modul>.write`, `records.read` und `records.write`.
-Die Freigaben sind für `training` und `attendance` getrennt.
+Operative **Teilnahmen (`attendance.entry`) und Geräte (`training.device`)**
+benötigen keine Einwilligung. Lesen erfordert `records.read` und das Modul-Leserecht;
+Schreiben `records.write` und das Modul-Schreibrecht. Dazu kommt jeweils die
+passende Personenreichweite. Der Bootstrap-Administrator erfüllt diese Rechte
+mit `*`, auch ohne Verknüpfung seines Kontos mit einer Person.
+Anwesenheitsübersichten benötigen zusätzlich `attendance.summary`.
+
+**Trainingseinheiten, Roh-/Gesundheitsdaten, Wearable-Importe, KI und externe
+Weitergabe** bleiben gesondert einwilligungspflichtig. `*` umgeht diese Prüfung
+nicht. Freigaben werden von der betroffenen Person beziehungsweise den dafür
+berechtigten Sorgeberechtigten verwaltet. Bestehende `attendance.consent`-Datensätze
+bleiben aus Kompatibilitäts- und Auditgründen erhalten, steuern operative
+Teilnahmen und ihre Übersichten aber nicht mehr.
+
+Die folgenden Freigaben gelten für die geschützten Trainingsdaten:
 
 Im jeweiligen Tab **Freigaben** einen Datensatz anlegen:
 
@@ -61,7 +71,8 @@ Im jeweiligen Tab **Freigaben** einen Datensatz anlegen:
 | `status` | `granted` oder `withdrawn` |
 
 Zuerst eine Freigabe mit `purpose=storage`, leerer Benutzer-ID und
-`status=granted` anlegen. Erst danach können Daten erfasst werden.
+`status=granted` anlegen. Erst danach können geschützte Trainingsdaten erfasst werden. Geräte und operative
+Anwesenheiten sind davon ausgenommen.
 Für Trainer je gewünschtem Zugriff einen zusätzlichen Freigabedatensatz
 anlegen. Freigaben ersetzen keine Rollenrechte:
 
@@ -71,7 +82,7 @@ anlegen. Freigaben ersetzen keine Rollenrechte:
   Freigabe `write`; Archivieren/Wiederherstellen benötigt zusätzlich die
   entsprechenden bestehenden Modul-/Datensatzrechte.
 - Anwesenheitsübersicht: `attendance.read`, `attendance.summary`, `records.read`,
-  passende Personenreichweite und Freigabe `summary`.
+  passende Personenreichweite; keine Einwilligung.
 - Personenreichweite: bestehende Organisationszuordnung mit
   `<modul>.read.organization` / `<modul>.write.organization` oder explizite
   `<modul>.read.all` / `<modul>.write.all`. Auch `.all` ersetzt keine Freigabe.
@@ -87,14 +98,14 @@ Ein Widerruf sperrt nachfolgende Serverzugriffe sofort. Bereits angezeigte Daten
 werden dadurch nicht aus dem Gedächtnis oder Bildschirm eines Empfängers entfernt.
 Ein Widerruf von `storage` sperrt die Nutzung der Trainingsdaten für alle; die
 Person kann ihre Freigaben weiterhin bearbeiten. Bestehende Datensätze werden
-nicht automatisch gelöscht. Ein automatischer Aufbewahrungs-/Löschprozess sowie
-Freigaben durch Sorgeberechtigte sind noch nicht Bestandteil dieses Ausbaus.
+nicht automatisch gelöscht. Ein automatischer Aufbewahrungs-/Löschprozess ist nicht Bestandteil dieser Basisbeschreibung. Den aktuellen Stand zu
+Sorgeberechtigten beschreibt das [Wearable-Handbuch](de/training-wearables-ai.md).
 
 ## Anwesenheit und Leistung erfassen
 
-1. **Personen** öffnen, Sportler auswählen und das Personendossier öffnen.
-2. Unter dem Modul **Trainingsanwesenheit** die **Freigaben** wie oben einrichten.
-3. Zum Tab **Teilnahmen** wechseln und einen Datensatz anlegen.
+1. **Trainingsanwesenheit** in der Navigation öffnen.
+2. Die Person suchen und auswählen. Eine Einwilligung ist hierfür nicht nötig.
+3. Im Tab **Teilnahmen** einen Datensatz anlegen. Auch die Personenakte bietet diesen Zugang.
 4. `session_key`: stabile, eindeutige Kennung der Einheit, z. B.
    `tkd-2026-09-22-1800`. Dieselbe Einheit darf bei vielen Sportlern vorkommen,
    aber nur einmal je Sportler. Für eine zweite Einheit am selben Tag eine

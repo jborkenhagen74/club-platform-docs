@@ -3,6 +3,7 @@
 Stand: 23.09.2026 · Feature-Branch `feature/training-wearable-import`.
 Training-Extension 1.4.0, Extension-Schema 4, Host-Schema 21, ABI V3.
 Dieser Stand ergänzt die [Trainings- und Anwesenheitsbasis](../training-attendance.md).
+Aktuelle Rechte und getrennte Arbeitsbereiche: [Operative Module und Auswertungen](operational-workspaces.md).
 Er ist ein Entwicklungsstand, noch kein veröffentlichtes Pilot-Update.
 
 ## Abgleich mit dem Konzept vom 21.09.2026
