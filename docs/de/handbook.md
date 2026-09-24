@@ -47,3 +47,15 @@ Veranstaltungen verwalten Anmeldung, Fristen, Kapazität und Warteliste. Gebühr
 Im Kampfsportbereich der Person erfasst Du Lizenzname, Erteilungsdatum, Ablaufdatum, erteilende Organisation oder Freitext sowie den Warnzeitraum in Tagen. Mehrere Fotos/Nachweise sind möglich. Bei aktiviertem Kalender werden Ablaufdaten aus den Lizenzdaten angezeigt; ändere die Fachlizenz, nicht die abgeleitete Kalenderanzeige.
 
 Dokumentvorlagen verwenden registrierte Platzhalter. Wähle bei mehreren passenden Adressen, Funktionen oder Prüfungen den Kontext ausdrücklich aus. Vorschau und Ausgabe prüfen die Rechte erneut. [Vollständige Platzhalterliste](placeholders.md).
+
+## Training, Wearables und lokale KI
+
+Die Personenakte bietet Dateiimport mit Vorschau, Pulskurven, Zonenvergleiche,
+Wochen-/Monatsdiagramme und eine optionale lokale KI-Erklärung. Voraussetzung
+sind das lizenzierte Training-Modul und die passenden persönlichen Freigaben.
+Die KI-Freigabe muss auch für eigene Daten ausdrücklich erteilt werden.
+
+Die [detaillierte Anleitung](training-wearables-ai.md) enthält Formate, Beispiele,
+Berechtigungen, Berechnungsregeln und Einrichtung des KI-Dienstes.
+[Trainingsanwesenheit](../training-attendance.md) bleibt ein separates Modul.
+Dieser Ausbau liegt auf `feature/training-wearable-import` und ist noch kein Release.

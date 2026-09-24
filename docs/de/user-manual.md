@@ -291,3 +291,15 @@ Am Tagesende offene Entwürfe bearbeiten, wichtige Änderungen durch erneutes Le
 kontrollieren und abmelden. Backupstatus und Wiederherstellungsproben sind Aufgaben
 der Administration. Bei Supportanfragen Produktversion, Betriebsart, Zeitpunkt,
 Aktion und Fehlermeldung nennen; Passwörter, Token und unnötige Personendaten weglassen.
+
+## Training, Wearables und lokale KI
+
+Die Personenakte bietet Dateiimport mit Vorschau, Pulskurven, Zonenvergleiche,
+Wochen-/Monatsdiagramme und eine optionale lokale KI-Erklärung. Voraussetzung
+sind das lizenzierte Training-Modul und die passenden persönlichen Freigaben.
+Die KI-Freigabe muss auch für eigene Daten ausdrücklich erteilt werden.
+
+Die [detaillierte Anleitung](training-wearables-ai.md) enthält Formate, Beispiele,
+Berechtigungen, Berechnungsregeln und Einrichtung des KI-Dienstes.
+[Trainingsanwesenheit](../training-attendance.md) bleibt ein separates Modul.
+Dieser Ausbau liegt auf `feature/training-wearable-import` und ist noch kein Release.
