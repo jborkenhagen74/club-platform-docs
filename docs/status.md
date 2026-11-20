@@ -50,6 +50,9 @@ Preview features are off by default and are enabled by the host operator with
   language-pack keys (927 keys per pack) with a CI check against new hard-coded text;
   documents support `{{key|locale}}` ([details](document-placeholders.md)); portal PDFs
   embed Noto Sans KR for Hangul.
+- **Search:** person, list and inventory search is case-insensitive, treats Turkish
+  I/İ/ı/i alike and normalizes Unicode (NFC) identically on SQLite and PostgreSQL;
+  accents stay distinct and sorting stays binary ([lists](list-query-lifecycle.md)).
 - **API:** [complete route catalogue](api/club-platform.openapi.json) for all 52
   operations, contract-tested against the server.
 - **CI:** pull requests run Linux (SQLite + PostgreSQL), desktop and portal checks before
@@ -57,8 +60,7 @@ Preview features are off by default and are enabled by the host operator with
 
 ## Remaining gates
 
-- **Phase 5 (I18n):** locale-aware search and sorting (Turkish I/İ, Hangul) on both
-  databases; native review of the new translations; desktop PDF output with Hangul on all
+- **Phase 5 (I18n):** locale-alphabetical sorting (stored ICU sort keys); native review of the new translations; desktop PDF output with Hangul on all
   platforms; preview-module texts.
 - **Phase 6:** acceptance together with phase 5.
 - **Phase 14:** representative bank exports and user acceptance of matching rules; no

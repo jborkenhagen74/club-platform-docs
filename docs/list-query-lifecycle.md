@@ -36,7 +36,7 @@ HTTP auf. Der Actor stammt ausschließlich aus der Sitzung.
 
 | Eigenschaft | Vertrag |
 |---|---|
-| `search` | Wörtliche, UTF-8-/groß-/kleinschreibungssensitive Suche, höchstens 256 Bytes |
+| `search` | Wörtliche Teilstring-Suche ohne Platzhalterzeichen, höchstens 256 Bytes. Seit 1.0.x unabhängig von Groß-/Kleinschreibung (ICU-Kleinschreibung), I/İ/ı/i gleichwertig, Unicode-normalisiert (NFC); Akzente und Umlaute bleiben unterscheidend (`a` findet nicht `ä`). Gilt auch für den Filteroperator `contains`. |
 | `sort` | Ein freigegebenes Feld, Standard `id`; ID als eindeutiger zweiter Schlüssel |
 | `direction` | `asc` oder `desc`, gilt auch für den ID-Schlüssel |
 | `page_size` | 1 bis 100, Standard 100 |
