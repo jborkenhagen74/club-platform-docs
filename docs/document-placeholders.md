@@ -99,3 +99,22 @@ lokale/Remote-Vorschau; Playwright prüft Picker/Vorschau bei Desktop- und Mobil
 PostgreSQL führt dieselben neuen fachlichen Tests in der CI aus.
 Phase 5 ergänzt vollständige I18n; Phase 6 den vollständigen Erweiterungsmanager
 und Martial-V3-Migration. Dieser Stand ist keine vollständige 0.6.0-Freigabe.
+
+## Localeabhängige Formatierung (seit 1.0.x)
+
+Platzhalter liefern weiterhin normalisierte Werte (ISO-Datum, Dezimalpunkt), damit
+bestehende Vorlagen unverändert bleiben. Mit dem Modifikator `|locale` werden Datums-,
+Dezimal- und Ganzzahlwerte für die Vorlagen-Locale formatiert (ICU, mittleres Datumsformat):
+
+| Vorlage | de-DE | en-US | ko-KR |
+|---|---|---|---|
+| `{{document.date}}` | 2026-09-16 | 2026-09-16 | 2026-09-16 |
+| `{{document.date\|locale}}` | 16.09.2026 | Sep 16, 2026 | 2026. 9. 16. |
+
+Locale-Auflösung: Vorlage `locale`, sonst Kontext/Benutzerpräferenz, sonst Sprache,
+sonst `de-DE`. Unbekannte Modifikatoren oder ungültige Locales liefern 400. Textwerte
+werden nie verändert oder übersetzt.
+
+Portal-PDFs mit koreanischem Text betten Noto Sans KR (SIL OFL 1.1) nur für die
+Hangul-Abschnitte ein; übriger Text bleibt in Roboto (Noto Sans KR enthält z. B.
+kein türkisches İ/ı/ş/ğ). Die Schriftdateien werden nur bei Bedarf geladen.

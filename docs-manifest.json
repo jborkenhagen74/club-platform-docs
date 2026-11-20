@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "edition": "2026-09-21",
+  "edition": "2026-11-20",
   "schema": 18,
   "abi": 3,
   "languages": [
@@ -22,7 +22,7 @@
     "frontends/getting-started.md",
     "versioning.md"
   ],
-  "scope": "1.0 pilot; legacy G0 chapters retained and explicitly labelled",
+  "scope": "1.0 pilot (1.0.x, November 2026); legacy G0 chapters retained and explicitly labelled",
   "release_channel": "pilot",
   "historical_baseline": {
     "implementation_commit": "427159c789ed19c1ab73f5241dad1ed7ae895316",

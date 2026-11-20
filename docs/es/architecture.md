@@ -70,7 +70,10 @@ se revierte toda la operación.
 Las contraseñas utilizan hashes Argon2id; los tokens también se almacenan como
 hashes en el servidor. Valores predeterminados: ocho horas de duración absoluta,
 30 minutos de inactividad y bloqueo de 30 segundos tras cinco fallos de acceso.
-Evitar bucles de reintentos rápidos.
+Desde 1.0.x cada bloqueo adicional se duplica (60 s, 120 s, … una hora como máximo)
+hasta un inicio de sesión correcto o 24 horas sin intentos. La actividad de la sesión
+se guarda como máximo una vez por minuto, por lo que la inactividad puede expirar
+hasta un minuto antes. Evitar bucles de reintentos rápidos.
 
 La cadena es usuario → grupos → roles → permisos; sin concesión se deniega el
 acceso. `records.read/write` cubre registros generales; `memberships.read/write`,

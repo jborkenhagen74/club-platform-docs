@@ -68,7 +68,10 @@ change is rolled back.
 
 Passwords use Argon2id hashes; server-side session tokens are also stored as hashes.
 Defaults are eight hours absolute lifetime, 30 minutes idle timeout and a
-30-second lock interval after five failed login attempts. Clients should explain
+30-second lock interval after five failed login attempts. Since 1.0.x each further
+lock doubles (60 s, 120 s, … at most one hour) until a sign-in succeeds or 24 hours
+pass without attempts. Session activity is stored at most once per minute, so the
+idle timeout may end up to one minute early. Clients should explain
 failures instead of creating rapid retry loops.
 
 The permission chain is user → groups → roles → permission keys. Default is deny.
