@@ -1,5 +1,9 @@
 # Wearable-Import, Trainingsauswertung und lokale KI
 
+> **Pilotumfang (20.11.2026):** KI-Auswertung, KI-Planung und die Strava-Anbindung sind
+> Vorschaufunktionen und nur mit `CLUBPLATFORM_EXPERIMENTAL=training-ai,strava` aktiv.
+> Siehe [Vorschaufunktionen](../preview-features.md).
+
 Stand: 23.09.2026 · Feature-Branch `feature/training-wearable-import`.
 Training-Extension 1.4.0, Extension-Schema 4, Host-Schema 21, ABI V3.
 Dieser Stand ergänzt die [Trainings- und Anwesenheitsbasis](../training-attendance.md).

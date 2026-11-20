@@ -6,6 +6,14 @@ Public documentation and examples for integrating with Club Platform.
 
 [Current pilot status and upgrade instructions](docs/release-1.0-pilot.md). Pilot is a prerelease channel; native acceptance remains a separate gate.
 
+**November 2026 (1.0.x):** [status and pilot scope](docs/status.md) ·
+[preview features](docs/preview-features.md) ·
+[complete API route catalogue](docs/api/club-platform.openapi.json) ·
+[inventory](docs/inventory.md) ·
+[extension services and signed UI packages](docs/extension-services-and-ui-packages.md) ·
+[movement/combat analysis (preview)](docs/movement-combat-preview.md) ·
+[document locale formatting](docs/document-placeholders.md#localeabhängige-formatierung-seit-10x).
+
 New: [ausführliche bebilderte Bedienungsanleitung (Deutsch)](docs/de/bedienung.md),
 [Formularatlas mit allen Aktionen](docs/de/formulare.md),
 [Pilot und Wiederherstellung](docs/pilot.md),
@@ -48,7 +56,7 @@ Use `sdk/include/clubplatform/extension_v3.h` and `sdk/examples/v3-extension` fo
 
 - `docs/extensions` – extension ABI, lifecycle and UI contributions
 - `docs/frontends` – REST-based frontend integration
-- `openapi` – public REST API contract draft
+- `openapi` – public REST API contract (complete 1.0 route catalogue)
 - `sdk` – public extension ABI header
 - `examples/extensions` – compilable native extension examples
 - `examples/frontends` – minimal browser/client examples

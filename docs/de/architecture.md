@@ -73,7 +73,11 @@ konvertieren können; andernfalls wird die Änderung als Ganzes verworfen.
 Passwörter werden mit Argon2id gehasht; Sitzungstoken werden serverseitig ebenfalls
 nicht im Klartext gespeichert. Standardmäßig endet eine Sitzung spätestens nach
 acht Stunden oder nach 30 Minuten ohne berechtigte Aktivität. Fünf fehlgeschlagene
-Anmeldungen führen zum konfigurierten Sperrintervall von 30 Sekunden. Clients
+Anmeldungen führen zum konfigurierten Sperrintervall von 30 Sekunden; seit 1.0.x
+verdoppelt sich jede weitere Sperre (60 s, 120 s, … höchstens eine Stunde), bis eine
+Anmeldung gelingt oder 24 Stunden ohne Versuch vergehen. Der Aktivitätszeitpunkt
+einer Sitzung wird höchstens minütlich gespeichert, sodass die Inaktivitätsgrenze
+bis zu einer Minute früher greifen kann. Clients
 sollten Fehler verständlich anzeigen und keine schnellen Wiederholschleifen starten.
 
 Benutzer → Gruppen → Rollen → Berechtigungen: Ohne passende Freigabe wird ein

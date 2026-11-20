@@ -28,4 +28,9 @@ current = yaml.safe_load((root / 'openapi/club-platform.yaml').read_text())
 validate(current)
 assert current['info']['version'] == '1.0.0-pilot'
 assert '/api/v1/auth/me' in current['paths']
+# Complete 1.0 route catalogue (52 operations), preview-feature error code documented.
+assert sum(len([m for m in p if m != 'servers']) for p in current['paths'].values()) == 52
+assert all(path == '/health' or path.startswith('/api/v1/') for path in current['paths'])
+assert 'feature.experimental_disabled' in current['components']['responses']['E409']['description']
+assert current['paths']['/api/v1/auth/login']['post']['security'] == []
 print('OK: historical G0 contract, current pilot authentication contract and ABI-2 compatibility example.')

@@ -71,7 +71,10 @@ si une conversion échoue, l’ensemble du changement est annulé.
 Les mots de passe sont hachés avec Argon2id ; les jetons sont également stockés
 sous forme hachée côté serveur. Valeurs par défaut : durée absolue de huit heures,
 inactivité maximale de 30 minutes et blocage de 30 secondes après cinq échecs de
-connexion. Éviter les boucles de tentatives rapides.
+connexion. Depuis 1.0.x, chaque blocage supplémentaire double (60 s, 120 s, … une heure
+au maximum) jusqu'à une connexion réussie ou 24 heures sans tentative. L'activité de
+session est enregistrée au plus une fois par minute ; l'expiration pour inactivité peut
+donc survenir jusqu'à une minute plus tôt. Éviter les boucles de tentatives rapides.
 
 La chaîne est utilisateur → groupes → rôles → permissions. Sans droit explicite,
 l’accès est refusé. `records.read/write` concerne les données générales ;
