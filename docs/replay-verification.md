@@ -186,14 +186,50 @@ oder vom MediaPipe Pose Landmarker (Python). Beide werden auf das Skelett
 `body12-mediapipe-v1` mit 12 Gelenken abgebildet. Die 3D-Punkte entstehen durch
 geometrische Triangulation (DLT) über die kalibrierten Kameras.
 
-### Generisches Taekwondoin-Modell
+### Sportartprofile (Kampfsport-Modul)
+
+Alles Sportartspezifische wird im **Kampfsport-Modul** (`martial`) geregelt. Die
+Kampfanalyse selbst ist sportartneutral: Erkennung (Pose, Triangulation,
+Bewegungssegmente, geometrische Vorschläge), Replay und Review funktionieren für
+jede Sportart gleich.
+
+- Die Profile liegen in `extensions/martial-arts/sports/profiles.json`
+  (`martial.sport-profiles.v1`). Der Martial-Dienst stellt sie über die
+  Service-Operation `sport.profiles.v1` bereit. Die Kampfanalyse reicht sie über
+  den Befehl `sport_profiles` an Web und Desktop weiter.
+- Enthalten sind: Allgemein, Taekwondo, Karate, Judo, Boxen, Kickboxen, Muay Thai,
+  Ringen und MMA.
+- Je Profil sind festgelegt:
+  - die **zwei Markierungen** der Sportler mit Farbe, z. B. Chung/Hong, Aka/Ao,
+    weißer/blauer Judogi oder rote/blaue Ecke; dazu kommt immer „Neutral“;
+  - die **Ausrüstung** des 3D-Modells: Oberteil und Ärmel, Hose oder Shorts,
+    Gürtel, Rumpfschutz, Kopfschutz, Hände (frei, Faustschützer, Handschuhe)
+    und Füße;
+  - die **Ereignisarten im Review**, z. B. Wurf, Takedown, Kontrolle/Haltegriff,
+    Aufgabegriff, Clinch, Block oder Verlassen der Fläche. Die neutralen Arten
+    der Kampfanalyse (Kontaktkandidat, Treffer, Technik, Beinarbeit, Deckung)
+    sind immer erlaubt.
+  - optional eine **Wertungsvorlage**. Sie ist nur für Sportarten mit fester
+    Punkte-je-Aktion-Tabelle hinterlegt (Taekwondo WT, Karate WKF), dient als
+    Ausgangspunkt und ist ausdrücklich mit dem aktuellen Regelwerk abzugleichen.
+    Für Judo, Boxen, Ringen, MMA usw. gibt es keine Vorlage; die Wertung wird
+    nach Regelwerk selbst konfiguriert.
+- Die Sportart einer Szene wird in **Formen & Regelwertung** gewählt
+  (`analysis.sport`, revisioniert mit der Szene). Danach prüft der Dienst die
+  Review-Ereignisarten gegen das Profil.
+- Im Kampfsport-Katalog kann ein **Stil** einem Sportartprofil zugeordnet
+  werden, z. B. ein Vereinsstil „ITF Taekwon-Do“ dem Profil Taekwondo.
+- Ist das Kampfsport-Modul nicht aktiv, steht nur das Profil „Allgemein“ mit den
+  sportartneutralen Ereignisarten zur Verfügung.
+- Sportart-, Markierungs- und Ereignisnamen sind in den sieben Sprachpaketen
+  des Kampfsport-Moduls übersetzt.
+
+### Generisches Sportlermodell
 
 - Das Modell besteht aus einfachen Grundkörpern: Zylinder und Ellipsoide.
-- Weißer Dobok und schwarzer Gürtel.
-- Rumpfschutz (Hogu) und Kopfschutz tragen die **Markierungsfarbe**:
-  - Chung (blau), standardmäßig für den ersten Track;
-  - Hong (rot), standardmäßig für den zweiten Track;
-  - Neutral, für Trainingsszenen.
+- Es trägt die Ausrüstung des gewählten Sportartprofils. Die Teile mit
+  Markierungsfarbe zeigen, welcher Sportler welcher ist.
+- Im Replay ist die Sportart des Modells unabhängig von der Szene umschaltbar.
 - Die Markierung ist je Sportler umstellbar. Die Skelettlinien und die
   Projektion in den Kamerabildern verwenden dieselbe Farbe.
 - **Gliedmaßen enden exakt an den gemessenen Gelenken.** Generisch sind nur die
@@ -230,6 +266,10 @@ geometrische Triangulation (DLT) über die kalibrierten Kameras.
   - Auf der Bildebene wird ihr Bild angezeigt; der Abstand ist einstellbar.
   - Bild und Skelett decken sich nur aus Sicht der jeweiligen Kamera. Das Bild
     ist eine einfache Lochkamera-Projektion ohne Entzerrung.
+- Ausrüstung je Sportart, Markierungen, Ereignisarten je Szenenprofil, Wertungsvorlagen
+  und der Rückfall ohne Kampfsport-Modul sind getestet
+  (`tests/combat_athlete_tests.mjs`, `extensions/combat/tests/test_analysis_service.py`,
+  `apps/portal/tests/combat.spec.ts`).
 - Die Projektion der Web-3D-Ansicht ist per Test mit der bisherigen
   Orbit-Projektion abgeglichen: 1048 Punkte, Abweichung < 10⁻⁴. Modellteile,
   Größenschätzung und Bildecken der Screens sind ebenfalls getestet

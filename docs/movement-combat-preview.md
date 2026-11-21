@@ -30,8 +30,9 @@ wird im Server verankert. Unverändertheit und Vollständigkeit lassen sich mit
 Genauigkeit des markerlosen Trackings ist nicht „exakt“, sondern wird mit
 `clubplatform-tracking-validate` gegen Referenzdaten gemessen. Das 3D-Replay ist mit
 freier Kamerafahrt (Maus, Touch, Tastatur) abspielbar und zeigt wahlweise Skelett, generische
-Taekwondoin-Modelle (Chung/Hong-Markierung, nach geschätzter oder eingegebener Körpergröße
-skaliert) sowie die Kamerabilder als Kacheln oder als Screens an den Kamerapositionen im 3D-Raum. Format, Werkzeuge und der Stand der
+Sportlermodelle in der Ausrüstung der gewählten Sportart (Sportartprofile aus dem Kampfsport-Modul:
+Taekwondo, Karate, Judo, Boxen, Kickboxen, Muay Thai, Ringen, MMA, Allgemein; nach geschätzter oder
+eingegebener Körpergröße skaliert) sowie die Kamerabilder als Kacheln oder als Screens an den Kamerapositionen im 3D-Raum. Format, Werkzeuge und der Stand der
 Verifizierungsreife, einschließlich der vor einer WT-Einreichung offenen Punkte:
 [Verifizierbares Live-Replay](replay-verification.md).
 
