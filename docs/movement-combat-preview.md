@@ -36,4 +36,11 @@ eingegebener Körpergröße skaliert) sowie die Kamerabilder als Kacheln oder al
 Verifizierungsreife, einschließlich der vor einer WT-Einreichung offenen Punkte:
 [Verifizierbares Live-Replay](replay-verification.md).
 
+## Sportartneutrale Analyse und Sportmodule
+
+Die Szenen- & Spielanalyse (bisher „Kampfanalyse“) ist sportartneutral: Sportmodule wie
+das Kampfsport-Modul liefern Sportartprofile; Szenen mit 2–16 Kameras und bis zu 30 Personen;
+Vergleich mit Referenzvideos aus einer Perspektive. Details:
+[Sportartneutrale Analyse](sport-neutral-analysis.md).
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).

@@ -186,7 +186,9 @@ oder vom MediaPipe Pose Landmarker (Python). Beide werden auf das Skelett
 `body12-mediapipe-v1` mit 12 Gelenken abgebildet. Die 3D-Punkte entstehen durch
 geometrische Triangulation (DLT) über die kalibrierten Kameras.
 
-### Sportartprofile (Kampfsport-Modul)
+### Sportartprofile (Sportmodule, z. B. Kampfsport)
+
+Allgemeine Architektur und Anleitung für neue Sportmodule: [Sportartneutrale Analyse](sport-neutral-analysis.md).
 
 Alles Sportartspezifische wird im **Kampfsport-Modul** (`martial`) geregelt. Die
 Kampfanalyse selbst ist sportartneutral: Erkennung (Pose, Triangulation,
