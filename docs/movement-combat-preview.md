@@ -21,4 +21,16 @@ zeigen „Vorschau“ in der Modulübersicht.
 - Die Oberflächentexte der Analyse-Dialoge sind noch nicht vollständig übersetzt.
 - Plattformabdeckung (CoreML/CUDA, Kameras) ist nicht abgenommen.
 
+## Verifizierbares Live-Replay und Tracking-Genauigkeit
+
+Die Live-Erfassung der Kampfanalyse zeichnet jedes Kamerabild in voller Auflösung mit
+Quellzeitstempel, SHA-256-Hashkette und ausdrücklich vermerkten Lücken auf. Der Kopf-Hash
+wird im Server verankert. Unverändertheit und Vollständigkeit lassen sich mit
+`clubplatform-replay-verify` (oder einer unabhängigen Python-Implementierung) prüfen. Die
+Genauigkeit des markerlosen Trackings ist nicht „exakt“, sondern wird mit
+`clubplatform-tracking-validate` gegen Referenzdaten gemessen. Das 3D-Replay ist mit
+freier Kamerafahrt (Maus, Touch, Tastatur) abspielbar. Format, Werkzeuge und der Stand der
+Verifizierungsreife, einschließlich der vor einer WT-Einreichung offenen Punkte:
+[Verifizierbares Live-Replay](replay-verification.md).
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).
