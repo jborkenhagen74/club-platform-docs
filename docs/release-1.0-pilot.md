@@ -1,7 +1,7 @@
 # Club Platform 1.0.0 Pilot
 
 Stand: 21.09.2026. Produktversion: **1.0.0**. Veröffentlichungskanal: **pilot**.
-Datenbankschema: **18**. Öffentliche HTTP-API: **/api/v1**. Native Extension-ABI: **V3**.
+Datenbankschema: **18** (Stand 1.0.0 Pilot; aktueller Entwicklungsstand: 22 – die Migrationen 19–22 ergänzen Training/Wearables, siehe [Trainingsdoku](de/training-wearables-ai.md)). Öffentliche HTTP-API: **/api/v1**. Native Extension-ABI: **V3**.
 
 Dieser Stand bündelt die bisherigen Featurezweige auf develop und main und ist für
 kontrollierten Pilotbetrieb vorgesehen. Die Versionssetzung ist kein Nachweis einer

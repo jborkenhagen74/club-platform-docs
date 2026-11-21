@@ -184,3 +184,14 @@ that the externally loaded code was executed. No sentinel is emitted by normal b
 Cross-platform source is included; Linux CI evidence and Windows/macOS release
 validation must be reported separately. Real Ollama model quality remains a trainer
 acceptance check, distinct from transport and consent tests.
+
+## Central module gate (since 1.0.x)
+
+Before the host dispatches any module route – `/finance/...`, `/calendar`, `/events`,
+`/training/commands/...`, `/module-dossiers/...` and `/extensions/{module}/commands/...` –
+it resolves the session and checks that the addressed module is licensed, installed,
+enabled and that its required dependencies are ready (`401` without session, `403`
+`module_not_licensed`, `409` when not installed/disabled). Events stay usable without a
+calendar licence. Modules keep their own permission and sub-module checks (for example
+banking or contributions operations inside finance); the host gate is an additional,
+uniform layer, not a replacement. Covered by the implementation's HTTP regression tests.
