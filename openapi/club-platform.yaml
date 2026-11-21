@@ -1105,6 +1105,21 @@ paths:
           - active
           - archived
           - all
+      - name: locale
+        in: query
+        required: false
+        description: Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent
+          = binary UTF-8 order.
+        schema:
+          type: string
+          enum:
+          - de-DE
+          - en
+          - fr-FR
+          - it-IT
+          - es-ES
+          - ko-KR
+          - tr-TR
     post:
       summary: Create (id empty) or update a record
       tags:
@@ -1503,6 +1518,21 @@ paths:
           - active
           - archived
           - all
+      - name: locale
+        in: query
+        required: false
+        description: Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent
+          = binary UTF-8 order.
+        schema:
+          type: string
+          enum:
+          - de-DE
+          - en
+          - fr-FR
+          - it-IT
+          - es-ES
+          - ko-KR
+          - tr-TR
     post:
       summary: Create person
       tags:
@@ -1795,6 +1825,21 @@ paths:
           - active
           - archived
           - all
+      - name: locale
+        in: query
+        required: false
+        description: Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent
+          = binary UTF-8 order.
+        schema:
+          type: string
+          enum:
+          - de-DE
+          - en
+          - fr-FR
+          - it-IT
+          - es-ES
+          - ko-KR
+          - tr-TR
   /api/v1/roles:
     post:
       summary: Create role

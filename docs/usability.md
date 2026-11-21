@@ -20,9 +20,10 @@ und Rollen wechseln. **Hinzufügen** weist einen Eintrag zu; **Entfernen** hebt 
 diese Zuordnung auf. Die Person, das Benutzerkonto oder die Rolle selbst wird dabei
 nicht gelöscht. Der Schutz vor Entfernung des letzten Administrators bleibt aktiv.
 
-Neue Gruppen und Rollen entstehen weiterhin über **Neu anlegen**. Bestehende
-Gruppen- und Rollennamen sind in dieser Version nicht umbenennbar; der Dialog dient
-der Verwaltung ihrer Zuordnungen.
+Neue Gruppen und Rollen entstehen weiterhin über **Neu anlegen**. Seit 1.0.x lassen
+sich bestehende Gruppen und Rollen im selben Dialog über **Umbenennen** umbenennen; Namen
+bleiben eindeutig (ein vergebener Name wird abgewiesen), Zuordnungen und Berechtigungen
+bleiben erhalten, und die Änderung wird protokolliert.
 
 ## Kalender und Termine
 
@@ -36,11 +37,26 @@ Datum und Uhrzeit werden im Desktop mit Kalenderauswahl und getrennten Stunden-
 und Minutenfeldern gewählt; das Portal verwendet HTML-Datums-/Zeitfelder.
 Bei ganztägigen Terminen ist das Ende weiterhin der erste nicht enthaltene Tag.
 
-Unter **Zugeordnete Person oder Organisation** wird der Bezug ausgewählt. Für den
-Ablauf einer Personenlizenz beispielsweise einen Termin mit Titel „Lizenzablauf“,
-der betreffenden Person und dem Ablaufdatum anlegen. Anschließend kann über die
-Kalenderaktion eine Erinnerung eingerichtet werden. Termine aus Ablaufdaten werden
-hierbei nicht automatisch erzeugt.
+Unter **Zugeordnete Person oder Organisation** wird der Bezug ausgewählt.
+
+Fristen erscheinen automatisch, ohne dass Termine angelegt werden müssen (Projektion aus den
+Fachdaten, keine Kopie): Ablaufdaten von Athletenlizenzen (mit Erinnerung entsprechend der
+Vorwarnzeit der Lizenz) und seit 1.0.x **Enden von Mitgliedschaften** (Erinnerung 30 Tage
+vorher). Beide sind schreibgeschützt, erscheinen als Hinweise im Dashboard und nur für
+Personen, für die Kalender- bzw. Mitgliedschaftsleserechte bestehen. Archivierte
+Mitgliedschaften verschwinden aus dem Kalender.
+
+## Adressen im Portal
+
+Bereich, Liste und geöffnete Akte stehen in der Adresse (`#area=…&resource=…&kind=…&id=…`).
+Links lassen sich teilen, und die Zurück-Taste des Browsers führt zur vorherigen Ansicht.
+
+## Barrierefreiheit
+
+`apps/portal/tests/a11y.spec.ts` prüft Anmeldung, Startseite und Personenliste auf Desktop
+und Mobil mit axe-core (WCAG 2.1 A/AA) und schlägt bei schwerwiegenden Befunden fehl.
+Behoben in 1.0.x: Kontrast der Primärfarbe (4,83:1), Name des Suchbuttons auf Mobilgeräten,
+Kontrast des aktiven Eintrags der mobilen Navigation.
 
 ## Lokal prüfen
 

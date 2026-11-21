@@ -1736,6 +1736,24 @@
                 "all"
               ]
             }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "description": "Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent = binary UTF-8 order.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "de-DE",
+                "en",
+                "fr-FR",
+                "it-IT",
+                "es-ES",
+                "ko-KR",
+                "tr-TR"
+              ]
+            }
           }
         ]
       },
@@ -2335,6 +2353,24 @@
                 "all"
               ]
             }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "description": "Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent = binary UTF-8 order.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "de-DE",
+                "en",
+                "fr-FR",
+                "it-IT",
+                "es-ES",
+                "ko-KR",
+                "tr-TR"
+              ]
+            }
           }
         ]
       },
@@ -2780,6 +2816,24 @@
                 "active",
                 "archived",
                 "all"
+              ]
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "description": "Alphabetical text order for a locale (ICU collation, binary tie-break; cursors are bound to it). Empty/absent = binary UTF-8 order.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "de-DE",
+                "en",
+                "fr-FR",
+                "it-IT",
+                "es-ES",
+                "ko-KR",
+                "tr-TR"
               ]
             }
           }

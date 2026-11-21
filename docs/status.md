@@ -1,6 +1,6 @@
 # Development and acceptance status
 
-Baseline: **1.0.0 Pilot**, schema 18, extension ABI V3. Edition of this page: 20 November 2026.
+Baseline: **1.0.0 Pilot** (shipped with schema 18; current core schema 22), extension ABI V3. Edition of this page: 21 November 2026.
 The pilot label does not certify production acceptance. See
 [pilot rollout and module upgrade](release-1.0-pilot.md).
 
@@ -53,6 +53,14 @@ Preview features are off by default and are enabled by the host operator with
 - **Search:** person, list and inventory search is case-insensitive, treats Turkish
   I/İ/ı/i alike and normalizes Unicode (NFC) identically on SQLite and PostgreSQL;
   accents stay distinct and sorting stays binary ([lists](list-query-lifecycle.md)).
+- **Sorting:** optional alphabetical list order per locale (`locale` = de-DE, en, fr-FR,
+  it-IT, es-ES, ko-KR, tr-TR) with ICU collations on SQLite and PostgreSQL; cursors are
+  bound to the locale; without it the binary v1 order stays ([lists](list-query-lifecycle.md)).
+- **Module gate:** every module route requires a licensed, installed and enabled module
+  before module code runs ([details](extension-services-and-ui-packages.md#central-module-gate-since-10x)).
+- **Usability:** groups and roles can be renamed; membership end dates appear in the
+  calendar with reminders; accessibility checks for the main portal views with contrast
+  and labelling fixes ([usability](usability.md)).
 - **API:** [complete route catalogue](api/club-platform.openapi.json) for all 52
   operations, contract-tested against the server.
 - **CI:** pull requests run Linux (SQLite + PostgreSQL), desktop and portal checks before
@@ -60,7 +68,7 @@ Preview features are off by default and are enabled by the host operator with
 
 ## Remaining gates
 
-- **Phase 5 (I18n):** locale-alphabetical sorting (stored ICU sort keys); native review of the new translations; desktop PDF output with Hangul on all
+- **Phase 5 (I18n):** native review of the new translations; desktop PDF output with Hangul on all
   platforms; preview-module texts.
 - **Phase 6:** acceptance together with phase 5.
 - **Phase 14:** representative bank exports and user acceptance of matching rules; no

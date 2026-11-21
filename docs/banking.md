@@ -1,6 +1,6 @@
 # Banking Foundation — CSV and CAMT.053
 
-Development implementation, schema 18. Native/platform acceptance is pending CI.
+Development implementation introduced with schema 18 (current core schema: 22). Native/platform acceptance is pending CI.
 Requires installed, active and licensed `banking` and `finance` modules, and
 `banking.write` plus `finance.write` for all banking workspace operations.
 Module 1.0.0 exposes `finance.payment-provider` v1. Native dependency: libxml2.

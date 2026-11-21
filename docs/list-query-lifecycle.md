@@ -36,6 +36,7 @@ HTTP auf. Der Actor stammt ausschließlich aus der Sitzung.
 
 | Eigenschaft | Vertrag |
 |---|---|
+| `locale` | Optional seit 1.0.x: alphabetische Textsortierung für `de-DE`, `en`, `fr-FR`, `it-IT`, `es-ES`, `ko-KR` oder `tr-TR` (ICU-Collation; gleichwertige Werte binär nachsortiert, ID als letzter Schlüssel). Ohne Angabe bleibt die binäre UTF-8-Reihenfolge. Cursor sind an die Locale gebunden; ein Wechsel startet eine neue Seitenfolge. Portal und Desktop senden die Locale der Oberflächensprache. PostgreSQL benötigt die ICU-Collations (`de-x-icu` usw., Standard bei ICU-fähigen Builds), sonst gilt binäre Ordnung. |
 | `search` | Wörtliche Teilstring-Suche ohne Platzhalterzeichen, höchstens 256 Bytes. Seit 1.0.x unabhängig von Groß-/Kleinschreibung (ICU-Kleinschreibung), I/İ/ı/i gleichwertig, Unicode-normalisiert (NFC); Akzente und Umlaute bleiben unterscheidend (`a` findet nicht `ä`). Gilt auch für den Filteroperator `contains`. |
 | `sort` | Ein freigegebenes Feld, Standard `id`; ID als eindeutiger zweiter Schlüssel |
 | `direction` | `asc` oder `desc`, gilt auch für den ID-Schlüssel |
