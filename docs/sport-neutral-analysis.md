@@ -81,8 +81,9 @@ Die Felder im Einzelnen:
    und Erweiterungen geprüft werden. Dort fügt ein simuliertes Handball-Modul
    Profile hinzu, und ein Taekwondo-Zusatzmodul erweitert ein Profil.
 
-Noch nicht vorhanden für Mannschaftssportarten: Ball- und Objektverfolgung sowie
-eine Mannschaftswertung. Die Wertung arbeitet heute mit genau zwei Sportlern.
+Noch nicht vorhanden für Mannschaftssportarten: eine Mannschaftswertung (die
+Wertung arbeitet mit genau zwei Sportlern) und ein Bilddetektor für den Ball. Die
+Ballverfolgung selbst ist vorhanden (siehe unten).
 
 ## 2 bis n Kameras, viele Personen
 
@@ -104,9 +105,36 @@ eine Mannschaftswertung. Die Wertung arbeitet heute mit genau zwei Sportlern.
   - Die Mehrdeutigkeitsprüfung bleibt unverändert.
 - **Messung:** 10 Personen mit 8 Kameras im Kreis werden exakt rekonstruiert, mit
   stabilen Identitäten; nativ etwa 0,3 s je Bild ohne Optimierung für Echtzeit.
-- **Grenze:** Die Personen werden in einem Bild initialisiert, in dem ein
-  Kamerapaar alle Personen sieht. Bei starken Verdeckungen, z. B. im Gedränge,
-  kann das dauern. Bis dahin bleiben Personen unaufgelöst statt geraten.
+- **Schrittweiser Start bei Verdeckung:** Sieht kein Kamerapaar alle Personen,
+  werden Personen einzeln aufgenommen. Das geschieht, sobald ein Kamerapaar eine
+  Person eindeutig trianguliert und mindestens drei Kameras sie bestätigen.
+  - Getestet mit 10 Personen und 8 Kameras, bei denen jede Kamera je Bild 2–3
+    Personen verpasst.
+  - Ein Track, der schon eine Person hatte, bekommt nie eine andere. So gibt es
+    keine Identitätswechsel, was für die Wertung wichtig ist.
+  - Bei starker Verdeckung bleibt eine Person lieber kurz offen, als falsch
+    zugeordnet zu werden.
+
+## Ball- und Objektverfolgung
+
+- Objekt-Detektionen je Kamera und Bild (`objects`: Klasse, x, y, Konfidenz)
+  werden über Kamerapaare trianguliert; bestätigende weitere Kameras werden
+  hinzugenommen.
+- Über die Zeit verfolgt mit Geschwindigkeitsvorhersage und eindeutiger
+  Zuordnung.
+- Eine neue Spur braucht mindestens 3 Kameras; Spuren enden nach 1 s ohne
+  Messung. Die Höchstzahl je Klasse steht in der Szenenkonfiguration, z. B.
+  `"objects": {"ball": {"max": 1}}`.
+- Ausgabe je Bild: Position, Kamerazahl, Reprojektionsfehler und Geschwindigkeit
+  in m/s. Fehlende Messungen bleiben fehlend, es wird nichts interpoliert. Der
+  Dienst prüft diese Angaben.
+- Anzeige im Replay: orange Kugel in 3D, Markierung im Kamerabild und in den
+  Kacheln.
+- Geprüft mit einer Wurfparabel über 8 Kameras: Positionen exakt, eine stabile
+  Kennung, Fehldetektionen ignoriert, ein verdecktes Bild bleibt leer.
+- **Noch offen:** der Bilddetektor für den Ball (Plan:
+  Planung Turnierbetrieb, Abschnitt 4). Die
+  Python-Variante verfolgt noch keine Objekte.
 
 ## Vergleich mit Referenzvideos aus einer Perspektive
 
