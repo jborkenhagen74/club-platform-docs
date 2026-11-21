@@ -29,7 +29,9 @@ wird im Server verankert. Unverändertheit und Vollständigkeit lassen sich mit
 `clubplatform-replay-verify` (oder einer unabhängigen Python-Implementierung) prüfen. Die
 Genauigkeit des markerlosen Trackings ist nicht „exakt“, sondern wird mit
 `clubplatform-tracking-validate` gegen Referenzdaten gemessen. Das 3D-Replay ist mit
-freier Kamerafahrt (Maus, Touch, Tastatur) abspielbar. Format, Werkzeuge und der Stand der
+freier Kamerafahrt (Maus, Touch, Tastatur) abspielbar und zeigt wahlweise Skelett, generische
+Taekwondoin-Modelle (Chung/Hong-Markierung, nach geschätzter oder eingegebener Körpergröße
+skaliert) sowie die Kamerabilder als Kacheln oder als Screens an den Kamerapositionen im 3D-Raum. Format, Werkzeuge und der Stand der
 Verifizierungsreife, einschließlich der vor einer WT-Einreichung offenen Punkte:
 [Verifizierbares Live-Replay](replay-verification.md).
 
