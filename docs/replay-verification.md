@@ -77,8 +77,17 @@ durch den eigenen Code definiert.
 - Ein voller Encoder-Puffer (2 s) verwirft keine Bilder stillschweigend. Das
   übersprungene Intervall wird als `encoder_overload` vermerkt.
 - Voraussetzung ist ein absoluter Medienordner `CLUBPLATFORM_COMBAT_STORE`. Die
-  Aufzeichnung liegt dort unter `live-replays/<job_id>/`. Eine Sitzung dauert
-  höchstens zehn Minuten.
+  Aufzeichnung liegt dort unter `live-replays/<job_id>/segment-NNNN/`, ein Segment
+  je Kampf. Ältere Sitzungen ohne Segmente liegen direkt in `live-replays/<job_id>/`.
+  Eine Sitzung dauert höchstens zwölf Stunden.
+- **Nächster Kampf** (`live_segment`): Der Worker lenkt neue Bilder sofort in das
+  nächste Segment, versiegelt das vorige und meldet es mit `live_segment_sealed`.
+  Liegt die Aufnahme im gemeinsamen Speicher, prüft der Dienst die versiegelten
+  Dateien selbst und verankert nur einen passenden Kopf-Hash.
+- Das **offene Segment** ist während der Aufnahme lesbar (`replay_timeline`,
+  `replay_frame`, als „vorläufig“ gekennzeichnet). Die Hashkette ist bis zum
+  aktuellen Ende geprüft, und jedes Bild wird beim Lesen gegen seinen Hash
+  geprüft.
 - Beim Beenden wird die Aufzeichnung versiegelt und sofort geprüft. Der Kopf-Hash
   wird mit `live_finish` an den Dienst übergeben und dort in der Datenbank
   **verankert**. Wird die Aufzeichnung später vor Ort ersetzt, erkennt der Dienst

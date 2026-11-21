@@ -43,4 +43,13 @@ das Kampfsport-Modul liefern Sportartprofile; Szenen mit 2–16 Kameras und bis 
 Vergleich mit Referenzvideos aus einer Perspektive. Details:
 [Sportartneutrale Analyse](sport-neutral-analysis.md).
 
+## Video-Replay am Wettkampfplatz (IVR)
+
+Während einer Live-Sitzung lässt sich in der vollständigen Aufnahme des laufenden Kampfes
+zurückspulen, in Zeitlupe und Bild für Bild ansehen, mit Zoom & Pan im Videobild und
+mehreren Kameras – die Aufnahme läuft weiter. Videobeweis-Anfragen und Entscheidungen werden
+festgehalten; je Kampf entsteht ein eigenes, versiegeltes und im Server verankertes Segment.
+Ein Praxistest mit echten Kameras am Wettkampfplatz steht noch aus. Details:
+[Verifizierbares Live-Replay](replay-verification.md).
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).
