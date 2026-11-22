@@ -61,4 +61,14 @@ zentral gespeichert, auf dem Server gegen den versiegelten Stand geprüft und bl
 für spätere Prüfungen (z. B. Einsprüche) in Portal und Desktop abrufbar. Details:
 [Kampfflächen-Stationen](court-stations.md).
 
+## Kalibrierung, Pilotmessung und Vergleiche für die Trainings-KI
+
+- Die Kamerakalibrierung unterstützt 2–16 Kameras und ChArUco-Bretter mit Druckvorlage:
+  [Kamerakalibrierung](camera-calibration.md).
+- Für belastbare Genauigkeitsaussagen gibt es einen gesperrten Messplan und eine
+  Auswertung gegen vorher festgelegte Zielwerte: [Pilotmessung](pilot-measurement.md).
+- Referenzvideo- und Formvorlagen-Vergleiche lassen sich ausdrücklich für die
+  Trainings-KI freigeben. Übergeben werden nur Kennzahlen für die der Spur zugeordnete
+  Person; ein Vergleich ist keine Technikbewertung und kann zurückgezogen werden.
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).
