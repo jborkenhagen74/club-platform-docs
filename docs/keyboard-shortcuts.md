@@ -82,6 +82,10 @@ Die Tasten wirken, solange die räumliche Ansicht den Fokus hat.
 | Videobeweis angefordert / bestätigt / abgelehnt | R / Y / N |
 | Markierung | M |
 | Einspruch | P |
+| Erste / zweite Seite auswählen | A / B |
+| Wertungsaktion 1–6 für die gewählte Seite | 1–6 |
+| Unterbrechung / Fortsetzung | I |
+| Rundenbeginn / Rundenende | O |
 | Nächster Kampf | nicht belegt |
 
 ## Schreibweise

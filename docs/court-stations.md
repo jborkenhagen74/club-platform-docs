@@ -41,12 +41,13 @@ Szenario: Ein Server läuft zentral, alle Clients greifen darauf zu. Jeder Deskt
    - Erst dann verschiebt er sie nach `CLUBPLATFORM_COMBAT_STORE/live-replays/<job>/segment-NNNN/`.
    - Eine nach dem Versiegeln veränderte Aufnahme wird abgewiesen und nicht gespeichert.
    - Bei einem Verbindungsabbruch setzt der nächste Versuch an der unterbrochenen Stelle fort, automatisch alle 10 s oder über **Jetzt übertragen**.
-7. **Späteres Review, z. B. bei einem Einspruch:**
+7. **Kampfdaten und Protokoll:** Kämpfer, Offizielle, Veranstaltung, Zeit, Ort und Kampfnummer sowie Wertungen, Strafen, Unterbrechungen und Entscheidung werden je Kampf im IVR erfasst ([Kampfprotokoll](contest-log.md)).
+8. **Späteres Review, z. B. bei einem Einspruch:**
    - Jeder berechtigte Client öffnet im Portal oder Desktop **Aufzeichnungen** und wählt einen Kampf. Gespeicherte Kämpfe werden aus der zentralen Ablage abgespielt.
    - Je Kampf werden Ablagestatus und Zahl der Einsprüche angezeigt.
    - **Einspruch** (Taste P, belegbar) wird mit Zeit, Seite und Kameras festgehalten. Die Markierungen werden nur angefügt und enthalten den Bearbeiter.
    - Der Zugriff bleibt auch nach einer späteren Änderung der Szene möglich, z. B. nach neuer Kalibrierung am nächsten Turniertag.
-8. **Speicherplatz an der Kampffläche:** **Zentral gespeicherte lokale Kopien entfernen** löscht nur Segmente, die der Server bestätigt hat. Nicht gespeicherte oder abgewiesene Segmente bleiben erhalten.
+9. **Speicherplatz an der Kampffläche:** **Zentral gespeicherte lokale Kopien entfernen** löscht nur Segmente, die der Server bestätigt hat. Nicht gespeicherte oder abgewiesene Segmente bleiben erhalten.
 
 ## Statusanzeigen
 

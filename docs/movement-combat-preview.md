@@ -71,4 +71,11 @@ für spätere Prüfungen (z. B. Einsprüche) in Portal und Desktop abrufbar. Det
   Trainings-KI freigeben. Übergeben werden nur Kennzahlen für die der Spur zugeordnete
   Person; ein Vergleich ist keine Technikbewertung und kann zurückgezogen werden.
 
+## Kampfdaten und offizielles Kampfprotokoll
+
+Jede Kampfaufzeichnung trägt versionierte Kampfdaten (Kämpfer, Offizielle, Veranstaltung,
+Kampfnummer, Zeit und Ort) und ein nur anfügendes, hashverkettetes Protokoll aus Wertungen,
+Strafen, Unterbrechungen, Runden, Entscheidung und Korrekturen. Das Kampfprotokoll ist
+exportierbar und unabhängig prüfbar: [Kampfprotokoll](contest-log.md).
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).
