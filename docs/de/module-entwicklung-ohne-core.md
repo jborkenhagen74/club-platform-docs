@@ -352,6 +352,7 @@ Nach jeder Änderung der nativen Bibliothek den Host vollständig beenden und ne
 | Dokumente | Kein Wert, mehrere Werte, Berechtigungen, Übersetzungen |
 | Plattform | Saubere Zielmaschine, passende CPU, fehlende Bibliotheken erkannt |
 | Update | Neuer Katalogstand, Neustart, Backup und Wiederherstellung |
+| Tastenkürzel | Tastaturbedienbare Funktionen in `shortcuts.json` deklariert (ID mit Modulpräfix, übersetztes `label_key`, konfliktfreie Standardtaste) und in Web und Desktop behandelt; Menüeinträge automatisch belegbar, siehe [Tastenkürzel](../keyboard-shortcuts.md) |
 
 Die reine Callback-Logik in eigenen Tests ausführen. Für das Laden, die Hosttransaktionen, Lizenzierung und Oberflächen sind Integrationstests mit dem bereitgestellten Host nötig. Keine vollständige Plattformfreigabe aus einem einzigen Linux-Build ableiten.
 

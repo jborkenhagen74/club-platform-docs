@@ -72,3 +72,7 @@ Beim Start den öffentlichen Lizenzschlüssel wie in der Lizenzanleitung setzen.
 3. Gruppen/Rollen öffnen, eine Zuordnung hinzufügen und wieder entfernen.
 4. Kalendertag wählen, Datum/Uhrzeit und Person prüfen, Termin speichern.
 5. Kalender neu laden und prüfen, dass der Termin am gewählten Tag erscheint.
+
+## Tastenkürzel
+
+Hauptmenü, Suche, Einstellungen sowie 3D- und Video-Replay sind über frei belegbare Tasten bedienbar (Einstellungen → Tastenkürzel, je Benutzer und Server gespeichert). Details: [Tastenkürzel](keyboard-shortcuts.md).
