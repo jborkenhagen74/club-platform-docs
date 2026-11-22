@@ -81,6 +81,7 @@ Die Tasten wirken, solange die räumliche Ansicht den Fokus hat.
 | Vergrößern / Verkleinern / Zoom zurücksetzen | + / - / 0 |
 | Videobeweis angefordert / bestätigt / abgelehnt | R / Y / N |
 | Markierung | M |
+| Einspruch | P |
 | Nächster Kampf | nicht belegt |
 
 ## Schreibweise

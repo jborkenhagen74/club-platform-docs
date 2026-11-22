@@ -52,4 +52,13 @@ festgehalten; je Kampf entsteht ein eigenes, versiegeltes und im Server veranker
 Ein Praxistest mit echten Kameras am Wettkampfplatz steht noch aus. Details:
 [Verifizierbares Live-Replay](replay-verification.md).
 
+## Mehrere Kampfflächen und zentrale Ablage
+
+Im Turnierbetrieb mit zentralem Server betreibt jeder Desktop-Client als
+Kampfflächen-Station eine Fläche mit eigenen Kameras, eigener Analyse und eigenem
+Videoreplay aus der lokalen Aufnahme. Jeder abgeschlossene Kampf wird im Hintergrund
+zentral gespeichert, auf dem Server gegen den versiegelten Stand geprüft und bleibt
+für spätere Prüfungen (z. B. Einsprüche) in Portal und Desktop abrufbar. Details:
+[Kampfflächen-Stationen](court-stations.md).
+
 Weitere Vorschaufunktionen und der Laufzeitschalter: [Vorschaufunktionen](preview-features.md).
