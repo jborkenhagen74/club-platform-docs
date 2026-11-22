@@ -86,6 +86,8 @@ Die Tasten wirken, solange die räumliche Ansicht den Fokus hat.
 | Wertungsaktion 1–6 für die gewählte Seite | 1–6 |
 | Unterbrechung / Fortsetzung | I |
 | Rundenbeginn / Rundenende | O |
+| Formen: erste / zweite Abzugsart für den gewählten Kampfrichter | Q / W |
+| Formen: Beginn / Ende der Form | S |
 | Nächster Kampf | nicht belegt |
 
 ## Schreibweise

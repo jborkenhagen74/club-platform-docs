@@ -6,6 +6,37 @@ Jede Videoaufzeichnung eines Kampfes (ein Segment der Live-Sitzung) trägt:
 
 Alles ist zeitlich an die Originalaufnahme gebunden, wird nur angefügt und ist gegen nachträgliche Änderungen gesichert. Das **Kampfprotokoll** fasst Kampfdaten, Aufnahme und Protokoll prüfbar zusammen.
 
+## Zwei getrennte Ansichten: Formen und Kampf
+
+Jede Szene gehört zu einer **Disziplin**. Sie wird beim Anlegen gewählt und kann in den Einstellungen geändert werden. Ohne eigene Wahl gilt: eine Person = Formen, ab zwei Personen = Kampf. Portal und Desktop zeigen je Disziplin nur die passenden Elemente; der Server weist Einträge der anderen Disziplin ab.
+
+| | Formen | Kampf |
+|---|---|---|
+| Reiter | Vorbereitung, Replay, Trainerprüfung, **Formenwertung & Abschnitte**, Formvorlagen, Live & Formenwertung, Aufzeichnungen | Vorbereitung, Replay, Trainerprüfung, **Wettkampfregeln & Wertung**, Live & Instant Replay, Aufzeichnungen |
+| Einstellungen | Bewegungsabschnitte (Formsegmentierung), Formenwertung (Startwert, Abzugsarten, Präsentationsbestandteile, Zusammenfassung der Richter) | Wettkampfregeln (Runden, Grenzen, Wertungsaktionen) |
+| Ergebnisse | erkannte Bewegungsabschnitte | Wertungstafel, Wertungsentscheidungen |
+| Trainerprüfung | Technik, Beinarbeit, Deckung … – **keine** Treffer oder Kontaktkandidaten | alle Arten der Sportart |
+| Video-Replay (IVR) | **Wertungsprotokoll Formen**: Beginn/Ende der Form, Abzüge und Präsentation je Kampfrichter, Richterwertungen, Endnote | **Kampfprotokoll**: Wertungen, Strafen, Runden, Kampfbeginn/-ende, Entscheidung |
+| Kampfdaten | Ausführende (1–3, Team/Paar), Kampfrichter | Kämpfer je Seite, Kampfrichter |
+
+Gemeinsam sind: Unterbrechung/Fortsetzung, Verletzung, Notiz, Korrektur, Videobeweis, Einspruch und Markierung.
+
+### Formenwertung
+
+- **Eintrag je Kampfrichter:** Jeder Eintrag gehört zu einem Kampfrichter (Auswahl aus den Kampfdaten oder freie Eingabe).
+- **Abzüge** gibt es während der Form, z. B. klein −0,1 und groß −0,3. Die Arten und Werte stammen aus den Regeln der Szene.
+- **Präsentation** wird nach dem Ende der Form vergeben, einmal je Kampfrichter. Jeder Bestandteil hat seinen Höchstwert. Eine Änderung erfordert zuerst eine Korrektur.
+- **Berechnung** durch den Server:
+  - Genauigkeit = Startwert − Abzüge (nicht unter 0);
+  - Richterwertung = Genauigkeit + Präsentation;
+  - Endnote = Mittelwert der Richter; beim gekappten Mittelwert ab fünf Richtern ohne höchste und niedrigste Wertung.
+  - Gerundet wird auf drei Nachkommastellen, damit jeder Prüfer dasselbe Ergebnis erhält.
+- **Vorlagen:** Taekwondo bringt eine Poomsae-Vorlage mit (Startwert 4,0; Abzüge 0,1/0,3; Präsentation 3 × 2,0). Sie ist mit „aktuelle WT-Regeln prüfen“ gekennzeichnet. Andere Sportarten verwenden die anpassbare Standardvorlage.
+- **Tastenkürzel (belegbar):**
+  - Q / W: erste / zweite Abzugsart für den gewählten Kampfrichter;
+  - S: Beginn / Ende der Form.
+- **Prüfwerkzeug:** `tools/replay/contest_record.py` rechnet bei Formen Richterwertungen und Endnote unabhängig nach.
+
 ## Kampfdaten
 
 Portal und Desktop: im Video-Replay (IVR) unter **Kampfprotokoll → Kampfdaten**. Die Kampfdaten können vor dem Kampf (für den nächsten Kampf), währenddessen oder danach erfasst werden.
