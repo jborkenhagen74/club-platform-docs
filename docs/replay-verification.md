@@ -262,6 +262,25 @@ jede Sportart gleich.
 - Das Modell ist eine **Darstellungshilfe, keine Messung**. Die Größenschätzung
   ist nur so genau wie das Tracking.
 
+### Ansicht je Kamera: Video, Skelett oder kombiniert
+
+Für jede Kamera lässt sich einzeln wählen, was gezeigt wird. Die Auswahl ist jederzeit umschaltbar, auch während der Wiedergabe:
+
+| Ansicht | Inhalt |
+|---|---|
+| **Video** | nur das Originalbild der Kamera (Video-Replay) |
+| **Skelett** | nur das 3D-Motion-Tracking, durch die Kalibrierung dieser Kamera projiziert |
+| **Kombiniert** | Originalbild mit dem projizierten Skelett darüber (Standard) |
+
+- **Wo umschalten:**
+  - an jeder Kamera-Kachel (Schaltflächen Video / Skelett / Kombi);
+  - für die gewählte Kamera neben der Ansichtsauswahl;
+  - mit der Taste **V** (belegbar), die die gewählte Kamera durchschaltet.
+- **Große Kameraperspektive:** Sie folgt der Ansicht der gewählten Kamera. Umgekehrt ändert die Ansichtsauswahl „Overlay / Nur Video / Nur Rekonstruktion“ die Ansicht dieser Kamera. Die freie 3D-Kamera und „Blinken“ bleiben davon unberührt.
+- **Gedächtnis:** Das Portal merkt sich die Auswahl je Szene und Kamera im Browser. Der Desktop hält sie für die laufende Sitzung.
+- **3D-Screens:** In der Skelett-Ansicht bleibt das Kamerabild unsichtbar geladen, weil es die Textur der Kamera-Screens im 3D-Raum ist.
+- **Video-Replay (IVR):** Hier gibt es diese Auswahl nicht. Das IVR zeigt Originalbilder der vollständigen Aufnahme, das Live-Tracking deckt dagegen nur das jeweils aktuelle Zeitfenster ab.
+
 ### Kamera-Screens
 
 - **Kacheln**:

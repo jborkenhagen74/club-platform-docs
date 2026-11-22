@@ -66,6 +66,7 @@ Die Tasten wirken, solange die räumliche Ansicht den Fokus hat.
 | Ansicht zurücksetzen | Pos1 |
 | Vorheriges / nächstes Bild | , / . |
 | Wiedergabe / Pause | Leertaste |
+| Ansicht der gewählten Kamera wechseln (Video / Skelett / Kombiniert) | V |
 
 ### Szenenanalyse: Video-Replay (IVR)
 
