@@ -77,8 +77,17 @@ durch den eigenen Code definiert.
 - Ein voller Encoder-Puffer (2 s) verwirft keine Bilder stillschweigend. Das
   übersprungene Intervall wird als `encoder_overload` vermerkt.
 - Voraussetzung ist ein absoluter Medienordner `CLUBPLATFORM_COMBAT_STORE`. Die
-  Aufzeichnung liegt dort unter `live-replays/<job_id>/`. Eine Sitzung dauert
-  höchstens zehn Minuten.
+  Aufzeichnung liegt dort unter `live-replays/<job_id>/segment-NNNN/`, ein Segment
+  je Kampf. Ältere Sitzungen ohne Segmente liegen direkt in `live-replays/<job_id>/`.
+  Eine Sitzung dauert höchstens zwölf Stunden.
+- **Nächster Kampf** (`live_segment`): Der Worker lenkt neue Bilder sofort in das
+  nächste Segment, versiegelt das vorige und meldet es mit `live_segment_sealed`.
+  Liegt die Aufnahme im gemeinsamen Speicher, prüft der Dienst die versiegelten
+  Dateien selbst und verankert nur einen passenden Kopf-Hash.
+- Das **offene Segment** ist während der Aufnahme lesbar (`replay_timeline`,
+  `replay_frame`, als „vorläufig“ gekennzeichnet). Die Hashkette ist bis zum
+  aktuellen Ende geprüft, und jedes Bild wird beim Lesen gegen seinen Hash
+  geprüft.
 - Beim Beenden wird die Aufzeichnung versiegelt und sofort geprüft. Der Kopf-Hash
   wird mit `live_finish` an den Dienst übergeben und dort in der Datenbank
   **verankert**. Wird die Aufzeichnung später vor Ort ersetzt, erkennt der Dienst
@@ -171,6 +180,134 @@ abspielbar, synchron zur Zeitachse und Bild für Bild:
 - Die Kamerafahrt verändert nur die Darstellung, nie die rekonstruierten
   Koordinaten. Das Originalvideo ist weiterhin nur in seiner festen
   Kameraperspektive deckungsgleich (Modus Überlagerung).
+
+## 6a. Darstellung: Skelett, generisches 3D-Modell, Kamera-Screens
+
+Im Replay (Web und Desktop) lassen sich Darstellung und Kamera-Screens frei wählen:
+
+- **Darstellung**: *Skelett*, *3D-Modell* oder *Modell und Skelett*.
+- **Kamera-Screens**: *Aus*, *Kacheln*, *Im 3D-Raum* oder *Kacheln und 3D-Raum*.
+
+### Erkennung und Rekonstruktion (unverändert)
+
+Die 2D-Posen kommen je nach Worker von RTMPose mit YOLOX (ONNX Runtime, C++)
+oder vom MediaPipe Pose Landmarker (Python). Beide werden auf das Skelett
+`body12-mediapipe-v1` mit 12 Gelenken abgebildet. Die 3D-Punkte entstehen durch
+geometrische Triangulation (DLT) über die kalibrierten Kameras.
+
+### Sportartprofile (Sportmodule, z. B. Kampfsport)
+
+Allgemeine Architektur und Anleitung für neue Sportmodule: [Sportartneutrale Analyse](sport-neutral-analysis.md).
+
+Alles Sportartspezifische wird im **Kampfsport-Modul** (`martial`) geregelt. Die
+Kampfanalyse selbst ist sportartneutral: Erkennung (Pose, Triangulation,
+Bewegungssegmente, geometrische Vorschläge), Replay und Review funktionieren für
+jede Sportart gleich.
+
+- Die Profile liegen in `extensions/martial-arts/sports/profiles.json`
+  (`martial.sport-profiles.v1`). Der Martial-Dienst stellt sie über die
+  Service-Operation `sport.profiles.v1` bereit. Die Kampfanalyse reicht sie über
+  den Befehl `sport_profiles` an Web und Desktop weiter.
+- Enthalten sind: Allgemein, Taekwondo, Karate, Judo, Boxen, Kickboxen, Muay Thai,
+  Ringen und MMA.
+- Je Profil sind festgelegt:
+  - die **zwei Markierungen** der Sportler mit Farbe, z. B. Chung/Hong, Aka/Ao,
+    weißer/blauer Judogi oder rote/blaue Ecke; dazu kommt immer „Neutral“;
+  - die **Ausrüstung** des 3D-Modells: Oberteil und Ärmel, Hose oder Shorts,
+    Gürtel, Rumpfschutz, Kopfschutz, Hände (frei, Faustschützer, Handschuhe)
+    und Füße;
+  - die **Ereignisarten im Review**, z. B. Wurf, Takedown, Kontrolle/Haltegriff,
+    Aufgabegriff, Clinch, Block oder Verlassen der Fläche. Die neutralen Arten
+    der Kampfanalyse (Kontaktkandidat, Treffer, Technik, Beinarbeit, Deckung)
+    sind immer erlaubt.
+  - optional eine **Wertungsvorlage**. Sie ist nur für Sportarten mit fester
+    Punkte-je-Aktion-Tabelle hinterlegt (Taekwondo WT, Karate WKF), dient als
+    Ausgangspunkt und ist ausdrücklich mit dem aktuellen Regelwerk abzugleichen.
+    Für Judo, Boxen, Ringen, MMA usw. gibt es keine Vorlage; die Wertung wird
+    nach Regelwerk selbst konfiguriert.
+- Die Sportart einer Szene wird in **Formen & Regelwertung** gewählt
+  (`analysis.sport`, revisioniert mit der Szene). Danach prüft der Dienst die
+  Review-Ereignisarten gegen das Profil.
+- Im Kampfsport-Katalog kann ein **Stil** einem Sportartprofil zugeordnet
+  werden, z. B. ein Vereinsstil „ITF Taekwon-Do“ dem Profil Taekwondo.
+- Ist das Kampfsport-Modul nicht aktiv, steht nur das Profil „Allgemein“ mit den
+  sportartneutralen Ereignisarten zur Verfügung.
+- Sportart-, Markierungs- und Ereignisnamen sind in den sieben Sprachpaketen
+  des Kampfsport-Moduls übersetzt.
+
+### Generisches Sportlermodell
+
+- Das Modell besteht aus einfachen Grundkörpern: Zylinder und Ellipsoide.
+- Es trägt die Ausrüstung des gewählten Sportartprofils. Die Teile mit
+  Markierungsfarbe zeigen, welcher Sportler welcher ist.
+- Im Replay ist die Sportart des Modells unabhängig von der Szene umschaltbar.
+- Die Markierung ist je Sportler umstellbar. Die Skelettlinien und die
+  Projektion in den Kamerabildern verwenden dieselbe Farbe.
+- **Gliedmaßen enden exakt an den gemessenen Gelenken.** Generisch sind nur die
+  Körpervolumen: Dicke der Gliedmaßen, Rumpf, Kopf und Füße. Sie werden mit der
+  Körpergröße skaliert.
+- **Körpergröße**:
+  - Sie wird je Track automatisch geschätzt: Oberschenkel + Unterschenkel +
+    Rumpf, geteilt durch den anthropometrischen Anteil 0,779 (Drillis &
+    Contini).
+  - Das Verfahren ist haltungsunabhängig und verwendet den Median über alle
+    Bilder.
+  - Angezeigt werden die Streuung (Interquartilsabstand) und die Anzahl der
+    verwendeten Bilder.
+  - Werte außerhalb von 1,00–2,30 m werden begrenzt und als unplausibel
+    gekennzeichnet.
+  - Die Größe kann je Sportler manuell in cm überschrieben werden.
+- Fehlen Gelenke in einem Bild, entfallen die betroffenen Körperteile. Eine
+  Tracking-Lücke bleibt also sichtbar und wird nicht ergänzt.
+- Das Modell ist eine **Darstellungshilfe, keine Messung**. Die Größenschätzung
+  ist nur so genau wie das Tracking.
+
+### Ansicht je Kamera: Video, Skelett oder kombiniert
+
+Für jede Kamera lässt sich einzeln wählen, was gezeigt wird. Die Auswahl ist jederzeit umschaltbar, auch während der Wiedergabe:
+
+| Ansicht | Inhalt |
+|---|---|
+| **Video** | nur das Originalbild der Kamera (Video-Replay) |
+| **Skelett** | nur das 3D-Motion-Tracking, durch die Kalibrierung dieser Kamera projiziert |
+| **Kombiniert** | Originalbild mit dem projizierten Skelett darüber (Standard) |
+
+- **Wo umschalten:**
+  - an jeder Kamera-Kachel (Schaltflächen Video / Skelett / Kombi);
+  - für die gewählte Kamera neben der Ansichtsauswahl;
+  - mit der Taste **V** (belegbar), die die gewählte Kamera durchschaltet.
+- **Große Kameraperspektive:** Sie folgt der Ansicht der gewählten Kamera. Umgekehrt ändert die Ansichtsauswahl „Overlay / Nur Video / Nur Rekonstruktion“ die Ansicht dieser Kamera. Die freie 3D-Kamera und „Blinken“ bleiben davon unberührt.
+- **Gedächtnis:** Das Portal merkt sich die Auswahl je Szene und Kamera im Browser. Der Desktop hält sie für die laufende Sitzung.
+- **3D-Screens:** In der Skelett-Ansicht bleibt das Kamerabild unsichtbar geladen, weil es die Textur der Kamera-Screens im 3D-Raum ist.
+- **Video-Replay (IVR):** Hier gibt es diese Auswahl nicht. Das IVR zeigt Originalbilder der vollständigen Aufnahme, das Live-Tracking deckt dagegen nur das jeweils aktuelle Zeitfenster ab.
+
+### Kamera-Screens
+
+- **Kacheln**:
+  - Je Kamera eine Kachel mit dem Originalbild: das Video der analysierten
+    Szene oder das Live-Vorschaubild, jeweils zur eigenen Quellzeit der Kamera.
+  - Darüber liegt das Skelett, projiziert über die Kalibrierung, einschließlich
+    Verzeichnung.
+  - Ein Klick wechselt in die exakte Perspektive dieser Kamera (Modus
+    Überlagerung).
+  - **Alle Kameravideos laden** lädt die Videos aller Kameras nacheinander.
+- **Im 3D-Raum**:
+  - Jede Kamera erscheint an ihrer kalibrierten Position als Pyramide.
+  - Auf der Bildebene wird ihr Bild angezeigt; der Abstand ist einstellbar.
+  - Bild und Skelett decken sich nur aus Sicht der jeweiligen Kamera. Das Bild
+    ist eine einfache Lochkamera-Projektion ohne Entzerrung.
+- Ausrüstung je Sportart, Markierungen, Ereignisarten je Szenenprofil, Wertungsvorlagen
+  und der Rückfall ohne Kampfsport-Modul sind getestet
+  (`tests/combat_athlete_tests.mjs`, `extensions/combat/tests/test_analysis_service.py`,
+  `apps/portal/tests/combat.spec.ts`).
+- Die Projektion der Web-3D-Ansicht ist per Test mit der bisherigen
+  Orbit-Projektion abgeglichen: 1048 Punkte, Abweichung < 10⁻⁴. Modellteile,
+  Größenschätzung und Bildecken der Screens sind ebenfalls getestet
+  (`tests/combat_athlete_tests.mjs`, `tests/combat_replay_camera_tests.mjs`).
+- **Desktop**: Dieselbe Rechenlogik kommt aus `extensions/combat/desktop/athlete.mjs`.
+  Die QML-Ansicht ist nur syntaxgeprüft, weil Qt Quick 3D und Qt Multimedia in
+  der Entwicklungsumgebung fehlen. Ausrichtung der Screen-Textur und Darstellung
+  sind auf dem Zielsystem zu prüfen.
 
 ## 7. Stand der Verifizierungsreife
 
